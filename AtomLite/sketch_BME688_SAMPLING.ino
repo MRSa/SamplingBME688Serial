@@ -1,6 +1,6 @@
 // M5Atom で BME688 のガスセンサ・ヒーターを操作するサンプル
 //   https://gist.githubusercontent.com/ksasao/5505e0e59a97cde799cf0ed2d2009b2d/raw/ec847139310ed5a3e51c163d95d8062d3e8f5d3d/M5BME688.ino
-// 2022/1/6 @ksasao  (ちょっとだけカスタマイズ: MRSa)
+// 2022/1/6 @ksasao  (自分環境用に微調整: MRSa)
 // 
 // 利用デバイス:
 // デバイスは、下記などで入手してください
@@ -29,11 +29,11 @@ void errLeds(void);
 //#define SDA_PIN 25
 //#define SCL_PIN 21
 
-//  I2C: Grove
+// Grove
 #define SDA_PIN 26
 #define SCL_PIN 32
 
-//  I2X: Address
+//  I2C: Address
 #define BME688_I2C_ADDR 0x76
 //#define BME688_I2C_ADDR 0x77
 
@@ -119,6 +119,7 @@ void loop(void)
         }else{
           M5.dis.drawpix(0, 0xf060f0);
         }
+        // ちょっと出力データを追加。
         Serial.print(",");
         Serial.print(String(data.gas_index)+",");
         Serial.print(String(data.meas_index) + ",");
