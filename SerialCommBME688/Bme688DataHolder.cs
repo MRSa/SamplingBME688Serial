@@ -15,6 +15,7 @@ namespace SerialCommBME688
         private int expectedIndexNumber = 0;
         private int receivedDataCount = 0;
         private IMessageCallback callback;
+        private DataTable dataSource = new DataTable("dataSummary");
         private Dictionary<String, Bme688DataSetGroup> dataSetMap = new Dictionary<String, Bme688DataSetGroup>();
 
         Bme688DataSetGroup? targetDataSet = null;
@@ -158,6 +159,8 @@ namespace SerialCommBME688
                    result = result + " valid:" + validDataSet + "\r\n";
                 }
                 result = result + "-----\r\n\r\n";
+
+                updateDataTable();
             }
             catch (Exception ee)
             {
@@ -270,13 +273,111 @@ namespace SerialCommBME688
             {
                 Debug.WriteLine(DateTime.Now + " exportCsvDataOnlyGasRegistance() : " + e.Message + " ");
                 Debug.WriteLine(DateTime.Now + e.StackTrace);
-
             }
         }
 
-        public Dictionary<String, Bme688DataSetGroup> getDataMap()
+        public DataTable getGridDataSource()
         {
-            return (dataSetMap);
+            try
+            {
+                // データグリッドに表示するカラムのヘッダーを設定する
+                dataSource.Columns.Add("Category");
+                dataSource.Columns.Add("dataCount", Type.GetType("System.Int32"));
+                dataSource.Columns.Add("validCount", Type.GetType("System.Int32"));
+                dataSource.Columns.Add("Temp. - Max", Type.GetType("System.Double"));
+                dataSource.Columns.Add("Temp. - Min", Type.GetType("System.Double"));
+                dataSource.Columns.Add("Humi. - Max", Type.GetType("System.Double"));
+                dataSource.Columns.Add("Humi. - Min", Type.GetType("System.Double"));
+                dataSource.Columns.Add("Pres. - Max", Type.GetType("System.Double"));
+                dataSource.Columns.Add("Pres. - Min", Type.GetType("System.Double"));
+                dataSource.Columns.Add("GasR. - Max", Type.GetType("System.Double"));
+                dataSource.Columns.Add("GasR. - Min", Type.GetType("System.Double"));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " getGridDataSource() : " + e.Message);
+
+            }
+            return (dataSource);
+        }
+
+        private void updateDataTable()
+        {
+            dataSource.Clear();
+            try
+            {
+                Dictionary<String, Bme688DataSetGroup> datamap = dataSetMap;
+                foreach (KeyValuePair<String, Bme688DataSetGroup> item in datamap)
+                {
+                    String category = item.Key;
+                    List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
+                    int sampleCount = dataSet.Count;
+                    int validCount = 0;
+                    double temperature_max = dataSet[0].temperature_max;
+                    double temperature_min = dataSet[0].temperature_min;
+                    double humidity_max = dataSet[0].humidity_max;
+                    double humidity_min = dataSet[0].humidity_min;
+                    double pressure_max = dataSet[0].pressure_max;
+                    double pressure_min = dataSet[0].pressure_min;
+                    double gas_registance_max = dataSet[0].gas_registance_max;
+                    double gas_registance_min = dataSet[0].gas_registance_min;
+                    foreach (Bme688DataSet collectedData in dataSet)
+                    {
+                        if (collectedData.lack_data == 0)
+                        {
+                            validCount++;
+                        }
+                        if (temperature_max < collectedData.temperature_max)
+                        {
+                            temperature_max = collectedData.temperature_max;
+                        }
+                        if (temperature_min > collectedData.temperature_min)
+                        {
+                            temperature_min = collectedData.temperature_min;
+                        }
+                        if (humidity_max < collectedData.humidity_max)
+                        {
+                            humidity_max = collectedData.humidity_max;
+                        }
+                        if (humidity_min > collectedData.humidity_min)
+                        {
+                            humidity_min = collectedData.humidity_min;
+                        }
+                        if (pressure_max < collectedData.pressure_max)
+                        {
+                            pressure_max = collectedData.pressure_max;
+                        }
+                        if (pressure_min > collectedData.pressure_min)
+                        {
+                            pressure_min = collectedData.pressure_min;
+                        }
+                        if (gas_registance_max < collectedData.gas_registance_max)
+                        {
+                            gas_registance_max = collectedData.gas_registance_max;
+                        }
+                        if (gas_registance_min > collectedData.gas_registance_min)
+                        {
+                            gas_registance_min = collectedData.gas_registance_min;
+                        }
+                    }
+
+                    dataSource.Rows.Add(category,
+                                        sampleCount,
+                                        validCount,
+                                        temperature_max,
+                                        temperature_min,
+                                        humidity_max,
+                                        humidity_min,
+                                        pressure_max,
+                                        pressure_min,
+                                        gas_registance_max,
+                                        gas_registance_min);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " updateDataTable() : " + e.Message);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -149,7 +150,6 @@ namespace SerialCommBME688
             }
         }
 
-
         public void messageCallback(String message)
         {
             try
@@ -162,9 +162,10 @@ namespace SerialCommBME688
             }
         }
 
-        public Dictionary<String, Bme688DataSetGroup> getDataMap()
+        public DataTable getGridDataSource()
         {
-            return (dataHolder.getDataMap());
+            return (dataHolder.getGridDataSource());
         }
+
     }
 }
