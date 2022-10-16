@@ -135,6 +135,21 @@ namespace SerialCommBME688
             }
         }
 
+        public void exportCsvDataOnlyGasRegistance(Stream myStream)
+        {
+            try
+            {
+                appendText("----- exportCsvDataOnlyGasRegistance() : START...\r\n");
+                dataHolder.exportCsvDataOnlyGasRegistance(myStream);
+                appendText("----- exportCsvDataOnlyGasRegistance() : FINISHED.\r\n");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " exportCsvData() : " + e.Message);
+            }
+        }
+
+
         public void messageCallback(String message)
         {
             try

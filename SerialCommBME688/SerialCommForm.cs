@@ -25,6 +25,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = false;
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
+                    chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                 }
                 else
                 {
@@ -32,6 +33,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = true;
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
+                    chkExportOnlyGasRegistanceLogarithm.Enabled = true;
 
                 }
             }
@@ -51,6 +53,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = true;
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
+                    chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     //txtConsole.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
                 }
                 else
@@ -59,6 +62,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = false;
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
+                    chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -96,7 +100,7 @@ namespace SerialCommBME688
 
 
                     // CSVへデータを書き出す。
-                    myReceiver.startExportCsv(myStream);
+                    myReceiver.startExportCsv(myStream, chkExportOnlyGasRegistanceLogarithm.Checked);
                     myStream.Close();
                 }
             }

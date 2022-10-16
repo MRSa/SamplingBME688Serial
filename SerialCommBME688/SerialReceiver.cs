@@ -99,20 +99,28 @@ namespace SerialCommBME688
         }
 
 
-        public void startExportCsv(Stream myStream)
+        public void startExportCsv(Stream myStream, bool exportOnlyGasRegistanceLogarithm)
         {
             try
             {
                 // 収集データをCSVファイルに出力する
-                dataParser.exportCsvData(myStream);
+                if (exportOnlyGasRegistanceLogarithm)
+                {
+                    // GasRegistance の 対数データのみ出力する
+                    dataParser.exportCsvDataOnlyGasRegistance(myStream);
+                }
+                else
+                {
+                    dataParser.exportCsvData(myStream);
+                }
 
-                // 固まるので、本当はコンテキストを切りたい...
+                // 固まるはずなので、本当はここでコンテキストを切りたい...
                 //Thread writeThread = new Thread(exportCsvData);
                 //writeThread.Start();
             }
             catch (Exception e)
             {
-                Debug.WriteLine(DateTime.Now + " startExportCsv() : " + e.Message);
+                Debug.WriteLine(DateTime.Now + " startExportCsv(" + exportOnlyGasRegistanceLogarithm + ") : " + e.Message);
             }
         }
 

@@ -210,6 +210,70 @@ namespace SerialCommBME688
 
             }
         }
+
+
+        public void exportCsvDataOnlyGasRegistance(Stream myStream)
+        {
+            try
+            {
+                Debug.WriteLine("exportCsvDataOnlyGasRegistance() : canWrite: " + myStream.CanWrite);
+
+                StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
+                writer.AutoFlush = true;
+
+                int categoryCount = 0;
+                writer.Write("; index, ");
+                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+                {
+                    writer.Write(item.Key + ", ");
+                    categoryCount++;
+                }
+                writer.WriteLine(" ;");
+
+                // 次に読み込むインデックス位置を取得する
+                List<int> nextElement = new List<int>(categoryCount);
+                for (int index = 0; index < categoryCount; index++)
+                {
+                    nextElement.Add(-1);
+                }
+
+                while (true)
+                {
+                    // 次に読み込むインデックス番号を決める
+                    for (int index = 0; index < categoryCount; index++)
+                    {
+                        do
+                        {
+                            nextElement[index] = nextElement[index] + 1;
+                        } while (dataSetMap.ElementAt(index).Value.getCollectedDataSet().ElementAt(nextElement[index]).lack_data != 0);
+                    }
+
+                    // それぞれｎデータを出力する
+                    for (int dataIndex = 0; dataIndex < NUMBER_OF_INDEX; dataIndex++)
+                    {
+                        writer.Write(dataIndex + ", ");
+                        for (int index = 0; index < categoryCount; index++)
+                        {
+                            Bme688DataSet collectedData = dataSetMap.ElementAt(index).Value.getCollectedDataSet().ElementAt(nextElement[index]);
+                            Bme688Data data = collectedData.getBme688Data(dataIndex);
+                            writer.Write(data.gas_registance_log + ", ");
+                        }
+                        writer.WriteLine(";"); // 改行
+                    }
+                }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Debug.WriteLine(" index over ");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " exportCsvDataOnlyGasRegistance() : " + e.Message + " ");
+                Debug.WriteLine(DateTime.Now + e.StackTrace);
+
+            }
+        }
+
         public Dictionary<String, Bme688DataSetGroup> getDataMap()
         {
             return (dataSetMap);

@@ -37,6 +37,7 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.grpData = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.chkExportOnlyGasRegistanceLogarithm = new System.Windows.Forms.CheckBox();
             this.grpPort.SuspendLayout();
             this.grpDataCategory.SuspendLayout();
             this.grpData.SuspendLayout();
@@ -96,13 +97,13 @@
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
             this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole.Size = new System.Drawing.Size(644, 117);
+            this.txtConsole.Size = new System.Drawing.Size(658, 87);
             this.txtConsole.TabIndex = 4;
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(583, 33);
+            this.btnClear.Location = new System.Drawing.Point(597, 33);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(79, 23);
             this.btnClear.TabIndex = 5;
@@ -130,11 +131,11 @@
             // btnExport
             // 
             this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExport.Location = new System.Drawing.Point(583, 218);
+            this.btnExport.Location = new System.Drawing.Point(551, 188);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(79, 22);
+            this.btnExport.Size = new System.Drawing.Size(114, 22);
             this.btnExport.TabIndex = 7;
-            this.btnExport.Text = "CSV Export";
+            this.btnExport.Text = "Export CSV";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
@@ -143,12 +144,12 @@
             this.grpData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpData.Controls.Add(this.dataGridView1);
-            this.grpData.Location = new System.Drawing.Point(12, 199);
+            this.grpData.Location = new System.Drawing.Point(12, 169);
             this.grpData.Name = "grpData";
-            this.grpData.Size = new System.Drawing.Size(563, 269);
+            this.grpData.Size = new System.Drawing.Size(533, 269);
             this.grpData.TabIndex = 8;
             this.grpData.TabStop = false;
-            this.grpData.Text = "Data";
+            this.grpData.Text = "Collected Data";
             // 
             // dataGridView1
             // 
@@ -161,14 +162,26 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(557, 247);
+            this.dataGridView1.Size = new System.Drawing.Size(527, 247);
             this.dataGridView1.TabIndex = 0;
+            // 
+            // chkExportOnlyGasRegistanceLogarithm
+            // 
+            this.chkExportOnlyGasRegistanceLogarithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
+            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(551, 216);
+            this.chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
+            this.chkExportOnlyGasRegistanceLogarithm.Size = new System.Drawing.Size(114, 19);
+            this.chkExportOnlyGasRegistanceLogarithm.TabIndex = 9;
+            this.chkExportOnlyGasRegistanceLogarithm.Text = "Only Gas R.(Log)";
+            this.chkExportOnlyGasRegistanceLogarithm.UseVisualStyleBackColor = true;
             // 
             // SerialCommForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 480);
+            this.ClientSize = new System.Drawing.Size(688, 450);
+            this.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
             this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.grpData);
             this.Controls.Add(this.btnExport);
@@ -203,5 +216,6 @@
         private Button btnExport;
         private GroupBox grpData;
         private DataGridView dataGridView1;
+        private CheckBox chkExportOnlyGasRegistanceLogarithm;
     }
 }
