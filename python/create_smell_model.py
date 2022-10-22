@@ -1,5 +1,10 @@
 #
 #   BME688の匂いのデータをモデルにする
+#      - 引数１ : 収集した匂いのデータのCSVファイル
+#
+#      - 出力１ : モデルファイル(HDF5形式, xxx.h5)
+#      - 出力２ : モデルのカテゴリファイル (CSV形式, xxx_category.txt)
+#          ※ xxx は、引数１で指定したファイルの名前
 #
 import pandas as pd
 import numpy as np
