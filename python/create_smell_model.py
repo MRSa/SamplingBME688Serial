@@ -86,6 +86,7 @@ model.save(h5_filename)
 # ----- モデルのデータ情報についての値を出力する
 result_number = 0.0
 with open(category_filename,"w") as output_file:
+    print("label,value,;", file = output_file)
     for category in range(number_of_categories):
         print("{0},{1:.5f},;".format(smell_data.columns[category + 1], result_number), file = output_file)
         result_number = result_number + data_interval
