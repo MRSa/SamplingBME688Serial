@@ -26,6 +26,7 @@ namespace SerialCommBME688
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
+                    btnReset.Enabled = false;
                 }
                 else
                 {
@@ -34,7 +35,7 @@ namespace SerialCommBME688
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
-
+                    btnReset.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -54,6 +55,7 @@ namespace SerialCommBME688
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
+                    btnReset.Enabled = true;
                     //txtConsole.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
                 }
                 else
@@ -63,6 +65,8 @@ namespace SerialCommBME688
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
+                    btnReset.Enabled = false;
+
                 }
             }
             catch (Exception ex)
@@ -110,6 +114,13 @@ namespace SerialCommBME688
         {
             // データグリッドに表示するカラムのヘッダーを設定する
             dataGridView1.DataSource = myReceiver.getGridDataSource();
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            // データをリセットする
+            myReceiver.reset();
+            txtDataCategory.Text = "";
         }
     }
 }

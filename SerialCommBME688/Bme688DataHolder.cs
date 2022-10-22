@@ -92,6 +92,10 @@ namespace SerialCommBME688
                     result = " INDEX MISMATCH :" + expectedIndexNumber + " - " + gas_index + "\r\n";
                 }
 
+                if (result.Length == 0)
+                {
+                    result = ".";
+                }
                 if (targetDataSet != null)
                 {
                     // 待っていたデータが来たので、そのまま入れる
@@ -104,6 +108,7 @@ namespace SerialCommBME688
                 {
                     // 最大データを入れ終わったとき
                     expectedIndexNumber = 0;
+                    result = ".\r\n";
                 }
                 return (result);
             }
@@ -292,6 +297,8 @@ namespace SerialCommBME688
                 dataSource.Columns.Add("Pres. - Min", Type.GetType("System.Double"));
                 dataSource.Columns.Add("GasR. - Max", Type.GetType("System.Double"));
                 dataSource.Columns.Add("GasR. - Min", Type.GetType("System.Double"));
+                dataSource.Columns.Add("GasR.(log) - Max", Type.GetType("System.Double"));
+                dataSource.Columns.Add("GasR.(log) - Min", Type.GetType("System.Double"));
             }
             catch (Exception e)
             {
@@ -321,6 +328,8 @@ namespace SerialCommBME688
                     double pressure_min = dataSet[0].pressure_min;
                     double gas_registance_max = dataSet[0].gas_registance_max;
                     double gas_registance_min = dataSet[0].gas_registance_min;
+                    double gas_registance_log_max = dataSet[0].gas_registance_log_max;
+                    double gas_registance_log_min = dataSet[0].gas_registance_log_min;
                     foreach (Bme688DataSet collectedData in dataSet)
                     {
                         if (collectedData.lack_data == 0)
@@ -359,6 +368,14 @@ namespace SerialCommBME688
                         {
                             gas_registance_min = collectedData.gas_registance_min;
                         }
+                        if (gas_registance_log_max < collectedData.gas_registance_log_max)
+                        {
+                            gas_registance_log_max = collectedData.gas_registance_log_max;
+                        }
+                        if (gas_registance_log_min > collectedData.gas_registance_log_min)
+                        {
+                            gas_registance_log_min = collectedData.gas_registance_log_min;
+                        }
                     }
 
                     dataSource.Rows.Add(category,
@@ -371,13 +388,21 @@ namespace SerialCommBME688
                                         pressure_max,
                                         pressure_min,
                                         gas_registance_max,
-                                        gas_registance_min);
+                                        gas_registance_min,
+                                        gas_registance_log_max,
+                                        gas_registance_log_min);
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(DateTime.Now + " updateDataTable() : " + e.Message);
             }
+        }
+
+        public void reset()
+        {
+            dataSource.Clear();
+            dataSetMap.Clear();
         }
     }
 }

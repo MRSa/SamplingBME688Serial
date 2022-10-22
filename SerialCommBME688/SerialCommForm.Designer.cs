@@ -38,6 +38,7 @@
             this.grpData = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.chkExportOnlyGasRegistanceLogarithm = new System.Windows.Forms.CheckBox();
+            this.btnReset = new System.Windows.Forms.Button();
             this.grpPort.SuspendLayout();
             this.grpDataCategory.SuspendLayout();
             this.grpData.SuspendLayout();
@@ -176,11 +177,23 @@
             this.chkExportOnlyGasRegistanceLogarithm.Text = "Only Gas R.(Log)";
             this.chkExportOnlyGasRegistanceLogarithm.UseVisualStyleBackColor = true;
             // 
+            // btnReset
+            // 
+            this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnReset.Location = new System.Drawing.Point(551, 413);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(114, 22);
+            this.btnReset.TabIndex = 10;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // SerialCommForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(688, 450);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
             this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.grpData);
@@ -217,5 +230,6 @@
         private GroupBox grpData;
         private DataGridView dataGridView1;
         private CheckBox chkExportOnlyGasRegistanceLogarithm;
+        private Button btnReset;
     }
 }

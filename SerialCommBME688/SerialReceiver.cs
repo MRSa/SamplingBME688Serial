@@ -99,6 +99,10 @@ namespace SerialCommBME688
         {
             try
             {
+                // このままだと固まるはずなので、本当はここでコンテキストを切りたい...
+                //Thread writeThread = new Thread(exportCsvData);
+                //writeThread.Start();
+
                 // 収集データをCSVファイルに出力する
                 if (exportOnlyGasRegistanceLogarithm)
                 {
@@ -109,10 +113,6 @@ namespace SerialCommBME688
                 {
                     dataParser.exportCsvData(myStream);
                 }
-
-                // このままだと固まるはずなので、本当はここでコンテキストを切りたい...
-                //Thread writeThread = new Thread(exportCsvData);
-                //writeThread.Start();
             }
             catch (Exception e)
             {
@@ -124,5 +124,12 @@ namespace SerialCommBME688
         {
             return (dataParser.getGridDataSource());
         }
+
+        public void reset()
+        {
+            // データをリセットする
+            dataParser.reset();
+        }
+
     }
 }

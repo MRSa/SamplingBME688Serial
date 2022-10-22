@@ -167,5 +167,11 @@ namespace SerialCommBME688
             return (dataHolder.getGridDataSource());
         }
 
+        public void reset()
+        {
+            // データをリセットする
+            dataHolder.reset();
+        }
+
     }
 }

@@ -1,7 +1,6 @@
 #
 #   BME688の匂いのデータをモデルにする
 #
-import datetime
 import pandas as pd
 import numpy as np
 import sys
