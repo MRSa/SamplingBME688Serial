@@ -29,7 +29,9 @@ if __name__ == '__main__':
         quit()
 
 h5_filename = os.path.splitext(os.path.basename(csv_filename))[0] + ".h5"
-print(' Create model: {0} -> {1}'.format(csv_filename, h5_filename))
+category_filename = os.path.splitext(os.path.basename(csv_filename))[0] + "_category.txt"
+
+print(' Create model: {0} -> {1} ({2})'.format(csv_filename, h5_filename, category_filename))
 
 # -------------  CSVデータファイルからガス抵抗値を読み込む
 smell_data = pd.read_csv(csv_filename) 
@@ -81,3 +83,10 @@ model.summary()
 
 # ----- できたモデルをファイルに保存する
 model.save(h5_filename)
+
+# ----- モデルのデータ情報についての値を出力する
+result_number = 0.0
+with open(category_filename,"w") as output_file:
+    for category in range(number_of_categories):
+        print("{0},{1:.5f},;".format(smell_data.columns[category + 1], result_number), file = output_file)
+        result_number = result_number + data_interval
