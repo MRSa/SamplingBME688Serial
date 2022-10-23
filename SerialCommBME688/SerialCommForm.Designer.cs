@@ -170,6 +170,8 @@
             // 
             this.chkExportOnlyGasRegistanceLogarithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
+            this.chkExportOnlyGasRegistanceLogarithm.Checked = true;
+            this.chkExportOnlyGasRegistanceLogarithm.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(551, 216);
             this.chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
             this.chkExportOnlyGasRegistanceLogarithm.Size = new System.Drawing.Size(114, 19);
