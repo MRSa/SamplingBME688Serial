@@ -1,6 +1,6 @@
 // M5Atom で BME688 のガスセンサ・ヒーターを操作するサンプル
 //   https://gist.githubusercontent.com/ksasao/5505e0e59a97cde799cf0ed2d2009b2d/raw/ec847139310ed5a3e51c163d95d8062d3e8f5d3d/M5BME688.ino
-// 2022/1/6 @ksasao  (自分環境用に微調整: MRSa)
+// 2022/1/6 @ksasao  (自分環境用に微調整...I2CのIDどちらでもいけるようにした: MRSa)
 // 
 // 利用デバイス:
 // デバイスは、下記などで入手してください
@@ -34,8 +34,8 @@ void errLeds(void);
 #define SCL_PIN 32
 
 //  I2C: Address
-#define BME688_I2C_ADDR 0x76
-//#define BME688_I2C_ADDR 0x77
+#define BME688_I2C_ADDR_1ST 0x76
+#define BME688_I2C_ADDR_2ND 0x77
 
 #include <math.h>
 Bme68x bme;
@@ -61,7 +61,13 @@ void setup(void)
   }
 
   /* initializes the sensor based on I2C library */
-  bme.begin(BME688_I2C_ADDR, Wire);
+  bme.begin(BME688_I2C_ADDR_2ND, Wire);
+
+  if((bme.checkStatus())&&(bme.checkStatus() == BME68X_ERROR))
+  {
+     Serial.println(" TRY : ADDR_1ST");
+     bme.begin(BME688_I2C_ADDR_1ST, Wire);
+  }
 
   if(bme.checkStatus())
   {
@@ -131,7 +137,7 @@ void loop(void)
         Serial.print(String(data.pressure) + ",");
         Serial.print(String(data.gas_resistance) + ",");
         float current = log(data.gas_resistance); // 値の変動が大きいので対数をとるといい感じです
-        Serial.print(String(current,3)+",");
+        Serial.print(String(current,6)+",");      // 精度をちょっと拡大
         Serial.print(String(current-last+10,3));  // ガスの脱着は温度変化に敏感なので差分もつかうと良いです
         Serial.print(",;");
         Serial.println();
