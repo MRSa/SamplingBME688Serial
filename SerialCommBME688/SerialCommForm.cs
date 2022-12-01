@@ -1,5 +1,8 @@
+using SamplingBME688Serial;
+using System;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Windows.Forms;
 
 namespace SerialCommBME688
 {
@@ -104,7 +107,7 @@ namespace SerialCommBME688
 
 
                     // CSVへデータを書き出す。
-                    myReceiver.startExportCsv(myStream, chkExportOnlyGasRegistanceLogarithm.Checked);
+                    myReceiver.startExportCsv(myStream, chkExportOnlyGasRegistanceLogarithm.Checked, Decimal.ToInt32(numDuplicate.Value));
                     myStream.Close();
                 }
             }
@@ -121,6 +124,29 @@ namespace SerialCommBME688
             // データをリセットする
             myReceiver.reset();
             txtDataCategory.Text = "";
+        }
+
+        private void btnShowGraph_Click(object sender, EventArgs e)
+        {
+            //  データが１つ以上選択されていた時は、グラフを表示する
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                    {
+                        Debug.WriteLine(row.Index + " : : " + row.Cells[0].Value + " ");
+                    }
+                    // データが選択されていた時は、詳細ダイアログを表示する
+                    DataDetailDialog dialog = new DataDetailDialog();
+                    dialog.Owner = this;
+                    dialog.Show();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(DateTime.Now + " btnShowGraph_Click()" + ex.Message);
+                }
+            }
         }
     }
 }

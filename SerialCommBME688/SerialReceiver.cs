@@ -95,7 +95,7 @@ namespace SerialCommBME688
             Debug.WriteLine("  ----- FINISH ReadSerial() -----");
         }
 
-        public void startExportCsv(Stream myStream, bool exportOnlyGasRegistanceLogarithm)
+        public void startExportCsv(Stream myStream, bool exportOnlyGasRegistanceLogarithm, int numOfDuplicate)
         {
             try
             {
@@ -103,11 +103,16 @@ namespace SerialCommBME688
                 //Thread writeThread = new Thread(exportCsvData);
                 //writeThread.Start();
 
+
                 // 収集データをCSVファイルに出力する
                 if (exportOnlyGasRegistanceLogarithm)
                 {
-                    // GasRegistance の 対数データのみ出力する
-                    dataParser.exportCsvDataOnlyGasRegistance(myStream);
+                    int duplicateCount = (numOfDuplicate <= 0) ? 1 : numOfDuplicate;
+                    for (int count = 0; count < duplicateCount; count++)
+                    {
+                        // GasRegistance の 対数データのみ出力する
+                        dataParser.exportCsvDataOnlyGasRegistance(myStream, count);
+                    }
                 }
                 else
                 {

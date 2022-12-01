@@ -136,13 +136,13 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvDataOnlyGasRegistance(Stream myStream)
+        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count)
         {
             try
             {
-                appendText("----- exportCsvDataOnlyGasRegistance() : START...\r\n");
-                dataHolder.exportCsvDataOnlyGasRegistance(myStream);
-                appendText("----- exportCsvDataOnlyGasRegistance() : FINISHED.\r\n");
+                appendText("----- exportCsvDataOnlyGasRegistance() : START...(" + count + ")\r\n");
+                dataHolder.exportCsvDataOnlyGasRegistance(myStream, count);
+                appendText("----- exportCsvDataOnlyGasRegistance() : FINISHED. (" + count + ")\r\n");
             }
             catch (Exception e)
             {

@@ -220,23 +220,33 @@ namespace SerialCommBME688
         }
 
 
-        public void exportCsvDataOnlyGasRegistance(Stream myStream)
+        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count)
         {
             try
             {
-                Debug.WriteLine("exportCsvDataOnlyGasRegistance() : canWrite: " + myStream.CanWrite);
+                Debug.WriteLine("exportCsvDataOnlyGasRegistance() : canWrite: " + myStream.CanWrite + " count: " + count);
 
                 StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
                 writer.AutoFlush = true;
 
+                // データのヘッダー部分を出力する
                 int categoryCount = 0;
-                writer.Write("; index, ");
+                if (count == 0)
+                {
+                    writer.Write("; index, ");
+                }
                 foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
                 {
-                    writer.Write(item.Key + ", ");
+                    if (count == 0)
+                    {
+                        writer.Write(item.Key + ", ");
+                    }
                     categoryCount++;
                 }
-                writer.WriteLine(" ;");
+                if (count == 0)
+                {
+                    writer.WriteLine(" ;");
+                }
 
                 // 次に読み込むインデックス位置を取得する
                 List<int> nextElement = new List<int>(categoryCount);
@@ -270,9 +280,10 @@ namespace SerialCommBME688
                     }
                 }
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException ex)
             {
                 Debug.WriteLine(" index over ");
+                // Debug.WriteLine(DateTime.Now + ex.StackTrace);
             }
             catch (Exception e)
             {

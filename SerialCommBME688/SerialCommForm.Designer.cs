@@ -39,10 +39,14 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.chkExportOnlyGasRegistanceLogarithm = new System.Windows.Forms.CheckBox();
             this.btnReset = new System.Windows.Forms.Button();
+            this.btnShowGraph = new System.Windows.Forms.Button();
+            this.numDuplicate = new System.Windows.Forms.NumericUpDown();
+            this.lblDuplicate = new System.Windows.Forms.Label();
             this.grpPort.SuspendLayout();
             this.grpDataCategory.SuspendLayout();
             this.grpData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDuplicate)).BeginInit();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -98,7 +102,7 @@
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
             this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole.Size = new System.Drawing.Size(658, 87);
+            this.txtConsole.Size = new System.Drawing.Size(658, 79);
             this.txtConsole.TabIndex = 4;
             // 
             // btnClear
@@ -132,9 +136,9 @@
             // btnExport
             // 
             this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExport.Location = new System.Drawing.Point(551, 188);
+            this.btnExport.Location = new System.Drawing.Point(551, 180);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(114, 22);
+            this.btnExport.Size = new System.Drawing.Size(125, 22);
             this.btnExport.TabIndex = 7;
             this.btnExport.Text = "Export CSV";
             this.btnExport.UseVisualStyleBackColor = true;
@@ -145,7 +149,7 @@
             this.grpData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpData.Controls.Add(this.dataGridView1);
-            this.grpData.Location = new System.Drawing.Point(12, 169);
+            this.grpData.Location = new System.Drawing.Point(12, 161);
             this.grpData.Name = "grpData";
             this.grpData.Size = new System.Drawing.Size(533, 269);
             this.grpData.TabIndex = 8;
@@ -172,7 +176,7 @@
             this.chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
             this.chkExportOnlyGasRegistanceLogarithm.Checked = true;
             this.chkExportOnlyGasRegistanceLogarithm.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(551, 216);
+            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(551, 208);
             this.chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
             this.chkExportOnlyGasRegistanceLogarithm.Size = new System.Drawing.Size(114, 19);
             this.chkExportOnlyGasRegistanceLogarithm.TabIndex = 9;
@@ -182,19 +186,68 @@
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(551, 413);
+            this.btnReset.Location = new System.Drawing.Point(551, 405);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(114, 22);
+            this.btnReset.Size = new System.Drawing.Size(125, 22);
             this.btnReset.TabIndex = 10;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // btnShowGraph
+            // 
+            this.btnShowGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShowGraph.Location = new System.Drawing.Point(551, 293);
+            this.btnShowGraph.Name = "btnShowGraph";
+            this.btnShowGraph.Size = new System.Drawing.Size(125, 23);
+            this.btnShowGraph.TabIndex = 11;
+            this.btnShowGraph.Text = "Show Graph";
+            this.btnShowGraph.UseVisualStyleBackColor = true;
+            this.btnShowGraph.Visible = false;
+            this.btnShowGraph.Click += new System.EventHandler(this.btnShowGraph_Click);
+            // 
+            // numDuplicate
+            // 
+            this.numDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.numDuplicate.Location = new System.Drawing.Point(611, 239);
+            this.numDuplicate.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numDuplicate.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numDuplicate.Name = "numDuplicate";
+            this.numDuplicate.Size = new System.Drawing.Size(65, 23);
+            this.numDuplicate.TabIndex = 12;
+            this.numDuplicate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblDuplicate
+            // 
+            this.lblDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDuplicate.AutoSize = true;
+            this.lblDuplicate.Location = new System.Drawing.Point(548, 241);
+            this.lblDuplicate.Name = "lblDuplicate";
+            this.lblDuplicate.Size = new System.Drawing.Size(57, 15);
+            this.lblDuplicate.TabIndex = 13;
+            this.lblDuplicate.Text = "Duplicate";
+            this.lblDuplicate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // SerialCommForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(688, 450);
+            this.ClientSize = new System.Drawing.Size(688, 442);
+            this.Controls.Add(this.lblDuplicate);
+            this.Controls.Add(this.numDuplicate);
+            this.Controls.Add(this.btnShowGraph);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
             this.Controls.Add(this.txtConsole);
@@ -213,6 +266,7 @@
             this.grpDataCategory.PerformLayout();
             this.grpData.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDuplicate)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -233,5 +287,8 @@
         private DataGridView dataGridView1;
         private CheckBox chkExportOnlyGasRegistanceLogarithm;
         private Button btnReset;
+        private Button btnShowGraph;
+        private NumericUpDown numDuplicate;
+        private Label lblDuplicate;
     }
 }
