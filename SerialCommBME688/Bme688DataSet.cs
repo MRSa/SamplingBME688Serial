@@ -27,15 +27,16 @@ namespace SerialCommBME688
 
         public Bme688DataSet(int nofIndex, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
         {
+            // データ数の最大を設定し、エリアを初期化する
+            if ((nofIndex < 0)||(nofIndex > 100))
+            {
+                //  入力値が変な時は、補正する。（ありえないはず..）
+                nofIndex = 10;
+            }
+
+            observedData = new List<Bme688Data>(nofIndex);
             try
             {
-                // データ数の最大を設定し、エリアを初期化する
-                if (nofIndex < 0)
-                {
-                    //  入力値が変な時は、補正する。（ありえないはず）
-                    nofIndex = 10;
-                }
-                observedData = new List<Bme688Data>(nofIndex);
                 lack_data = nofIndex;
                 for (int index = 0; index < nofIndex; index++)
                 {

@@ -42,11 +42,21 @@
             this.btnShowGraph = new System.Windows.Forms.Button();
             this.numDuplicate = new System.Windows.Forms.NumericUpDown();
             this.lblDuplicate = new System.Windows.Forms.Label();
+            this.txtConsole_2 = new System.Windows.Forms.TextBox();
+            this.grpPort_2 = new System.Windows.Forms.GroupBox();
+            this.btnStop_2 = new System.Windows.Forms.Button();
+            this.btnConnect_2 = new System.Windows.Forms.Button();
+            this.txtPort_2 = new System.Windows.Forms.TextBox();
+            this.grpLogConsole = new System.Windows.Forms.GroupBox();
+            this.grpExportOption = new System.Windows.Forms.GroupBox();
             this.grpPort.SuspendLayout();
             this.grpDataCategory.SuspendLayout();
             this.grpData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDuplicate)).BeginInit();
+            this.grpPort_2.SuspendLayout();
+            this.grpLogConsole.SuspendLayout();
+            this.grpExportOption.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -73,12 +83,12 @@
             this.grpPort.Controls.Add(this.btnStop);
             this.grpPort.Controls.Add(this.btnConnect);
             this.grpPort.Controls.Add(this.txtPort);
-            this.grpPort.Location = new System.Drawing.Point(12, 12);
+            this.grpPort.Location = new System.Drawing.Point(233, 12);
             this.grpPort.Name = "grpPort";
             this.grpPort.Size = new System.Drawing.Size(240, 56);
             this.grpPort.TabIndex = 3;
             this.grpPort.TabStop = false;
-            this.grpPort.Text = "Communication Port";
+            this.grpPort.Text = "Sensor1";
             // 
             // btnStop
             // 
@@ -97,18 +107,18 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConsole.HideSelection = false;
-            this.txtConsole.Location = new System.Drawing.Point(18, 76);
+            this.txtConsole.Location = new System.Drawing.Point(3, 24);
             this.txtConsole.Multiline = true;
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
             this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole.Size = new System.Drawing.Size(658, 79);
+            this.txtConsole.Size = new System.Drawing.Size(787, 85);
             this.txtConsole.TabIndex = 4;
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(597, 33);
+            this.btnClear.Location = new System.Drawing.Point(731, 33);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(79, 23);
             this.btnClear.TabIndex = 5;
@@ -119,7 +129,7 @@
             // grpDataCategory
             // 
             this.grpDataCategory.Controls.Add(this.txtDataCategory);
-            this.grpDataCategory.Location = new System.Drawing.Point(258, 12);
+            this.grpDataCategory.Location = new System.Drawing.Point(12, 12);
             this.grpDataCategory.Name = "grpDataCategory";
             this.grpDataCategory.Size = new System.Drawing.Size(215, 56);
             this.grpDataCategory.TabIndex = 6;
@@ -136,7 +146,7 @@
             // btnExport
             // 
             this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExport.Location = new System.Drawing.Point(551, 180);
+            this.btnExport.Location = new System.Drawing.Point(685, 328);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(125, 22);
             this.btnExport.TabIndex = 7;
@@ -149,9 +159,9 @@
             this.grpData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpData.Controls.Add(this.dataGridView1);
-            this.grpData.Location = new System.Drawing.Point(12, 161);
+            this.grpData.Location = new System.Drawing.Point(12, 309);
             this.grpData.Name = "grpData";
-            this.grpData.Size = new System.Drawing.Size(533, 269);
+            this.grpData.Size = new System.Drawing.Size(667, 269);
             this.grpData.TabIndex = 8;
             this.grpData.TabStop = false;
             this.grpData.Text = "Collected Data";
@@ -167,7 +177,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(527, 247);
+            this.dataGridView1.Size = new System.Drawing.Size(661, 247);
             this.dataGridView1.TabIndex = 0;
             // 
             // chkExportOnlyGasRegistanceLogarithm
@@ -176,17 +186,18 @@
             this.chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
             this.chkExportOnlyGasRegistanceLogarithm.Checked = true;
             this.chkExportOnlyGasRegistanceLogarithm.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(551, 208);
+            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(6, 19);
             this.chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
             this.chkExportOnlyGasRegistanceLogarithm.Size = new System.Drawing.Size(114, 19);
             this.chkExportOnlyGasRegistanceLogarithm.TabIndex = 9;
             this.chkExportOnlyGasRegistanceLogarithm.Text = "Only Gas R.(Log)";
             this.chkExportOnlyGasRegistanceLogarithm.UseVisualStyleBackColor = true;
+            this.chkExportOnlyGasRegistanceLogarithm.CheckedChanged += new System.EventHandler(this.chkExportOnlyGasRegistanceLogarithm_CheckedChanged);
             // 
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(551, 405);
+            this.btnReset.Location = new System.Drawing.Point(685, 553);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(125, 22);
             this.btnReset.TabIndex = 10;
@@ -197,7 +208,7 @@
             // btnShowGraph
             // 
             this.btnShowGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowGraph.Location = new System.Drawing.Point(551, 293);
+            this.btnShowGraph.Location = new System.Drawing.Point(685, 471);
             this.btnShowGraph.Name = "btnShowGraph";
             this.btnShowGraph.Size = new System.Drawing.Size(125, 23);
             this.btnShowGraph.TabIndex = 11;
@@ -209,7 +220,7 @@
             // numDuplicate
             // 
             this.numDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.numDuplicate.Location = new System.Drawing.Point(611, 239);
+            this.numDuplicate.Location = new System.Drawing.Point(69, 44);
             this.numDuplicate.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -221,7 +232,7 @@
             0,
             0});
             this.numDuplicate.Name = "numDuplicate";
-            this.numDuplicate.Size = new System.Drawing.Size(65, 23);
+            this.numDuplicate.Size = new System.Drawing.Size(56, 23);
             this.numDuplicate.TabIndex = 12;
             this.numDuplicate.Value = new decimal(new int[] {
             1,
@@ -233,31 +244,112 @@
             // 
             this.lblDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDuplicate.AutoSize = true;
-            this.lblDuplicate.Location = new System.Drawing.Point(548, 241);
+            this.lblDuplicate.Location = new System.Drawing.Point(6, 46);
             this.lblDuplicate.Name = "lblDuplicate";
             this.lblDuplicate.Size = new System.Drawing.Size(57, 15);
             this.lblDuplicate.TabIndex = 13;
             this.lblDuplicate.Text = "Duplicate";
             this.lblDuplicate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // txtConsole_2
+            // 
+            this.txtConsole_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtConsole_2.HideSelection = false;
+            this.txtConsole_2.Location = new System.Drawing.Point(3, 115);
+            this.txtConsole_2.Multiline = true;
+            this.txtConsole_2.Name = "txtConsole_2";
+            this.txtConsole_2.ReadOnly = true;
+            this.txtConsole_2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtConsole_2.Size = new System.Drawing.Size(787, 108);
+            this.txtConsole_2.TabIndex = 14;
+            // 
+            // grpPort_2
+            // 
+            this.grpPort_2.Controls.Add(this.btnStop_2);
+            this.grpPort_2.Controls.Add(this.btnConnect_2);
+            this.grpPort_2.Controls.Add(this.txtPort_2);
+            this.grpPort_2.Location = new System.Drawing.Point(479, 12);
+            this.grpPort_2.Name = "grpPort_2";
+            this.grpPort_2.Size = new System.Drawing.Size(240, 56);
+            this.grpPort_2.TabIndex = 15;
+            this.grpPort_2.TabStop = false;
+            this.grpPort_2.Text = "Sensor2";
+            // 
+            // btnStop_2
+            // 
+            this.btnStop_2.Enabled = false;
+            this.btnStop_2.Location = new System.Drawing.Point(157, 20);
+            this.btnStop_2.Name = "btnStop_2";
+            this.btnStop_2.Size = new System.Drawing.Size(75, 23);
+            this.btnStop_2.TabIndex = 3;
+            this.btnStop_2.Text = "Stop";
+            this.btnStop_2.UseVisualStyleBackColor = true;
+            this.btnStop_2.Click += new System.EventHandler(this.btnStop_2_Click);
+            // 
+            // btnConnect_2
+            // 
+            this.btnConnect_2.Location = new System.Drawing.Point(76, 20);
+            this.btnConnect_2.Name = "btnConnect_2";
+            this.btnConnect_2.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect_2.TabIndex = 0;
+            this.btnConnect_2.Text = "Connect";
+            this.btnConnect_2.UseVisualStyleBackColor = true;
+            this.btnConnect_2.Click += new System.EventHandler(this.btnConnect_2_Click);
+            // 
+            // txtPort_2
+            // 
+            this.txtPort_2.Location = new System.Drawing.Point(6, 21);
+            this.txtPort_2.Name = "txtPort_2";
+            this.txtPort_2.Size = new System.Drawing.Size(64, 23);
+            this.txtPort_2.TabIndex = 2;
+            this.txtPort_2.Text = "COM6";
+            this.txtPort_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // grpLogConsole
+            // 
+            this.grpLogConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpLogConsole.Controls.Add(this.txtConsole_2);
+            this.grpLogConsole.Controls.Add(this.txtConsole);
+            this.grpLogConsole.Location = new System.Drawing.Point(12, 74);
+            this.grpLogConsole.Name = "grpLogConsole";
+            this.grpLogConsole.Size = new System.Drawing.Size(798, 229);
+            this.grpLogConsole.TabIndex = 16;
+            this.grpLogConsole.TabStop = false;
+            this.grpLogConsole.Text = "Sampling Status";
+            // 
+            // grpExportOption
+            // 
+            this.grpExportOption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpExportOption.Controls.Add(this.numDuplicate);
+            this.grpExportOption.Controls.Add(this.lblDuplicate);
+            this.grpExportOption.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
+            this.grpExportOption.Location = new System.Drawing.Point(685, 358);
+            this.grpExportOption.Name = "grpExportOption";
+            this.grpExportOption.Size = new System.Drawing.Size(131, 73);
+            this.grpExportOption.TabIndex = 17;
+            this.grpExportOption.TabStop = false;
+            this.grpExportOption.Text = "Export Option";
+            // 
             // SerialCommForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(688, 442);
-            this.Controls.Add(this.lblDuplicate);
-            this.Controls.Add(this.numDuplicate);
+            this.ClientSize = new System.Drawing.Size(822, 590);
+            this.Controls.Add(this.grpExportOption);
+            this.Controls.Add(this.grpPort_2);
             this.Controls.Add(this.btnShowGraph);
             this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
-            this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.grpData);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.grpDataCategory);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.grpPort);
+            this.Controls.Add(this.grpLogConsole);
             this.Name = "SerialCommForm";
-            this.Text = "BME688Serial";
+            this.Text = "BME688 Sampling";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SerialCommForm_FormClosing);
             this.Load += new System.EventHandler(this.SerialCommForm_Load);
             this.grpPort.ResumeLayout(false);
@@ -267,8 +359,13 @@
             this.grpData.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDuplicate)).EndInit();
+            this.grpPort_2.ResumeLayout(false);
+            this.grpPort_2.PerformLayout();
+            this.grpLogConsole.ResumeLayout(false);
+            this.grpLogConsole.PerformLayout();
+            this.grpExportOption.ResumeLayout(false);
+            this.grpExportOption.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -290,5 +387,12 @@
         private Button btnShowGraph;
         private NumericUpDown numDuplicate;
         private Label lblDuplicate;
+        private TextBox txtConsole_2;
+        private GroupBox grpPort_2;
+        private Button btnStop_2;
+        private Button btnConnect_2;
+        private TextBox txtPort_2;
+        private GroupBox grpLogConsole;
+        private GroupBox grpExportOption;
     }
 }

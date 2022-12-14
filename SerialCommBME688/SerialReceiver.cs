@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamplingBME688Serial;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -12,11 +13,19 @@ namespace SerialCommBME688
 {
     internal class SerialReceiver
     {
-        private static System.IO.Ports.SerialPort mySerialPort = new System.IO.Ports.SerialPort(new System.ComponentModel.Container());
-        private static SerialDataParser dataParser = new SerialDataParser();
+        private int sensorId;
         private Thread? readThread = null;  // new Thread(ReadSerial);
-        private static bool _continue = true;
-        private static String dataCategory = "";
+        private System.IO.Ports.SerialPort mySerialPort = new System.IO.Ports.SerialPort(new System.ComponentModel.Container());
+        private SerialDataParser dataParser;
+        private bool _continue = true;
+        private String dataCategory = "";
+
+        public SerialReceiver(int sensorId, IDataReceiveNotify notify)
+        {
+            this.sensorId = sensorId;
+            this.dataParser = new SerialDataParser(sensorId, notify);
+        }
+
 
         public bool startReceive(String comPort, String aDataCategory, TextBox aOutputArea)
         {
@@ -69,7 +78,7 @@ namespace SerialCommBME688
             return (true);
         }
 
-        public static void ReadSerial()
+        public void ReadSerial()
         {
             Debug.WriteLine("  ----- START ReadSerial() -----");
             while (_continue)
@@ -103,7 +112,6 @@ namespace SerialCommBME688
                 //Thread writeThread = new Thread(exportCsvData);
                 //writeThread.Start();
 
-
                 // 収集データをCSVファイルに出力する
                 if (exportOnlyGasRegistanceLogarithm)
                 {
@@ -125,10 +133,10 @@ namespace SerialCommBME688
             }
         }
 
-        public DataTable getGridDataSource()
-        {
-            return (dataParser.getGridDataSource());
-        }
+        //public DataTable getGridDataSource()
+        //{
+        //    return (dataParser.getGridDataSource());
+        //}
 
         public void reset()
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamplingBME688Serial;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -17,14 +18,13 @@ namespace SerialCommBME688
     internal class SerialDataParser: IMessageCallback
     {
         private const int NUMBER_OF_ITEMS = 13;
-        private static TextBox? outputArea = null;
-        private static Bme688DataHolder dataHolder;
+        private TextBox? outputArea = null;
+        private Bme688DataHolder dataHolder;
 
-        public SerialDataParser()
+        public SerialDataParser(int sensorId, IDataReceiveNotify notify)
         {
-            dataHolder = new Bme688DataHolder(this);
+            dataHolder = new Bme688DataHolder(this, notify, sensorId);
         }
-
 
         public void setOutputArea(TextBox aOutputArea)
         {
@@ -85,7 +85,7 @@ namespace SerialCommBME688
             }
         }
 
-        private static void appendText(String itemData)
+        private void appendText(String itemData)
         {
             try
             {
@@ -160,11 +160,6 @@ namespace SerialCommBME688
             {
                 Debug.WriteLine(DateTime.Now + " messageCallback() : " + e.Message + " " + message);
             }
-        }
-
-        public DataTable getGridDataSource()
-        {
-            return (dataHolder.getGridDataSource());
         }
 
         public void reset()
