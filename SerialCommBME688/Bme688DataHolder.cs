@@ -274,7 +274,7 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvData(Stream myStream)
+        public void exportCsvData(Stream myStream, bool isWriteHeader)
         {
             // callback.messageCallback("   --- exportCsvData() ---\r\n");
             try
@@ -284,8 +284,10 @@ namespace SerialCommBME688
                 StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
 
                 writer.AutoFlush = true;
-                writer.WriteLine("; category, index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff");
-
+                if (isWriteHeader)
+                {
+                    writer.WriteLine("; sensorId, category, index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff");
+                }
                 foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
                 {
                     String category = item.Key;
@@ -300,7 +302,7 @@ namespace SerialCommBME688
                                 try
                                 {
                                     Bme688Data data = collectedData.getBme688Data(dataIndex);
-                                    writer.WriteLine(category + "," + dataIndex + "," + data.temperature + "," + data.humidity + "," + data.pressure + "," + data.gas_registance + "," + data.gas_registance_log + "," + data.gas_registance_diff + ",;");
+                                    writer.WriteLine(sensorId + "," + category + "," + dataIndex + "," + data.temperature + "," + data.humidity + "," + data.pressure + "," + data.gas_registance + "," + data.gas_registance_log + "," + data.gas_registance_diff + ",;");
                                 }
                                 catch (Exception ee)
                                 {
@@ -319,7 +321,7 @@ namespace SerialCommBME688
         }
 
 
-        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count)
+        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count, bool isWriteHeader)
         {
             try
             {
@@ -329,21 +331,17 @@ namespace SerialCommBME688
                 writer.AutoFlush = true;
 
                 // データのヘッダー部分を出力する
-                int categoryCount = 0;
-                if (count == 0)
+                int categoryCount = dataSetMap.Count;
+
+                if (isWriteHeader)
                 {
+                    //categoryCount = 0;
                     writer.Write("; index, ");
-                }
-                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
-                {
-                    if (count == 0)
+                    foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
                     {
                         writer.Write(item.Key + ", ");
+                        //categoryCount++;
                     }
-                    categoryCount++;
-                }
-                if (count == 0)
-                {
                     writer.WriteLine(" ;");
                 }
 
@@ -389,6 +387,11 @@ namespace SerialCommBME688
                 Debug.WriteLine(DateTime.Now + " exportCsvDataOnlyGasRegistance() : " + e.Message + " ");
                 Debug.WriteLine(DateTime.Now + e.StackTrace);
             }
+        }
+
+        public bool isDataReceived()
+        {
+            return (dataSetMap.Count > 0);
         }
 
 /*

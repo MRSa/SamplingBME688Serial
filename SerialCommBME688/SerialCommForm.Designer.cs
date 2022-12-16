@@ -49,6 +49,7 @@
             this.txtPort_2 = new System.Windows.Forms.TextBox();
             this.grpLogConsole = new System.Windows.Forms.GroupBox();
             this.grpExportOption = new System.Windows.Forms.GroupBox();
+            this.chkCombineSensor = new System.Windows.Forms.CheckBox();
             this.grpPort.SuspendLayout();
             this.grpDataCategory.SuspendLayout();
             this.grpData.SuspendLayout();
@@ -112,13 +113,13 @@
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
             this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole.Size = new System.Drawing.Size(787, 85);
+            this.txtConsole.Size = new System.Drawing.Size(803, 87);
             this.txtConsole.TabIndex = 4;
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(731, 33);
+            this.btnClear.Location = new System.Drawing.Point(747, 33);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(79, 23);
             this.btnClear.TabIndex = 5;
@@ -146,9 +147,9 @@
             // btnExport
             // 
             this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExport.Location = new System.Drawing.Point(685, 328);
+            this.btnExport.Location = new System.Drawing.Point(703, 330);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(125, 22);
+            this.btnExport.Size = new System.Drawing.Size(123, 22);
             this.btnExport.TabIndex = 7;
             this.btnExport.Text = "Export CSV";
             this.btnExport.UseVisualStyleBackColor = true;
@@ -159,9 +160,9 @@
             this.grpData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpData.Controls.Add(this.dataGridView1);
-            this.grpData.Location = new System.Drawing.Point(12, 309);
+            this.grpData.Location = new System.Drawing.Point(12, 311);
             this.grpData.Name = "grpData";
-            this.grpData.Size = new System.Drawing.Size(667, 269);
+            this.grpData.Size = new System.Drawing.Size(685, 269);
             this.grpData.TabIndex = 8;
             this.grpData.TabStop = false;
             this.grpData.Text = "Collected Data";
@@ -177,7 +178,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(661, 247);
+            this.dataGridView1.Size = new System.Drawing.Size(679, 247);
             this.dataGridView1.TabIndex = 0;
             // 
             // chkExportOnlyGasRegistanceLogarithm
@@ -186,7 +187,7 @@
             this.chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
             this.chkExportOnlyGasRegistanceLogarithm.Checked = true;
             this.chkExportOnlyGasRegistanceLogarithm.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(6, 19);
+            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(6, 22);
             this.chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
             this.chkExportOnlyGasRegistanceLogarithm.Size = new System.Drawing.Size(114, 19);
             this.chkExportOnlyGasRegistanceLogarithm.TabIndex = 9;
@@ -197,9 +198,9 @@
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(685, 553);
+            this.btnReset.Location = new System.Drawing.Point(703, 555);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(125, 22);
+            this.btnReset.Size = new System.Drawing.Size(123, 22);
             this.btnReset.TabIndex = 10;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -208,9 +209,9 @@
             // btnShowGraph
             // 
             this.btnShowGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowGraph.Location = new System.Drawing.Point(685, 471);
+            this.btnShowGraph.Location = new System.Drawing.Point(703, 473);
             this.btnShowGraph.Name = "btnShowGraph";
-            this.btnShowGraph.Size = new System.Drawing.Size(125, 23);
+            this.btnShowGraph.Size = new System.Drawing.Size(123, 23);
             this.btnShowGraph.TabIndex = 11;
             this.btnShowGraph.Text = "Show Graph";
             this.btnShowGraph.UseVisualStyleBackColor = true;
@@ -220,7 +221,7 @@
             // numDuplicate
             // 
             this.numDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.numDuplicate.Location = new System.Drawing.Point(69, 44);
+            this.numDuplicate.Location = new System.Drawing.Point(67, 78);
             this.numDuplicate.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -244,7 +245,7 @@
             // 
             this.lblDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDuplicate.AutoSize = true;
-            this.lblDuplicate.Location = new System.Drawing.Point(6, 46);
+            this.lblDuplicate.Location = new System.Drawing.Point(4, 80);
             this.lblDuplicate.Name = "lblDuplicate";
             this.lblDuplicate.Size = new System.Drawing.Size(57, 15);
             this.lblDuplicate.TabIndex = 13;
@@ -256,12 +257,12 @@
             this.txtConsole_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConsole_2.HideSelection = false;
-            this.txtConsole_2.Location = new System.Drawing.Point(3, 115);
+            this.txtConsole_2.Location = new System.Drawing.Point(3, 117);
             this.txtConsole_2.Multiline = true;
             this.txtConsole_2.Name = "txtConsole_2";
             this.txtConsole_2.ReadOnly = true;
             this.txtConsole_2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole_2.Size = new System.Drawing.Size(787, 108);
+            this.txtConsole_2.Size = new System.Drawing.Size(803, 108);
             this.txtConsole_2.TabIndex = 14;
             // 
             // grpPort_2
@@ -315,7 +316,7 @@
             this.grpLogConsole.Controls.Add(this.txtConsole);
             this.grpLogConsole.Location = new System.Drawing.Point(12, 74);
             this.grpLogConsole.Name = "grpLogConsole";
-            this.grpLogConsole.Size = new System.Drawing.Size(798, 229);
+            this.grpLogConsole.Size = new System.Drawing.Size(814, 231);
             this.grpLogConsole.TabIndex = 16;
             this.grpLogConsole.TabStop = false;
             this.grpLogConsole.Text = "Sampling Status";
@@ -323,21 +324,33 @@
             // grpExportOption
             // 
             this.grpExportOption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpExportOption.Controls.Add(this.chkCombineSensor);
             this.grpExportOption.Controls.Add(this.numDuplicate);
             this.grpExportOption.Controls.Add(this.lblDuplicate);
             this.grpExportOption.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
-            this.grpExportOption.Location = new System.Drawing.Point(685, 358);
+            this.grpExportOption.Location = new System.Drawing.Point(703, 360);
             this.grpExportOption.Name = "grpExportOption";
-            this.grpExportOption.Size = new System.Drawing.Size(131, 73);
+            this.grpExportOption.Size = new System.Drawing.Size(129, 107);
             this.grpExportOption.TabIndex = 17;
             this.grpExportOption.TabStop = false;
             this.grpExportOption.Text = "Export Option";
+            // 
+            // chkCombineSensor
+            // 
+            this.chkCombineSensor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkCombineSensor.AutoSize = true;
+            this.chkCombineSensor.Location = new System.Drawing.Point(6, 47);
+            this.chkCombineSensor.Name = "chkCombineSensor";
+            this.chkCombineSensor.Size = new System.Drawing.Size(110, 19);
+            this.chkCombineSensor.TabIndex = 14;
+            this.chkCombineSensor.Text = "Combine sensor";
+            this.chkCombineSensor.UseVisualStyleBackColor = true;
             // 
             // SerialCommForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(822, 590);
+            this.ClientSize = new System.Drawing.Size(838, 592);
             this.Controls.Add(this.grpExportOption);
             this.Controls.Add(this.grpPort_2);
             this.Controls.Add(this.btnShowGraph);
@@ -394,5 +407,6 @@
         private TextBox txtPort_2;
         private GroupBox grpLogConsole;
         private GroupBox grpExportOption;
+        private CheckBox chkCombineSensor;
     }
 }

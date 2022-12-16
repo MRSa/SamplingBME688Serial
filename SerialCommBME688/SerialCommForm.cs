@@ -53,7 +53,6 @@ namespace SerialCommBME688
                 Debug.WriteLine(ex.StackTrace);
             }
         }
-
         private void btnStop_Click(object sender, EventArgs e)
         {
             try
@@ -115,13 +114,56 @@ namespace SerialCommBME688
                 {
                     Debug.WriteLine("OpenFile : canWrite: " + myStream.CanWrite);
 
-
                     // CSVへデータを書き出す。
-                    myReceiver.startExportCsv(myStream, chkExportOnlyGasRegistanceLogarithm.Checked, Decimal.ToInt32(numDuplicate.Value));
+                    if (!chkExportOnlyGasRegistanceLogarithm.Checked)
+                    {
+                        // 全データのエクスポート
+                        myReceiver.startExportAllDataToCsv(myStream, true);
+                        myReceiver_2.startExportAllDataToCsv(myStream, false);
+                    }
+                    else
+                    {
+                        // センサの対数データのみのエクスポートする
+                        if (chkCombineSensor.Checked)
+                        {
+                            // センサ１とセンサ２のデータを混ぜてCSV出力する
+                            exportCsvEachSensor(myStream);
+                        }
+                        else
+                        {
+                            bool isWriteHeader = true;
+
+                            // センサ１とセンサ２のデータを順番に出力する（センサ１→センサ２の順に出力する）
+                            if (myReceiver.isDataReceived())
+                            {
+                                myReceiver.startExportCsv(myStream, Decimal.ToInt32(numDuplicate.Value), isWriteHeader);
+                                isWriteHeader = false;
+                            }
+                            if (myReceiver_2.isDataReceived())
+                            {
+                                myReceiver_2.startExportCsv(myStream, Decimal.ToInt32(numDuplicate.Value), isWriteHeader);
+                            }
+                        }
+                    }
                     myStream.Close();
                 }
             }
         }
+
+        private void exportCsvEachSensor(Stream myStream)
+        {
+            try
+            {
+                int validCount = dataSourceProvider.getValidCount();
+                //myReceiver.startExportCsv(myStream, validCount, Decimal.ToInt32(numDuplicate.Value));
+                //myReceiver_2.startExportCsv(myStream, validCount, Decimal.ToInt32(numDuplicate.Value));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " exportCsvEachSensor()" + ex.Message);
+            }
+        }
+
 
         private void SerialCommForm_Load(object sender, EventArgs e)
         {
@@ -167,10 +209,12 @@ namespace SerialCommBME688
             if (chkExportOnlyGasRegistanceLogarithm.Checked)
             {
                 numDuplicate.Enabled = true;
+                chkCombineSensor.Enabled = true;
             }
             else
             {
                 numDuplicate.Enabled = false;
+                chkCombineSensor.Enabled = false;
             }
         }
 

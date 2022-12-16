@@ -122,27 +122,27 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvData(Stream myStream)
+        public void exportCsvData(Stream myStream, bool isWriteHeader)
         {
             try
             {
-                appendText("----- exportCsvData() : START...\r\n");
-                dataHolder.exportCsvData(myStream);
-                appendText("----- exportCsvData() : FINISHED.\r\n");
+                appendText("----- exportCsvData(" + isWriteHeader + ") : START...\r\n");
+                dataHolder.exportCsvData(myStream, isWriteHeader);
+                appendText("----- exportCsvData(" + isWriteHeader + ") : FINISHED.\r\n");
             }
             catch (Exception e)
             {
-                Debug.WriteLine(DateTime.Now + " exportCsvData() : " + e.Message);
+                Debug.WriteLine(DateTime.Now + " exportCsvData(" + isWriteHeader + ") : " + e.Message);
             }
         }
 
-        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count)
+        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count, bool isWriteHeader)
         {
             try
             {
-                appendText("----- exportCsvDataOnlyGasRegistance() : START...(" + count + ")\r\n");
-                dataHolder.exportCsvDataOnlyGasRegistance(myStream, count);
-                appendText("----- exportCsvDataOnlyGasRegistance() : FINISHED. (" + count + ")\r\n");
+                appendText("----- exportCsvDataOnlyGasRegistance() : START...(" + "," + count + "," + isWriteHeader + ")\r\n");
+                dataHolder.exportCsvDataOnlyGasRegistance(myStream, count, isWriteHeader);
+                appendText("----- exportCsvDataOnlyGasRegistance() : FINISHED. (" + "," + count + "," + isWriteHeader + ")\r\n");
             }
             catch (Exception e)
             {
@@ -160,6 +160,11 @@ namespace SerialCommBME688
             {
                 Debug.WriteLine(DateTime.Now + " messageCallback() : " + e.Message + " " + message);
             }
+        }
+
+        public bool isDataReceived()
+        {
+            return (dataHolder.isDataReceived());
         }
 
         public void reset()

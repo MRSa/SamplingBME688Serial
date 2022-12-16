@@ -104,7 +104,28 @@ namespace SerialCommBME688
             Debug.WriteLine("  ----- FINISH ReadSerial() -----");
         }
 
-        public void startExportCsv(Stream myStream, bool exportOnlyGasRegistanceLogarithm, int numOfDuplicate)
+
+        public void startExportAllDataToCsv(Stream myStream, bool isWriteHeader)
+        {
+            try
+            {
+                // このままだと固まるはずなので、本当はここでコンテキストを切りたい...
+                //Thread writeThread = new Thread(exportCsvData);
+                //writeThread.Start();
+                dataParser.exportCsvData(myStream, isWriteHeader);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " startExportAllDataToCsv(" + isWriteHeader + ") : " + e.Message);
+            }
+        }
+
+        public int getReceivedCount()
+        {
+            return (0);
+        }
+
+        public void startExportCsv(Stream myStream, int numOfDuplicate, bool isWriteHeader)
         {
             try
             {
@@ -112,24 +133,41 @@ namespace SerialCommBME688
                 //Thread writeThread = new Thread(exportCsvData);
                 //writeThread.Start();
 
-                // 収集データをCSVファイルに出力する
-                if (exportOnlyGasRegistanceLogarithm)
+                // 収集した対数データをCSVファイルに出力する
+                int duplicateCount = (numOfDuplicate <= 0) ? 1 : numOfDuplicate;
+                for (int count = 0; count < duplicateCount; count++)
                 {
-                    int duplicateCount = (numOfDuplicate <= 0) ? 1 : numOfDuplicate;
-                    for (int count = 0; count < duplicateCount; count++)
-                    {
-                        // GasRegistance の 対数データのみ出力する
-                        dataParser.exportCsvDataOnlyGasRegistance(myStream, count);
-                    }
-                }
-                else
-                {
-                    dataParser.exportCsvData(myStream);
+                    // GasRegistance の 対数データのみ出力する
+                    bool writeHeader = (count == 0) ? isWriteHeader : false;
+                    dataParser.exportCsvDataOnlyGasRegistance(myStream, count, writeHeader);
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine(DateTime.Now + " startExportCsv(" + exportOnlyGasRegistanceLogarithm + ") : " + e.Message);
+                Debug.WriteLine(DateTime.Now + " startExportCsv() : " + e.Message);
+            }
+        }
+
+
+        public void startExportCsvCombine(Stream myStream, int validCount, int numOfDuplicate)
+        {
+            try
+            {
+                // このままだと固まるはずなので、本当はここでコンテキストを切りたい...
+                //Thread writeThread = new Thread(exportCsvData);
+                //writeThread.Start();
+
+                // 収集した対数データをCSVファイルに出力する
+                int duplicateCount = (numOfDuplicate <= 0) ? 1 : numOfDuplicate;
+                for (int count = 0; count < duplicateCount; count++)
+                {
+                    // GasRegistance の 対数データのみ出力する
+                    //dataParser.exportCsvDataOnlyGasRegistance(myStream, validCount, count);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " startExportCsv() : " + e.Message);
             }
         }
 
@@ -138,11 +176,15 @@ namespace SerialCommBME688
         //    return (dataParser.getGridDataSource());
         //}
 
+        public bool isDataReceived()
+        {
+            return (dataParser.isDataReceived());
+        }
+
         public void reset()
         {
             // データをリセットする
             dataParser.reset();
         }
-
     }
 }

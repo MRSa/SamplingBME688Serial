@@ -16,6 +16,7 @@ namespace SamplingBME688Serial
 
     public class GridDataSourceProvider : IDataReceiveNotify
     {
+        private int minimumValidCount = -1;
         private DataTable dataSource = new DataTable("dataSummary");
         private Dictionary<String, Bme688DataSummary> dataSummaryMap = new Dictionary<String, Bme688DataSummary>();
 
@@ -58,6 +59,16 @@ namespace SamplingBME688Serial
                 foreach (KeyValuePair<String, Bme688DataSummary> item in dataSummaryMap)
                 {
                     Bme688DataSummary dataSummaryItem = item.Value;
+
+                    //  有効サンプル回数の最小値を決める
+                    if (minimumValidCount < 0)
+                    {
+                        minimumValidCount = dataSummaryItem.validCount;
+                    }
+                    if (minimumValidCount > dataSummaryItem.validCount)
+                    {
+                        minimumValidCount = dataSummaryItem.validCount;
+                    }
                     dataSource.Rows.Add(dataSummaryItem.category,
                                         dataSummaryItem.sensorId,
                                         dataSummaryItem.sampleCount,
@@ -79,10 +90,22 @@ namespace SamplingBME688Serial
                 Debug.WriteLine(DateTime.Now + " updateDataTable() : " + e.Message);
             }
         }
+
+        public int getValidCount()
+        {
+            if (minimumValidCount < 0)
+            {
+                // まだ収集していない場合...
+                return (0);
+            }
+            return (minimumValidCount);
+        }
+
         public void reset()
         {
             dataSummaryMap.Clear();
             dataSource.Clear();
+            minimumValidCount = -1;
         }
     }
 }
