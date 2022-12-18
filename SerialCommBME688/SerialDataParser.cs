@@ -15,7 +15,7 @@ namespace SerialCommBME688
         void messageCallback(String message);
     }
 
-    internal class SerialDataParser: IMessageCallback
+    internal class SerialDataParser : IMessageCallback
     {
         private const int NUMBER_OF_ITEMS = 13;
         private TextBox? outputArea = null;
@@ -65,10 +65,10 @@ namespace SerialCommBME688
                 // データを格納する。
                 String itemData = dataHolder.entryData(categoryName,
                                                        gas_index,
-                                                       meas_index, 
-                                                       serial_number, 
-                                                       data_status, 
-                                                       gas_wait, 
+                                                       meas_index,
+                                                       serial_number,
+                                                       data_status,
+                                                       gas_wait,
                                                        temperature,
                                                        humidity,
                                                        pressure,
@@ -136,17 +136,15 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count, bool isWriteHeader)
+        public void exportCsvDataOnlyGasRegistance(StreamWriter writer, List<String> categoryList, int validCount, int numOfDuplicate)
         {
             try
             {
-                appendText("----- exportCsvDataOnlyGasRegistance() : START...(" + "," + count + "," + isWriteHeader + ")\r\n");
-                dataHolder.exportCsvDataOnlyGasRegistance(myStream, count, isWriteHeader);
-                appendText("----- exportCsvDataOnlyGasRegistance() : FINISHED. (" + "," + count + "," + isWriteHeader + ")\r\n");
+                dataHolder.exportCsvDataOnlyGasRegistance(writer, categoryList, validCount, numOfDuplicate);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(DateTime.Now + " exportCsvData() : " + e.Message);
+                Debug.WriteLine(DateTime.Now + " exportCsvDataOnlyGasRegistance() : " + e.Message);
             }
         }
 
@@ -173,5 +171,20 @@ namespace SerialCommBME688
             dataHolder.reset();
         }
 
+        public Dictionary<String, List<List<double>>> getGasRegLogDataSet()
+        {
+            return (dataHolder.getGasRegLogDataSet());
+        }
+
+        public List<String> getCollectedCategoryList()
+        {
+            return (dataHolder.getCollectedCategoryList());
+
+        }
+
+        public int getDataIndexCount()
+        {
+            return (dataHolder.getDataIndexCount());
+        }
     }
 }

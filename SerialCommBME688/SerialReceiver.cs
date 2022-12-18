@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -25,7 +26,6 @@ namespace SerialCommBME688
             this.sensorId = sensorId;
             this.dataParser = new SerialDataParser(sensorId, notify);
         }
-
 
         public bool startReceive(String comPort, String aDataCategory, TextBox aOutputArea)
         {
@@ -125,7 +125,7 @@ namespace SerialCommBME688
             return (0);
         }
 
-        public void startExportCsv(Stream myStream, int numOfDuplicate, bool isWriteHeader)
+        public void startExportCsvOnlyGasRegistance(StreamWriter writer, List<String> categoryList, int validCount, int numOfDuplicate)
         {
             try
             {
@@ -134,17 +134,11 @@ namespace SerialCommBME688
                 //writeThread.Start();
 
                 // 収集した対数データをCSVファイルに出力する
-                int duplicateCount = (numOfDuplicate <= 0) ? 1 : numOfDuplicate;
-                for (int count = 0; count < duplicateCount; count++)
-                {
-                    // GasRegistance の 対数データのみ出力する
-                    bool writeHeader = (count == 0) ? isWriteHeader : false;
-                    dataParser.exportCsvDataOnlyGasRegistance(myStream, count, writeHeader);
-                }
+                dataParser.exportCsvDataOnlyGasRegistance(writer, categoryList, validCount, numOfDuplicate);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(DateTime.Now + " startExportCsv() : " + e.Message);
+                Debug.WriteLine(DateTime.Now + " startExportCsvOnlyGasRegistance() : " + e.Message);
             }
         }
 
@@ -153,7 +147,7 @@ namespace SerialCommBME688
         {
             try
             {
-                // このままだと固まるはずなので、本当はここでコンテキストを切りたい...
+                 // このままだと固まるはずなので、本当はここでコンテキストを切りたい...
                 //Thread writeThread = new Thread(exportCsvData);
                 //writeThread.Start();
 
@@ -171,11 +165,6 @@ namespace SerialCommBME688
             }
         }
 
-        //public DataTable getGridDataSource()
-        //{
-        //    return (dataParser.getGridDataSource());
-        //}
-
         public bool isDataReceived()
         {
             return (dataParser.isDataReceived());
@@ -186,5 +175,19 @@ namespace SerialCommBME688
             // データをリセットする
             dataParser.reset();
         }
+        public Dictionary<String, List<List<double>>> getGasRegLogDataSet()
+        {
+            return (dataParser.getGasRegLogDataSet());
+        }
+        public List<String> getCollectedCategoryList()
+        {
+            return (dataParser.getCollectedCategoryList());
+
+        }
+        public int getDataIndexCount()
+        {
+            return (dataParser.getDataIndexCount());
+        }
+
     }
 }

@@ -251,6 +251,7 @@ namespace SerialCommBME688
                         }
                     }
 
+                    //  表示用のデータを通知する
                     Bme688DataSummary dataSummary = new Bme688DataSummary(category,
                                                                           sensorId,
                                                                           sampleCount,
@@ -276,7 +277,7 @@ namespace SerialCommBME688
 
         public void exportCsvData(Stream myStream, bool isWriteHeader)
         {
-            // callback.messageCallback("   --- exportCsvData() ---\r\n");
+            // （欠損のない）受信データを全部ファイルにCSV形式で保管する
             try
             {
                 Debug.WriteLine("exportCsvData() : canWrite: " + myStream.CanWrite);
@@ -320,60 +321,29 @@ namespace SerialCommBME688
             }
         }
 
-
-        public void exportCsvDataOnlyGasRegistance(Stream myStream, int count, bool isWriteHeader)
+        public void exportCsvDataOnlyGasRegistance(StreamWriter writer, List<String> categoryList, int validCount, int numOfDuplicate)
         {
+            // センサデータ（対数のみ）をCSV形式で出力する（ヘッダ部分は呼び出し側で出力する）
             try
             {
-                Debug.WriteLine("exportCsvDataOnlyGasRegistance() : canWrite: " + myStream.CanWrite + " count: " + count);
+                int duplicateCount = (numOfDuplicate <= 0) ? 1 : numOfDuplicate;
+                Debug.WriteLine("exportCsvDataOnlyGasRegistance() : start  " + " duplicate: " + duplicateCount + " valid: " + validCount);
 
-                StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
-                writer.AutoFlush = true;
-
-                // データのヘッダー部分を出力する
-                int categoryCount = dataSetMap.Count;
-
-                if (isWriteHeader)
+                Dictionary<String, List<List<double>>> dataSet = getGasRegLogDataSet();
+                for (int duplicate = 0; duplicate < duplicateCount; duplicate++)
                 {
-                    //categoryCount = 0;
-                    writer.Write("; index, ");
-                    foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+                    for (int dataSetIndex = 0; dataSetIndex < validCount; dataSetIndex++)
                     {
-                        writer.Write(item.Key + ", ");
-                        //categoryCount++;
-                    }
-                    writer.WriteLine(" ;");
-                }
-
-                // 次に読み込むインデックス位置を取得する
-                List<int> nextElement = new List<int>(categoryCount);
-                for (int index = 0; index < categoryCount; index++)
-                {
-                    nextElement.Add(-1);
-                }
-
-                while (true)
-                {
-                    // 次に読み込むインデックス番号を決める
-                    for (int index = 0; index < categoryCount; index++)
-                    {
-                        do
+                        for (int dataIndex = 0; dataIndex < NUMBER_OF_INDEX; dataIndex++)
                         {
-                            nextElement[index] = nextElement[index] + 1;
-                        } while (dataSetMap.ElementAt(index).Value.getCollectedDataSet().ElementAt(nextElement[index]).lack_data != 0);
-                    }
-
-                    // それぞれｎデータを出力する
-                    for (int dataIndex = 0; dataIndex < NUMBER_OF_INDEX; dataIndex++)
-                    {
-                        writer.Write(dataIndex + ", ");
-                        for (int index = 0; index < categoryCount; index++)
-                        {
-                            Bme688DataSet collectedData = dataSetMap.ElementAt(index).Value.getCollectedDataSet().ElementAt(nextElement[index]);
-                            Bme688Data data = collectedData.getBme688Data(dataIndex);
-                            writer.Write(data.gas_registance_log + ", ");
+                            writer.Write(dataIndex + ", ");
+                            foreach (String category in categoryList)
+                            {
+                                double dataValue = dataSet[category].ElementAt(dataSetIndex).ElementAt(dataIndex);
+                                writer.Write(dataValue + ", ");
+                            }
+                            writer.WriteLine(";" + " (Sensor" + sensorId + ")"); // 改行
                         }
-                        writer.WriteLine(";"); // 改行
                     }
                 }
             }
@@ -387,6 +357,7 @@ namespace SerialCommBME688
                 Debug.WriteLine(DateTime.Now + " exportCsvDataOnlyGasRegistance() : " + e.Message + " ");
                 Debug.WriteLine(DateTime.Now + e.StackTrace);
             }
+            Debug.WriteLine("exportCsvDataOnlyGasRegistance() : finish " + " duplicate: " + numOfDuplicate + " valid: " + validCount);
         }
 
         public bool isDataReceived()
@@ -394,104 +365,67 @@ namespace SerialCommBME688
             return (dataSetMap.Count > 0);
         }
 
-/*
-        private void updateDataTable()
+        public void reset()
         {
-            dataSource.Clear();
+            dataSetMap.Clear();
+        }
+
+        public Dictionary<String, List<List<double>>> getGasRegLogDataSet()
+        {
+            // GasRegistanceの対数値を（カテゴリごとに詰めて）応答する
+            Dictionary<String, List<List<double>>> data = new Dictionary<String, List<List<double>>>();
             try
             {
-                Dictionary<String, Bme688DataSetGroup> datamap = dataSetMap;
-                foreach (KeyValuePair<String, Bme688DataSetGroup> item in datamap)
+                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
                 {
                     String category = item.Key;
+                    List <List<double>> outputData = new List<List<double>>();
                     List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
-                    int sampleCount = dataSet.Count;
-                    int validCount = 0;
-                    double temperature_max = dataSet[0].temperature_max;
-                    double temperature_min = dataSet[0].temperature_min;
-                    double humidity_max = dataSet[0].humidity_max;
-                    double humidity_min = dataSet[0].humidity_min;
-                    double pressure_max = dataSet[0].pressure_max;
-                    double pressure_min = dataSet[0].pressure_min;
-                    double gas_registance_max = dataSet[0].gas_registance_max;
-                    double gas_registance_min = dataSet[0].gas_registance_min;
-                    double gas_registance_log_max = dataSet[0].gas_registance_log_max;
-                    double gas_registance_log_min = dataSet[0].gas_registance_log_min;
                     foreach (Bme688DataSet collectedData in dataSet)
                     {
                         if (collectedData.lack_data == 0)
                         {
-                            validCount++;
-                        }
-                        if (temperature_max < collectedData.temperature_max)
-                        {
-                            temperature_max = collectedData.temperature_max;
-                        }
-                        if (temperature_min > collectedData.temperature_min)
-                        {
-                            temperature_min = collectedData.temperature_min;
-                        }
-                        if (humidity_max < collectedData.humidity_max)
-                        {
-                            humidity_max = collectedData.humidity_max;
-                        }
-                        if (humidity_min > collectedData.humidity_min)
-                        {
-                            humidity_min = collectedData.humidity_min;
-                        }
-                        if (pressure_max < collectedData.pressure_max)
-                        {
-                            pressure_max = collectedData.pressure_max;
-                        }
-                        if (pressure_min > collectedData.pressure_min)
-                        {
-                            pressure_min = collectedData.pressure_min;
-                        }
-                        if (gas_registance_max < collectedData.gas_registance_max)
-                        {
-                            gas_registance_max = collectedData.gas_registance_max;
-                        }
-                        if (gas_registance_min > collectedData.gas_registance_min)
-                        {
-                            gas_registance_min = collectedData.gas_registance_min;
-                        }
-                        if (gas_registance_log_max < collectedData.gas_registance_log_max)
-                        {
-                            gas_registance_log_max = collectedData.gas_registance_log_max;
-                        }
-                        if (gas_registance_log_min > collectedData.gas_registance_log_min)
-                        {
-                            gas_registance_log_min = collectedData.gas_registance_log_min;
+                            // データが欠損していない場合、データを詰める
+                            List<double> collected = new List<double>();
+                            for (int dataIndex = 0; dataIndex < NUMBER_OF_INDEX; dataIndex++)
+                            {
+                                try
+                                {
+                                    Bme688Data collectedValue = collectedData.getBme688Data(dataIndex);
+                                    collected.Add(collectedValue.gas_registance_log);
+                                }
+                                catch (Exception ee)
+                                {
+                                    Debug.WriteLine(DateTime.Now + " Bme688Data() : " + ee.Message + " ");
+                                }
+                            }
+                            outputData.Add(collected);
                         }
                     }
-
-                    dataSource.Rows.Add(category,
-                                        sensorId,
-                                        sampleCount,
-                                        validCount,
-                                        temperature_max,
-                                        temperature_min,
-                                        humidity_max,
-                                        humidity_min,
-                                        pressure_max,
-                                        pressure_min,
-                                        gas_registance_max,
-                                        gas_registance_min,
-                                        gas_registance_log_max,
-                                        gas_registance_log_min);
+                    data[category] = outputData;
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(DateTime.Now + " updateDataTable() : " + e.Message);
             }
+            return (data);
         }
-*/
 
-        public void reset()
+        public List<String> getCollectedCategoryList()
         {
-            //dataSource.Clear();
-            dataSetMap.Clear();
+            List<String> categoryList = new List<String>();
+            foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+            {
+                categoryList.Add(item.Key);
+            }
+            return (categoryList);
         }
+
+        public int getDataIndexCount()
+        {
+            return (NUMBER_OF_INDEX);
+        }
+
     }
 }

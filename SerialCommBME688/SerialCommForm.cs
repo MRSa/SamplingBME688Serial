@@ -2,6 +2,7 @@ using SamplingBME688Serial;
 using System;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Text;
 using System.Windows.Forms;
 
 namespace SerialCommBME688
@@ -127,22 +128,12 @@ namespace SerialCommBME688
                         if (chkCombineSensor.Checked)
                         {
                             // センサ１とセンサ２のデータを混ぜてCSV出力する
-                            exportCsvEachSensor(myStream);
+                            exportCsvEachSensorCombine(myStream);
                         }
                         else
                         {
-                            bool isWriteHeader = true;
-
-                            // センサ１とセンサ２のデータを順番に出力する（センサ１→センサ２の順に出力する）
-                            if (myReceiver.isDataReceived())
-                            {
-                                myReceiver.startExportCsv(myStream, Decimal.ToInt32(numDuplicate.Value), isWriteHeader);
-                                isWriteHeader = false;
-                            }
-                            if (myReceiver_2.isDataReceived())
-                            {
-                                myReceiver_2.startExportCsv(myStream, Decimal.ToInt32(numDuplicate.Value), isWriteHeader);
-                            }
+                            // センサ１とセンサ２のデータを順番にCSV出力する
+                            exportCsvEachSensorSerial(myStream);
                         }
                     }
                     myStream.Close();
@@ -150,20 +141,82 @@ namespace SerialCommBME688
             }
         }
 
-        private void exportCsvEachSensor(Stream myStream)
+
+        private void exportCsvEachSensorSerial(Stream myStream)
         {
             try
             {
-                int validCount = dataSourceProvider.getValidCount();
-                //myReceiver.startExportCsv(myStream, validCount, Decimal.ToInt32(numDuplicate.Value));
-                //myReceiver_2.startExportCsv(myStream, validCount, Decimal.ToInt32(numDuplicate.Value));
+                StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
+                writer.AutoFlush = true;
+
+                // ----- ヘッダ部分の出力 -----
+                List<String> categoryList1 = myReceiver.getCollectedCategoryList();
+                List<String> categoryList2 = myReceiver_2.getCollectedCategoryList();
+                List<String> categories = new List<String>();
+                writer.Write("; index, ");
+
+                if (myReceiver.isDataReceived())
+                {
+                    foreach (String item in categoryList1)
+                    {
+                        try
+                        {
+                            if ((categoryList2.Contains(item))||(!myReceiver_2.isDataReceived()))
+                            {
+                                // センサ１とセンサ２で同じカテゴリがあった場合だけ、ヘッダ部分に出力する
+                                writer.Write(item + ", ");
+                                categories.Add(item);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(DateTime.Now + " --- not found the key : " + item + " in sensor2... " + e.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    // センサ１のデータがない場合は、センサ２のみ利用する。
+                    foreach (String item in categoryList2)
+                    {
+                        writer.Write(item + ", ");
+                        categories.Add(item);
+                    }
+                }
+                writer.WriteLine(" ;");
+                // ----- ヘッダ部分の出力おわり -----
+
+
+                // センサ１とセンサ２のデータを順番に出力する（センサ１→センサ２の順に出力する）
+                if (myReceiver.isDataReceived())
+                {
+                    myReceiver.startExportCsvOnlyGasRegistance(writer, categories, dataSourceProvider.getValidCount(), Decimal.ToInt32(numDuplicate.Value));
+                }
+                if (myReceiver_2.isDataReceived())
+                {
+                    myReceiver_2.startExportCsvOnlyGasRegistance(writer, categories, dataSourceProvider.getValidCount(), Decimal.ToInt32(numDuplicate.Value));
+                }
+
+                writer.Close();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(DateTime.Now + " exportCsvEachSensor()" + ex.Message);
+                Debug.WriteLine(DateTime.Now + " exportCsvEachSensorSerial()" + ex.Message);
             }
         }
 
+        private void exportCsvEachSensorCombine(Stream myStream)
+        {
+            try
+            {
+                CombinedSensorDataCsvExporter exporter = new CombinedSensorDataCsvExporter(myReceiver, myReceiver_2);
+                exporter.startExportCsvCombine(myStream, dataSourceProvider.getValidCount(), Decimal.ToInt32(numDuplicate.Value));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " exportCsvEachSensorCombine()" + ex.Message);
+            }
+        }
 
         private void SerialCommForm_Load(object sender, EventArgs e)
         {
