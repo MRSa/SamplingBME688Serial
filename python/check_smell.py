@@ -2,33 +2,39 @@
 #   BME688の匂いのデータをモデルから判定する
 #      - 引数１ :  モデルファイル名
 #      - 引数２ :  チェックするCSVファイル名
-#      - 引数３ :  分類ラベルの書かれたファイル名（オプション）
-#          ※ 引数１、引数３は、 create_smell_model.py で生成したファイルを指定する
+#      - オプション１(-c) :  カテゴリファイル名
+#      - オプション２(-i) :  インデックスの数
+#          ※ 引数１、オプション１は、 create_smell_model.py で生成したファイルを指定する
 #
 import pandas as pd
 import numpy as np
 import keras
 import sys
+import argparse
 
 # -------------   実行時パラメータ
 nofIndex = 10       # 
 maxRange = 20.0     # 
-
-#  ------  引数でCSVファイルを指定する
 category_filename = ""
-if __name__ == '__main__':
-    args = sys.argv
-    if 3 <= len(args):
-        h5_filename = args[1]
-        csv_filename = args[2]
-        if 4 <= len(args):
-            category_filename = args[3]
-    else:
-        print('Usage: {0} model_file check_file [category_file]'.format(args[0]))
-        quit()
 
-#  ---------- 引数に指定されていた
-print(" Model file: {0}  Check target: {1}  Category define: {2}".format(h5_filename, csv_filename, category_filename))
+#  ------  コマンドライン引数の解析
+parser = argparse.ArgumentParser(description='Check Smell')
+parser.add_argument('modelFile', help='model file path')
+parser.add_argument('csvFile', help='CSV file path')
+parser.add_argument("-c", "--category", help="category file")
+parser.add_argument("-i", "--index", type=int, help="number of indexes")
+args =  parser.parse_args()
+h5_filename = args.modelFile
+csv_filename = args.csvFile
+if args.category:
+    print("category file name : {0}".format(args.category))
+    category_filename = args.category
+if args.index:
+    print("number of indexes : {0}".format(args.index))
+    nofIndex = args.index
+
+print(" Model file: {0}  Check target: {1}  Category define: {2}  [index: {3}]".format(h5_filename, csv_filename, category_filename, nofIndex))
+
 
 #  ---------- モデル(HDF5形式)の読み出し
 model = keras.models.load_model(h5_filename)

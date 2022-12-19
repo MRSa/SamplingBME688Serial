@@ -1,6 +1,8 @@
 #
 #   BME688の匂いのデータをモデルにする
 #      - 引数１ : 収集した匂いのデータのCSVファイル
+#      - オプション１(-e) :  エポック数
+#      - オプション２(-i) :  インデックスの数
 #
 #      - 出力１ : モデルファイル(HDF5形式, xxx.h5)
 #      - 出力２ : モデルのカテゴリファイル (CSV形式, xxx_category.txt)
@@ -10,32 +12,40 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+import argparse
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 
-# -------------   作成用パラメータ
-nofIndex = 10       # 
-maxRange = 20.0     # 
-n_input  = 1        # 
-n_hidden = nofIndex # 10
-n_epochs = 250      # 
-n_batch  = 32       # 
+#  ------  デフォルトパラメータ
+nofIndex = 10
+n_epochs = 500
 
-#  ------  引数でCSVファイルを指定する
-if __name__ == '__main__':
-    args = sys.argv
-    if 2 <= len(args):
-        csv_filename = args[1]
-    else:
-        print('Arguments are too short, please specify a CSV file name.')
-        quit()
+#  ------  コマンドライン引数の解析
+parser = argparse.ArgumentParser(description='Create Smell Model')
+parser.add_argument('csvFile', help='Input CSV file path')
+parser.add_argument("-e", "--epoch", type=int, help="number of epochs")
+parser.add_argument("-i", "--index", type=int, help="number of indexes")
+args =  parser.parse_args()
+csv_filename = args.csvFile
+if args.epoch:
+    print("number of epochs : {0}".format(args.epoch))
+    n_epochs = args.epoch
+if args.index:
+    print("number of indexes : {0}".format(args.index))
+    nofIndex = args.index
+
+# -------------   作成用パラメータ
+maxRange = 20.0       # 
+n_input  = 1          # 
+n_hidden = nofIndex   #
+n_batch  = 32         # 
 
 h5_filename = os.path.splitext(os.path.basename(csv_filename))[0] + ".h5"
 category_filename = os.path.splitext(os.path.basename(csv_filename))[0] + "_category.txt"
 
-print(' Create model: {0} -> {1} ({2})'.format(csv_filename, h5_filename, category_filename))
+print(' Create model: {0} -> {1} ({2}) [index:{3}]'.format(csv_filename, h5_filename, category_filename, nofIndex))
 
 # -------------  CSVデータファイルからガス抵抗値を読み込む
 smell_data = pd.read_csv(csv_filename) 
