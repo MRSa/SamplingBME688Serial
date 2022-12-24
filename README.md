@@ -3,6 +3,10 @@
 ## リポジトリ
 https://github.com/MRSa/SamplingBME688Serial
 
+
+![Overview images](https://github.com/MRSa/SamplingBME688Serial/tree/master/images/Overview.png)
+
+
 ## リポジトリ概要
 - Atom LiteにGrove(I2C)経由で接続したBME688から、シリアルポートにデータを出力するスケッチ (AtomLite/sketch_BME688_SAMPLING.ino)
 - シリアルポート経由でつないだAtom Liteから、BME688のデータを受信してCSVファイルに出力するWindows(C#)アプリ (SerialCommBME688/ 以下)
