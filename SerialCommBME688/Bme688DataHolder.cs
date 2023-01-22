@@ -106,6 +106,11 @@ namespace SerialCommBME688
                     // 待っていたデータが来たので、そのまま入れる
                     targetDataSet.setReceivedData(gas_index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
                     Debug.WriteLine("ENTRY" + sensorId + "[" + targetDataSet.dataGroupName + "]  : " + gas_index + " " + temperature + " " + humidity + " " + gas_registance + "");
+
+                    // ---------------------------------------------------------
+                    //   TODO: ここにデータベースへのデータ登録部分を入れる
+                    // ---------------------------------------------------------
+
                 }
 
                 expectedIndexNumber++;
