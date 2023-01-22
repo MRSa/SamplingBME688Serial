@@ -16,9 +16,26 @@ services:
       POSTGRES_USER: pgmaster
       POSTGRES_DB: sensordb
       #POSTGRES_DB: postgres
-
+      SENSOR_DB_USER: sensor_entry
+      SENSOR_DB_PASS: sens0r
+      SENSOR_DB_TABLE: bme688sensor
   adminer:
     image: adminer
     restart: always
     ports:
       - 8989:8080
+  webapi:
+    container_name: web_api
+    ports:
+      - "0.0.0.0:3010:3010"
+    build:
+      context: ./web_api
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./web_data:/work
+    environment:
+      SENSOR_DB_ACCESS_HOST: "postgres:5432"
+      SENSOR_DB_NAME: sensordb
+      SENSOR_DB_USER: sensor_entry
+      SENSOR_DB_PASS: sens0r
+      SENSOR_DB_TABLE: bme688sensor
