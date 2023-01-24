@@ -39,5 +39,6 @@ services:
       SENSOR_DB_USER: sensor_entry
       SENSOR_DB_PASS: sens0r
       SENSOR_DB_TABLE: bme688sensor
+      SENSOR_DB_OPTION: debug
       SENSOR_SERVICE_PORT: 3010
   

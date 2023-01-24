@@ -17,7 +17,9 @@ RUN apt-get update && \
     mkdir -p /work
 
 COPY ./web-service.py /work/web-service.py
+COPY ./StorageAdapter.py /work/StorageAdapter.py
 COPY ./sensordata.py /work/sensordata.py
+
 
 RUN ls -l /work
 
