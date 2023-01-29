@@ -19,7 +19,7 @@ def base_page():
     return ("<hr><br><p>Hello!</p><hr><br>")
 
 #  --------------- データ登録
-@app.route('/api/entry', methods=['POST'])
+@app.route('/sensor/entry', methods=['POST'])
 def entry_data():
     # --- 要求ヘッダの内容確認
     if ((request.headers['Content-Type']).casefold()).find('application/json'.casefold()):
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 # ------------  デバッグについて (POST) -----
 #   +++++ Chromeで 空白ページを 開いて、開発者ツールのコンソールで以下を実行する +++++
 # var xhr = new XMLHttpRequest();
-# xhr.open('POST', 'http://localhost:3010/api/entry');
+# xhr.open('POST', 'http://localhost:3010/sensor/entry');
 # xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 # xhr.send(JSON.stringify({
 #     data: 'XYZ'

@@ -6,7 +6,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     -- # CREATE DATABASE sensordb;
     GRANT ALL PRIVILEGES ON DATABASE $POSTGRES_DB TO $SENSOR_DB_USER;
     CREATE TABLE IF NOT EXISTS $SENSOR_DB_TABLE  (
-        serial SERIAL PRIMARY KEY,
+        serial INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
         datetime TIMESTAMP NOT NULL,
         sensor_id SMALLINT NOT NULL,
         category VARCHAR(128) NOT NULL,
@@ -16,7 +16,8 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
         pressure REAL NOT NULL,
         gas_registance REAL NOT NULL,
         gas_registance_log REAL NOT NULL,
-        comment VARCHAR(128)
+        gas_registance_diff REAL NOT NULL,
+        comment VARCHAR(256)
     );
     GRANT ALL PRIVILEGES ON $SENSOR_DB_TABLE TO $SENSOR_DB_USER;
 EOSQL
