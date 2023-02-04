@@ -1,10 +1,9 @@
 import os
-import sys
-import json
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Integer, SmallInteger, String, Float, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from alchemy_base import Base
+
 class SensorData(Base):
     __tablename__ = os.getenv("SENSOR_DB_TABLE")
 
@@ -21,35 +20,8 @@ class SensorData(Base):
     gas_registance_diff = Column('gas_registance_diff', Float(5, False, 3))
     comment = Column(String(256))
 
-    def parseJson(self, jsonObject):
-        category = ''
-        sensor_id = 0
-        try:
-            # ----- JSONオブジェクトを解析する
-            category = jsonObject.get('category')
-            sensor_id = jsonObject.get('sensor_id')
-            if (jsonObject.get('name')).lower() == "sensor_data_array":
-                # ----- センサデータをまとめて登録する場合
-                for sensorData in jsonObject["data_array"]:
-                    datetime = sensorData["datetime"]
-                    gas_index = sensorData["gas_index"]
-                    print(" Data: {0} {1}".format(datetime, gas_index), file=sys.stderr)
-            
-            else:
-                # ----- センサデータを１件登録する場合
-                sensorData = jsonObject.get('data')
-                datetime = sensorData["datetime"]
-                gas_index = sensorData["gas_index"]
-                print(" Data: {0} {1}".format(datetime, gas_index), file=sys.stderr)
-            
-            print(" Category:{0} id:{1}".format(category, sensor_id), file=sys.stderr)
-            return
-
-        except  Exception as e:
-            print(" === Received Exception : {0} {1} ".format(e.args, jsonObject), file=sys.stderr)
-            return    
-
-#
+#  -------------------------------------------------------
+#   　センサデータの型定義
 #  -------------------------------------------------------
 #    CREATE TABLE IF NOT EXISTS $SENSOR_DB_TABLE  (
 #        serial SERIAL PRIMARY KEY,
