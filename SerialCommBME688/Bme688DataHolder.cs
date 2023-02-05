@@ -19,6 +19,7 @@ namespace SerialCommBME688
         private IMessageCallback callback;
         private IDataReceiveNotify notify;
 
+        private PostJsonData postJson = new PostJsonData(NUMBER_OF_INDEX);
         private Dictionary<String, Bme688DataSetGroup> dataSetMap = new Dictionary<String, Bme688DataSetGroup>();
 
         Bme688DataSetGroup? targetDataSet = null;
@@ -31,6 +32,7 @@ namespace SerialCommBME688
         }
 
         public String entryData(String category,
+                               String sendUrl,
                                int gas_index, 
                                int meas_index,
                                Int64 serial_number,
@@ -47,7 +49,34 @@ namespace SerialCommBME688
             String result = "";
             try
             {
-                // Debug.WriteLine(" entryData() : " + category + " [" + gas_index + "] (" + dataSetMap.Count + ") ");
+                if (sendUrl.Length > 0)
+                {
+                    // URLが指定されていた時(DATABASEに格納する指示があるとき)は、まず最初に送信部分にデータを送っておく
+                    try
+                    {
+                        postJson.receivedData(
+                            sendUrl,
+                            category,
+                            sensorId,
+                            gas_index,
+                            meas_index,
+                            serial_number,
+                            data_status,
+                            gas_wait,
+                            temperature,
+                            humidity,
+                            pressure,
+                            gas_registance,
+                            gas_registance_log,
+                            gas_registance_diff);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(DateTime.Now + " updateDataTable() : " + e.Message);
+                    }
+                }
+
+                // Debug.WriteLine(" entryData() : " + category + " [" + gas_index + "] (" + dataSetMap.Count + ") " + sendUrl);
                 if (gas_index == 0)
                 {
                     // 初回データを受信したとき
@@ -106,11 +135,6 @@ namespace SerialCommBME688
                     // 待っていたデータが来たので、そのまま入れる
                     targetDataSet.setReceivedData(gas_index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
                     Debug.WriteLine("ENTRY" + sensorId + "[" + targetDataSet.dataGroupName + "]  : " + gas_index + " " + temperature + " " + humidity + " " + gas_registance + "");
-
-                    // ---------------------------------------------------------
-                    //   TODO: ここにデータベースへのデータ登録部分を入れる
-                    // ---------------------------------------------------------
-
                 }
 
                 expectedIndexNumber++;

@@ -50,6 +50,9 @@
             this.grpLogConsole = new System.Windows.Forms.GroupBox();
             this.grpExportOption = new System.Windows.Forms.GroupBox();
             this.chkCombineSensor = new System.Windows.Forms.CheckBox();
+            this.grpEntryDatabase = new System.Windows.Forms.GroupBox();
+            this.urlDatabaseToEntry = new System.Windows.Forms.TextBox();
+            this.chkEntryDatabase = new System.Windows.Forms.CheckBox();
             this.grpPort.SuspendLayout();
             this.grpDataCategory.SuspendLayout();
             this.grpData.SuspendLayout();
@@ -58,6 +61,7 @@
             this.grpPort_2.SuspendLayout();
             this.grpLogConsole.SuspendLayout();
             this.grpExportOption.SuspendLayout();
+            this.grpEntryDatabase.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -147,7 +151,7 @@
             // btnExport
             // 
             this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExport.Location = new System.Drawing.Point(703, 330);
+            this.btnExport.Location = new System.Drawing.Point(703, 438);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(123, 22);
             this.btnExport.TabIndex = 7;
@@ -161,9 +165,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpData.Controls.Add(this.dataGridView1);
-            this.grpData.Location = new System.Drawing.Point(12, 311);
+            this.grpData.Location = new System.Drawing.Point(12, 375);
             this.grpData.Name = "grpData";
-            this.grpData.Size = new System.Drawing.Size(685, 269);
+            this.grpData.Size = new System.Drawing.Size(685, 313);
             this.grpData.TabIndex = 8;
             this.grpData.TabStop = false;
             this.grpData.Text = "Collected Data";
@@ -179,7 +183,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(679, 247);
+            this.dataGridView1.Size = new System.Drawing.Size(679, 291);
             this.dataGridView1.TabIndex = 0;
             // 
             // chkExportOnlyGasRegistanceLogarithm
@@ -199,7 +203,7 @@
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(703, 555);
+            this.btnReset.Location = new System.Drawing.Point(703, 663);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(123, 22);
             this.btnReset.TabIndex = 10;
@@ -210,7 +214,7 @@
             // btnShowGraph
             // 
             this.btnShowGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowGraph.Location = new System.Drawing.Point(703, 473);
+            this.btnShowGraph.Location = new System.Drawing.Point(703, 581);
             this.btnShowGraph.Name = "btnShowGraph";
             this.btnShowGraph.Size = new System.Drawing.Size(123, 23);
             this.btnShowGraph.TabIndex = 11;
@@ -314,7 +318,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpLogConsole.Controls.Add(this.txtConsole_2);
             this.grpLogConsole.Controls.Add(this.txtConsole);
-            this.grpLogConsole.Location = new System.Drawing.Point(12, 74);
+            this.grpLogConsole.Location = new System.Drawing.Point(12, 138);
             this.grpLogConsole.Name = "grpLogConsole";
             this.grpLogConsole.Size = new System.Drawing.Size(814, 231);
             this.grpLogConsole.TabIndex = 16;
@@ -328,7 +332,7 @@
             this.grpExportOption.Controls.Add(this.numDuplicate);
             this.grpExportOption.Controls.Add(this.lblDuplicate);
             this.grpExportOption.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
-            this.grpExportOption.Location = new System.Drawing.Point(703, 360);
+            this.grpExportOption.Location = new System.Drawing.Point(703, 468);
             this.grpExportOption.Name = "grpExportOption";
             this.grpExportOption.Size = new System.Drawing.Size(129, 107);
             this.grpExportOption.TabIndex = 17;
@@ -346,11 +350,49 @@
             this.chkCombineSensor.Text = "Combine sensor";
             this.chkCombineSensor.UseVisualStyleBackColor = true;
             // 
+            // grpEntryDatabase
+            // 
+            this.grpEntryDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpEntryDatabase.Controls.Add(this.urlDatabaseToEntry);
+            this.grpEntryDatabase.Controls.Add(this.chkEntryDatabase);
+            this.grpEntryDatabase.Location = new System.Drawing.Point(12, 74);
+            this.grpEntryDatabase.Name = "grpEntryDatabase";
+            this.grpEntryDatabase.Size = new System.Drawing.Size(814, 58);
+            this.grpEntryDatabase.TabIndex = 18;
+            this.grpEntryDatabase.TabStop = false;
+            this.grpEntryDatabase.Text = "Database Entry";
+            // 
+            // urlDatabaseToEntry
+            // 
+            this.urlDatabaseToEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlDatabaseToEntry.Location = new System.Drawing.Point(77, 23);
+            this.urlDatabaseToEntry.Name = "urlDatabaseToEntry";
+            this.urlDatabaseToEntry.Size = new System.Drawing.Size(729, 23);
+            this.urlDatabaseToEntry.TabIndex = 1;
+            this.urlDatabaseToEntry.Text = "http://localhost:3010";
+            // 
+            // chkEntryDatabase
+            // 
+            this.chkEntryDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkEntryDatabase.AutoSize = true;
+            this.chkEntryDatabase.Location = new System.Drawing.Point(6, 25);
+            this.chkEntryDatabase.Name = "chkEntryDatabase";
+            this.chkEntryDatabase.Size = new System.Drawing.Size(68, 19);
+            this.chkEntryDatabase.TabIndex = 1;
+            this.chkEntryDatabase.Text = "     URL :";
+            this.chkEntryDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkEntryDatabase.UseVisualStyleBackColor = true;
+            // 
             // SerialCommForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(838, 592);
+            this.ClientSize = new System.Drawing.Size(838, 700);
+            this.Controls.Add(this.grpEntryDatabase);
             this.Controls.Add(this.grpExportOption);
             this.Controls.Add(this.grpPort_2);
             this.Controls.Add(this.btnShowGraph);
@@ -378,6 +420,8 @@
             this.grpLogConsole.PerformLayout();
             this.grpExportOption.ResumeLayout(false);
             this.grpExportOption.PerformLayout();
+            this.grpEntryDatabase.ResumeLayout(false);
+            this.grpEntryDatabase.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -408,5 +452,8 @@
         private GroupBox grpLogConsole;
         private GroupBox grpExportOption;
         private CheckBox chkCombineSensor;
+        private GroupBox grpEntryDatabase;
+        private TextBox urlDatabaseToEntry;
+        private CheckBox chkEntryDatabase;
     }
 }

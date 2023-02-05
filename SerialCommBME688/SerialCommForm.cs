@@ -28,7 +28,13 @@ namespace SerialCommBME688
             {
                 String category = txtDataCategory.Text;
                 txtConsole.Text = "--- START RECEIVE [" + txtPort.Text + "] (" + txtDataCategory.Text + ") ---\r\n";
-                if (myReceiver.startReceive(txtPort.Text, category, txtConsole))
+                String sendUrl = "";
+                if (chkEntryDatabase.Checked)
+                {
+                    sendUrl = urlDatabaseToEntry.Text;
+                }
+
+                if (myReceiver.startReceive(txtPort.Text, category, sendUrl, txtConsole))
                 {
                     // データの受信開始
                     btnConnect.Enabled = false;
@@ -37,6 +43,8 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
+                    chkEntryDatabase.Enabled = false;
+                    urlDatabaseToEntry.Enabled = false;
                 }
                 else
                 {
@@ -47,6 +55,8 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
+                    chkEntryDatabase.Enabled = true;
+                    urlDatabaseToEntry.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -67,6 +77,8 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
+                    chkEntryDatabase.Enabled = true;
+                    urlDatabaseToEntry.Enabled = true;
                     //txtConsole.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
                 }
                 else
@@ -78,7 +90,8 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
-
+                    chkEntryDatabase.Enabled = false;
+                    urlDatabaseToEntry.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -276,8 +289,13 @@ namespace SerialCommBME688
             try
             {
                 String category = txtDataCategory.Text;
+                String sendUrl = "";
+                if (chkEntryDatabase.Checked)
+                {
+                    sendUrl = urlDatabaseToEntry.Text;
+                }
                 txtConsole_2.Text = "--- START RECEIVE [" + txtPort_2.Text + "] (" + txtDataCategory.Text + ") ---\r\n";
-                if (myReceiver_2.startReceive(txtPort_2.Text, category, txtConsole_2))
+                if (myReceiver_2.startReceive(txtPort_2.Text, category, sendUrl, txtConsole_2))
                 {
                     // データの受信開始
                     btnConnect_2.Enabled = false;
@@ -286,6 +304,8 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
+                    chkEntryDatabase.Enabled = false;
+                    urlDatabaseToEntry.Enabled = false;
                 }
                 else
                 {
@@ -296,6 +316,8 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
+                    chkEntryDatabase.Enabled = true;
+                    urlDatabaseToEntry.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -318,6 +340,8 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
                     //txtConsole_2.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
+                    chkEntryDatabase.Enabled = true;
+                    urlDatabaseToEntry.Enabled = true;
                 }
                 else
                 {
@@ -328,7 +352,8 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
-
+                    chkEntryDatabase.Enabled = false;
+                    urlDatabaseToEntry.Enabled = false;
                 }
             }
             catch (Exception ex)

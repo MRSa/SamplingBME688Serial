@@ -20,6 +20,7 @@ namespace SerialCommBME688
         private SerialDataParser dataParser;
         private bool _continue = true;
         private String dataCategory = "";
+        private String sendUrl = "";
 
         public SerialReceiver(int sensorId, IDataReceiveNotify notify)
         {
@@ -27,7 +28,7 @@ namespace SerialCommBME688
             this.dataParser = new SerialDataParser(sensorId, notify);
         }
 
-        public bool startReceive(String comPort, String aDataCategory, TextBox aOutputArea)
+        public bool startReceive(String comPort, String aDataCategory, String aUrl, TextBox aOutputArea)
         {
             try
             {
@@ -51,6 +52,10 @@ namespace SerialCommBME688
                 else
                 {
                     dataCategory = "empty";
+                }
+                if (aUrl.Length > 0)
+                {
+                    sendUrl = aUrl;
                 }
                 _continue = true;
                 readThread = new Thread(ReadSerial);
@@ -86,11 +91,11 @@ namespace SerialCommBME688
                 try
                 {
                     string message = mySerialPort.ReadLine();
-                    dataParser.parseReceivedData(dataCategory, message);
+                    dataParser.parseReceivedData(dataCategory, sendUrl, message);
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(DateTime.Now + " ReadSerial() : " + e.Message);
+                    Debug.WriteLine(DateTime.Now + " ReadSerial(" + dataCategory + " " + sendUrl + ") : " + e.Message);
                 }
             }
             try
