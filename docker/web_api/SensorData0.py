@@ -34,7 +34,7 @@ class SensorData(Base):
 #        pressure REAL NOT NULL,
 #        gas_registance REAL NOT NULL,
 #        gas_registance_log REAL NOT NULL,
-#        gas_registance_log REAL NOT NULL,
+#        gas_registance_diff REAL NOT NULL,
 #        comment VARCHAR(256)
 #    );
 #  -------------------------------------------------------
