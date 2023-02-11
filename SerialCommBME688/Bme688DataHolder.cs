@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace SerialCommBME688
 {
-    internal class Bme688DataHolder
+    internal class Bme688DataHolder : IDataEntryNotify
     {
         private const int NUMBER_OF_INDEX = 10;
         private int sensorId;
@@ -18,8 +18,7 @@ namespace SerialCommBME688
         private int receivedDataCount = 0;
         private IMessageCallback callback;
         private IDataReceiveNotify notify;
-
-        private PostJsonData postJson = new PostJsonData(NUMBER_OF_INDEX);
+        private PostJsonData sendData;
         private Dictionary<String, Bme688DataSetGroup> dataSetMap = new Dictionary<String, Bme688DataSetGroup>();
 
         Bme688DataSetGroup? targetDataSet = null;
@@ -29,6 +28,7 @@ namespace SerialCommBME688
             this.callback = callback;
             this.sensorId = sensorId;
             this.notify = notify;
+            this.sendData = new PostJsonData(NUMBER_OF_INDEX, this);
         }
 
         public String entryData(String category,
@@ -54,7 +54,7 @@ namespace SerialCommBME688
                     // URLが指定されていた時(DATABASEに格納する指示があるとき)は、まず最初に送信部分にデータを送っておく
                     try
                     {
-                        postJson.receivedData(
+                        sendData.receivedData(
                             sendUrl,
                             category,
                             sensorId,
@@ -456,5 +456,16 @@ namespace SerialCommBME688
             return (NUMBER_OF_INDEX);
         }
 
+        public void dataEntryNotify(bool isSuccess, string message)
+        {
+            try
+            {
+                callback.messageCallback(" " + " [" + isSuccess + "] " + message + "\r\n");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " dataEntryNotify(" + isSuccess + ") : " + e.Message);
+            }
+        }
     }
 }
