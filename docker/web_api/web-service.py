@@ -47,7 +47,11 @@ def information():
 
 # ----- メイン部分 -----
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=os.getenv("SENSOR_SERVICE_PORT"), debug=True)
+    option_debug = False
+    if os.getenv("SENSOR_DB_OPTION") == "debug":
+        option_debug = True
+
+    app.run(host="0.0.0.0", port=os.getenv("SENSOR_SERVICE_PORT"), debug=option_debug)
 
 # ------------  デバッグについて (POST) -----
 #   +++++ Chromeで 空白ページを 開いて、開発者ツールのコンソールで以下を実行する +++++

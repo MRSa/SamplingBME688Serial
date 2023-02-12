@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.Linq;
+using System.Net;
+using System.Reflection.Metadata;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
@@ -25,7 +27,7 @@ namespace SamplingBME688Serial
             this.notifyCallback = notify;
         }
 
-        public void receivedData(
+        public async void receivedData(
             String sendUrl,
             String category,
             int sensorId,
@@ -47,50 +49,35 @@ namespace SamplingBME688Serial
                 SensorDataDetail sensorDetail = new SensorDataDetail(gas_index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
                 SensorDataSingle singleData = new SensorDataSingle("sensor_data", sensorId, category, sensorDetail);
 
-                // 送り先と送るメッセージを記憶する
-                SendDataImplement sendData = new SendDataImplement(sendUrl, JsonSerializer.Serialize(singleData), this.notifyCallback);
+                // POSTメソッドで送信する
+                HttpClient client = new HttpClient();
+                String messageToSend = JsonSerializer.Serialize(singleData);
+                StringContent message = new StringContent(messageToSend, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(sendUrl, message);
 
-                // スレッドを起こしてメッセージを送る
-                Thread postThread = new Thread(new ThreadStart(sendData.postJson));
-                postThread.Start();
+                // 応答コードで結果を判断する
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    // 登録成功を通知する
+                    notifyCallback.dataEntryNotify(true, "");
+                }
+                else
+                {
+                    // 登録失敗を通知する
+                    notifyCallback.dataEntryNotify(false, "DB ENTRY NG: " + " (" + gas_index + ") : " + response.StatusCode);
+                }
+
+                // デバッグ用メッセージ
+                Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson(" + sendUrl + ") -----");
+                Debug.WriteLine(DateTime.Now + "       " + messageToSend + " ");
+                Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson  END -----");
             }
             catch (Exception e)
             {
+                // 例外を通知する
                 Debug.WriteLine(DateTime.Now + " receivedData(" + sendUrl + " " + gas_index + ") : " + e.Message);
+                notifyCallback.dataEntryNotify(false, "EXCEPTION: " + sendUrl + " (" + gas_index + ") : " + e.Message);
             }
-        }
-
-        class SendDataImplement
-        {
-            // POST送信の実処理
-            private String urlToSend;
-            private String messageToSend;
-            private IDataEntryNotify notifyCallback;
-
-            public SendDataImplement(String url, String message, IDataEntryNotify callback)
-            {
-                this.urlToSend = url;
-                this.messageToSend = message;
-                this.notifyCallback = callback;
-            }
-
-            public void postJson()
-            {
-                //  データ登録本処理 (URLをたたく)
-                try
-                {
-                    Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson(" + urlToSend + ") -----");
-                    Debug.WriteLine(DateTime.Now + "       " + messageToSend + " ");
-                    Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson  END -----");
-
-                    notifyCallback.dataEntryNotify(true, messageToSend);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(DateTime.Now + " Exception(" + " " + ") : " + e.Message);
-                }
-            }
-
         }
 
         class SensorDataSingle
@@ -120,7 +107,6 @@ namespace SamplingBME688Serial
             public double gas_registance { get; }
             public double gas_registance_log { get; }
             public double gas_registance_diff { get; }
-
             public SensorDataDetail(int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
             {
                 this.datetime = DateTime.Now;
@@ -133,6 +119,5 @@ namespace SamplingBME688Serial
                 this.gas_registance_diff = gas_registance_diff;
             }
         }
-
     }
 }

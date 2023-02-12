@@ -460,7 +460,10 @@ namespace SerialCommBME688
         {
             try
             {
-                callback.messageCallback(" " + " [" + isSuccess + "] " + message + "\r\n");
+                if ((!isSuccess) || ((message != null) && (message.Length > 0)))
+                {
+                    callback.messageCallback(" Entry:[" + isSuccess + "] " + message + "\r\n");
+                }
             }
             catch (Exception e)
             {

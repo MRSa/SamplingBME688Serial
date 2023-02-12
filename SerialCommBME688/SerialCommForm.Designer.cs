@@ -372,7 +372,7 @@
             this.urlDatabaseToEntry.Name = "urlDatabaseToEntry";
             this.urlDatabaseToEntry.Size = new System.Drawing.Size(729, 23);
             this.urlDatabaseToEntry.TabIndex = 1;
-            this.urlDatabaseToEntry.Text = "http://localhost:3010";
+            this.urlDatabaseToEntry.Text = "http://localhost:3010/sensor/entry";
             // 
             // chkEntryDatabase
             // 
