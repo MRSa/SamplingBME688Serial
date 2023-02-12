@@ -21,6 +21,7 @@ namespace SerialCommBME688
         private bool _continue = true;
         private String dataCategory = "";
         private String sendUrl = "";
+        private bool isDbEntrySingle = false;
 
         public SerialReceiver(int sensorId, IDataReceiveNotify notify)
         {
@@ -28,14 +29,16 @@ namespace SerialCommBME688
             this.dataParser = new SerialDataParser(sensorId, notify);
         }
 
-        public bool startReceive(String comPort, String aDataCategory, String aUrl, TextBox aOutputArea)
+        public bool startReceive(String comPort, String aDataCategory, String aUrl, bool isDbEntrySingle, TextBox aOutputArea)
         {
             try
             {
                 dataParser.setOutputArea(aOutputArea);
-                //aOutputArea.Text = "";
 
-                /*****/ 
+                //aOutputArea.Text = "";
+                this.isDbEntrySingle = isDbEntrySingle;
+
+                /*****/
                 mySerialPort.BaudRate = 115200;
                 mySerialPort.Parity = System.IO.Ports.Parity.None;
                 mySerialPort.DataBits = 8;
@@ -91,11 +94,11 @@ namespace SerialCommBME688
                 try
                 {
                     string message = mySerialPort.ReadLine();
-                    dataParser.parseReceivedData(dataCategory, sendUrl, message);
+                    dataParser.parseReceivedData(dataCategory, sendUrl, isDbEntrySingle, message);
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(DateTime.Now + " ReadSerial(" + dataCategory + " " + sendUrl + ") : " + e.Message);
+                    Debug.WriteLine(DateTime.Now + " ReadSerial(" + dataCategory + " " + sendUrl + ", " + isDbEntrySingle + ") : " + e.Message);
                 }
             }
             try

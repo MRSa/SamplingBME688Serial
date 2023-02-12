@@ -21,13 +21,48 @@ namespace SamplingBME688Serial
         private int maxIndexNumber;
         private IDataEntryNotify notifyCallback;
 
+        private SensorDataDetail[] detailArray;
+        private int detailEntryCount;
+
         public PostJsonData(int maxIndex, IDataEntryNotify notify)
         {
             this.maxIndexNumber = maxIndex;
             this.notifyCallback = notify;
+            this.detailArray = new SensorDataDetail[maxIndex];
+            this.detailEntryCount = 0;
         }
 
-        public async void receivedData(
+        public void receivedData(
+            String sendUrl,
+            bool isSingleEntry,
+            String category,
+            int sensorId,
+            int gas_index,
+            int meas_index,
+            Int64 serial_number,
+            int data_status,
+            int gas_wait,
+            double temperature,
+            double humidity,
+            double pressure,
+            double gas_registance,
+            double gas_registance_log,
+            double gas_registance_diff)
+        {
+            // データを受信したら毎回DBに格納するか、まとめて格納するかの分岐
+            if (isSingleEntry)
+            {
+                // 受信したら毎回データベースに登録する場合...
+                receivedDataSingle(sendUrl, category, sensorId, gas_index, meas_index, serial_number, data_status, gas_wait, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
+            }
+            else
+            {
+                // データをまとめて登録する場合...
+                receivedDataBatch(sendUrl, category, sensorId, gas_index, meas_index, serial_number, data_status, gas_wait, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
+            }
+        }
+        
+        private async void receivedDataSingle(
             String sendUrl,
             String category,
             int sensorId,
@@ -47,7 +82,7 @@ namespace SamplingBME688Serial
             {
                 // 受信したデータを　JSON形式に置き換える...
                 SensorDataDetail sensorDetail = new SensorDataDetail(gas_index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
-                SensorDataSingle singleData = new SensorDataSingle("sensor_data", sensorId, category, sensorDetail);
+                SensorDataSingle singleData = new SensorDataSingle(sensorId, category, sensorDetail);
 
                 // POSTメソッドで送信する
                 HttpClient client = new HttpClient();
@@ -66,16 +101,47 @@ namespace SamplingBME688Serial
                     // 登録失敗を通知する
                     notifyCallback.dataEntryNotify(false, "DB ENTRY NG: " + " (" + gas_index + ") : " + response.StatusCode);
                 }
-
                 // デバッグ用メッセージ
-                Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson(" + sendUrl + ") -----");
-                Debug.WriteLine(DateTime.Now + "       " + messageToSend + " ");
-                Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson  END -----");
+                //Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson(" + sendUrl + ") -----");
+                //Debug.WriteLine(DateTime.Now + "       " + messageToSend + " ");
+                //Debug.WriteLine(DateTime.Now + " ----- PostJsonData::postJson  END -----");
             }
             catch (Exception e)
             {
                 // 例外を通知する
-                Debug.WriteLine(DateTime.Now + " receivedData(" + sendUrl + " " + gas_index + ") : " + e.Message);
+                Debug.WriteLine(DateTime.Now + " receivedDataSingle(" + sendUrl + " " + gas_index + ") : " + e.Message);
+                notifyCallback.dataEntryNotify(false, "EXCEPTION: " + sendUrl + " (" + gas_index + ") : " + e.Message);
+            }
+        }
+
+        private async void receivedDataBatch(
+            String sendUrl,
+            String category,
+            int sensorId,
+            int gas_index,
+            int meas_index,
+            Int64 serial_number,
+            int data_status,
+            int gas_wait,
+            double temperature,
+            double humidity,
+            double pressure,
+            double gas_registance,
+            double gas_registance_log,
+            double gas_registance_diff)
+        {
+            try
+            {
+                // デバッグ用メッセージ
+                Debug.WriteLine(DateTime.Now + " ----- PostJsonData::receivedDataBatch(" + sendUrl + ") -----");
+                //Debug.WriteLine(DateTime.Now + "       " + messageToSend + " ");
+                Debug.WriteLine(DateTime.Now + " ----- PostJsonData::receivedDataBatch  END -----");
+
+            }
+            catch (Exception e)
+            {
+                // 例外を通知する
+                Debug.WriteLine(DateTime.Now + " receievedDataBatch(" + sendUrl + " " + gas_index + ") : " + e.Message);
                 notifyCallback.dataEntryNotify(false, "EXCEPTION: " + sendUrl + " (" + gas_index + ") : " + e.Message);
             }
         }
@@ -89,14 +155,45 @@ namespace SamplingBME688Serial
             [JsonPropertyName("data")]
             public SensorDataDetail detail { get; }
 
-            public SensorDataSingle(string name, int sensor_id, string category, SensorDataDetail detail)
+            public SensorDataSingle(int sensor_id, string category, SensorDataDetail detail)
             {
-                this.name = name;
+                this.name = "sensor_data";
                 this.sensor_id = sensor_id;
                 this.category = category;
                 this.detail = detail;
             }
         }
+        class SensorDataBatch
+        {
+            public String name { get; }
+            public int sensor_id { get; }
+            public String category { get; }
+
+            [JsonPropertyName("data_array")]
+            public List<SensorDataDetail> detailArray { get; }
+
+            public SensorDataBatch(int sensor_id, string category)
+            {
+                this.name = "sensor_data_array";
+                this.sensor_id = sensor_id;
+                this.category = category;
+                this.detailArray = new List<SensorDataDetail>();
+            }
+
+            public void AddDetail(SensorDataDetail detail)
+            {
+                detailArray.Add(detail);
+            }
+            public void ClearDetail()
+            {
+                detailArray.Clear();
+            }
+            public int DetailCount()
+            {
+                return (detailArray.Count);
+            }
+        }
+
         class SensorDataDetail
         {
             public DateTime datetime { get; }

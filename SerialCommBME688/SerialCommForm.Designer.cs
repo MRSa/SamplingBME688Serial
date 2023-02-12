@@ -51,6 +51,7 @@
             this.grpExportOption = new System.Windows.Forms.GroupBox();
             this.chkCombineSensor = new System.Windows.Forms.CheckBox();
             this.grpEntryDatabase = new System.Windows.Forms.GroupBox();
+            this.chkDbEntrySingle = new System.Windows.Forms.CheckBox();
             this.urlDatabaseToEntry = new System.Windows.Forms.TextBox();
             this.chkEntryDatabase = new System.Windows.Forms.CheckBox();
             this.grpPort.SuspendLayout();
@@ -354,6 +355,7 @@
             // 
             this.grpEntryDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpEntryDatabase.Controls.Add(this.chkDbEntrySingle);
             this.grpEntryDatabase.Controls.Add(this.urlDatabaseToEntry);
             this.grpEntryDatabase.Controls.Add(this.chkEntryDatabase);
             this.grpEntryDatabase.Location = new System.Drawing.Point(12, 74);
@@ -363,6 +365,17 @@
             this.grpEntryDatabase.TabStop = false;
             this.grpEntryDatabase.Text = "Database Entry";
             // 
+            // chkDbEntrySingle
+            // 
+            this.chkDbEntrySingle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkDbEntrySingle.AutoSize = true;
+            this.chkDbEntrySingle.Location = new System.Drawing.Point(709, 25);
+            this.chkDbEntrySingle.Name = "chkDbEntrySingle";
+            this.chkDbEntrySingle.Size = new System.Drawing.Size(97, 19);
+            this.chkDbEntrySingle.TabIndex = 2;
+            this.chkDbEntrySingle.Text = "Entry All Data";
+            this.chkDbEntrySingle.UseVisualStyleBackColor = true;
+            // 
             // urlDatabaseToEntry
             // 
             this.urlDatabaseToEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -370,7 +383,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.urlDatabaseToEntry.Location = new System.Drawing.Point(77, 23);
             this.urlDatabaseToEntry.Name = "urlDatabaseToEntry";
-            this.urlDatabaseToEntry.Size = new System.Drawing.Size(729, 23);
+            this.urlDatabaseToEntry.Size = new System.Drawing.Size(626, 23);
             this.urlDatabaseToEntry.TabIndex = 1;
             this.urlDatabaseToEntry.Text = "http://localhost:3010/sensor/entry";
             // 
@@ -455,5 +468,6 @@
         private GroupBox grpEntryDatabase;
         private TextBox urlDatabaseToEntry;
         private CheckBox chkEntryDatabase;
+        private CheckBox chkDbEntrySingle;
     }
 }

@@ -34,9 +34,9 @@ namespace SerialCommBME688
                     sendUrl = urlDatabaseToEntry.Text;
                 }
 
-                if (myReceiver.startReceive(txtPort.Text, category, sendUrl, txtConsole))
+                if (myReceiver.startReceive(txtPort.Text, category, sendUrl, chkDbEntrySingle.Checked, txtConsole))
                 {
-                    // ƒf[ƒ^‚ÌóMŠJn
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡é–‹å§‹
                     btnConnect.Enabled = false;
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
@@ -44,11 +44,12 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
                     chkEntryDatabase.Enabled = false;
+                    chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
                 }
                 else
                 {
-                    // ƒf[ƒ^‚ÌóMŠJn‚É¸”s
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡é–‹å§‹ã«å¤±æ•—
                     btnConnect.Enabled = true;
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
@@ -56,6 +57,7 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
                     chkEntryDatabase.Enabled = true;
+                    chkDbEntrySingle.Enabled = true;
                     urlDatabaseToEntry.Enabled = true;
                 }
             }
@@ -70,7 +72,7 @@ namespace SerialCommBME688
             {
                 if (myReceiver.stopReceive())
                 {
-                    // ƒf[ƒ^‚ÌóMŠ®—¹
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡å®Œäº†
                     btnConnect.Enabled = true;
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
@@ -78,12 +80,13 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
                     chkEntryDatabase.Enabled = true;
+                    chkDbEntrySingle.Enabled = true;
                     urlDatabaseToEntry.Enabled = true;
                     //txtConsole.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
                 }
                 else
                 {
-                    // ƒf[ƒ^‚ÌóMI—¹‚É¸”s
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡çµ‚äº†ã«å¤±æ•—
                     btnConnect.Enabled = false;
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
@@ -91,6 +94,7 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
                     chkEntryDatabase.Enabled = false;
+                    chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
                 }
             }
@@ -103,7 +107,7 @@ namespace SerialCommBME688
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            // ƒƒO•\¦‚ÌƒNƒŠƒA
+            // ãƒ­ã‚°è¡¨ç¤ºã®ã‚¯ãƒªã‚¢
             txtConsole.Text = "";
             txtConsole_2.Text = "";
         }
@@ -128,24 +132,24 @@ namespace SerialCommBME688
                 {
                     Debug.WriteLine("OpenFile : canWrite: " + myStream.CanWrite);
 
-                    // CSV‚Öƒf[ƒ^‚ğ‘‚«o‚·B
+                    // CSVã¸ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãå‡ºã™ã€‚
                     if (!chkExportOnlyGasRegistanceLogarithm.Checked)
                     {
-                        // ‘Sƒf[ƒ^‚ÌƒGƒNƒXƒ|[ƒg
+                        // å…¨ãƒ‡ãƒ¼ã‚¿ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ
                         myReceiver.startExportAllDataToCsv(myStream, true);
                         myReceiver_2.startExportAllDataToCsv(myStream, false);
                     }
                     else
                     {
-                        // ƒZƒ“ƒT‚Ì‘Î”ƒf[ƒ^‚Ì‚İ‚ÌƒGƒNƒXƒ|[ƒg‚·‚é
+                        // ã‚»ãƒ³ã‚µã®å¯¾æ•°ãƒ‡ãƒ¼ã‚¿ã®ã¿ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã™ã‚‹
                         if (chkCombineSensor.Checked)
                         {
-                            // ƒZƒ“ƒT‚P‚ÆƒZƒ“ƒT‚Q‚Ìƒf[ƒ^‚ğ¬‚º‚ÄCSVo—Í‚·‚é
+                            // ã‚»ãƒ³ã‚µï¼‘ã¨ã‚»ãƒ³ã‚µï¼’ã®ãƒ‡ãƒ¼ã‚¿ã‚’æ··ãœã¦CSVå‡ºåŠ›ã™ã‚‹
                             exportCsvEachSensorCombine(myStream);
                         }
                         else
                         {
-                            // ƒZƒ“ƒT‚P‚ÆƒZƒ“ƒT‚Q‚Ìƒf[ƒ^‚ğ‡”Ô‚ÉCSVo—Í‚·‚é
+                            // ã‚»ãƒ³ã‚µï¼‘ã¨ã‚»ãƒ³ã‚µï¼’ã®ãƒ‡ãƒ¼ã‚¿ã‚’é †ç•ªã«CSVå‡ºåŠ›ã™ã‚‹
                             exportCsvEachSensorSerial(myStream);
                         }
                     }
@@ -162,7 +166,7 @@ namespace SerialCommBME688
                 StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
                 writer.AutoFlush = true;
 
-                // ----- ƒwƒbƒ_•”•ª‚Ìo—Í -----
+                // ----- ãƒ˜ãƒƒãƒ€éƒ¨åˆ†ã®å‡ºåŠ› -----
                 List<String> categoryList1 = myReceiver.getCollectedCategoryList();
                 List<String> categoryList2 = myReceiver_2.getCollectedCategoryList();
                 List<String> categories = new List<String>();
@@ -176,7 +180,7 @@ namespace SerialCommBME688
                         {
                             if ((categoryList2.Contains(item))||(!myReceiver_2.isDataReceived()))
                             {
-                                // ƒZƒ“ƒT‚P‚ÆƒZƒ“ƒT‚Q‚Å“¯‚¶ƒJƒeƒSƒŠ‚ª‚ ‚Á‚½ê‡‚¾‚¯Aƒwƒbƒ_•”•ª‚Éo—Í‚·‚é
+                                // ã‚»ãƒ³ã‚µï¼‘ã¨ã‚»ãƒ³ã‚µï¼’ã§åŒã˜ã‚«ãƒ†ã‚´ãƒªãŒã‚ã£ãŸå ´åˆã ã‘ã€ãƒ˜ãƒƒãƒ€éƒ¨åˆ†ã«å‡ºåŠ›ã™ã‚‹
                                 writer.Write(item + ", ");
                                 categories.Add(item);
                             }
@@ -189,7 +193,7 @@ namespace SerialCommBME688
                 }
                 else
                 {
-                    // ƒZƒ“ƒT‚P‚Ìƒf[ƒ^‚ª‚È‚¢ê‡‚ÍAƒZƒ“ƒT‚Q‚Ì‚İ—˜—p‚·‚éB
+                    // ã‚»ãƒ³ã‚µï¼‘ã®ãƒ‡ãƒ¼ã‚¿ãŒãªã„å ´åˆã¯ã€ã‚»ãƒ³ã‚µï¼’ã®ã¿åˆ©ç”¨ã™ã‚‹ã€‚
                     foreach (String item in categoryList2)
                     {
                         writer.Write(item + ", ");
@@ -197,10 +201,10 @@ namespace SerialCommBME688
                     }
                 }
                 writer.WriteLine(" ;");
-                // ----- ƒwƒbƒ_•”•ª‚Ìo—Í‚¨‚í‚è -----
+                // ----- ãƒ˜ãƒƒãƒ€éƒ¨åˆ†ã®å‡ºåŠ›ãŠã‚ã‚Š -----
 
 
-                // ƒZƒ“ƒT‚P‚ÆƒZƒ“ƒT‚Q‚Ìƒf[ƒ^‚ğ‡”Ô‚Éo—Í‚·‚éiƒZƒ“ƒT‚P¨ƒZƒ“ƒT‚Q‚Ì‡‚Éo—Í‚·‚éj
+                // ã‚»ãƒ³ã‚µï¼‘ã¨ã‚»ãƒ³ã‚µï¼’ã®ãƒ‡ãƒ¼ã‚¿ã‚’é †ç•ªã«å‡ºåŠ›ã™ã‚‹ï¼ˆã‚»ãƒ³ã‚µï¼‘â†’ã‚»ãƒ³ã‚µï¼’ã®é †ã«å‡ºåŠ›ã™ã‚‹ï¼‰
                 if (myReceiver.isDataReceived())
                 {
                     myReceiver.startExportCsvOnlyGasRegistance(writer, categories, dataSourceProvider.getValidCount(), Decimal.ToInt32(numDuplicate.Value));
@@ -233,13 +237,13 @@ namespace SerialCommBME688
 
         private void SerialCommForm_Load(object sender, EventArgs e)
         {
-            // ƒf[ƒ^ƒOƒŠƒbƒh‚É•\¦‚·‚éƒJƒ‰ƒ€‚Ìƒwƒbƒ_[‚ğİ’è‚·‚é
+            // ãƒ‡ãƒ¼ã‚¿ã‚°ãƒªãƒƒãƒ‰ã«è¡¨ç¤ºã™ã‚‹ã‚«ãƒ©ãƒ ã®ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’è¨­å®šã™ã‚‹
             dataGridView1.DataSource = dataSourceProvider.getGridDataSource();
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            // ƒf[ƒ^‚ğƒŠƒZƒbƒg‚·‚é
+            // ãƒ‡ãƒ¼ã‚¿ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
             myReceiver.reset();
             myReceiver_2.reset();
             dataSourceProvider.reset();
@@ -248,7 +252,7 @@ namespace SerialCommBME688
 
         private void btnShowGraph_Click(object sender, EventArgs e)
         {
-            //  ƒf[ƒ^‚ª‚P‚ÂˆÈã‘I‘ğ‚³‚ê‚Ä‚¢‚½‚ÍAƒOƒ‰ƒt‚ğ•\¦‚·‚é
+            //  ãƒ‡ãƒ¼ã‚¿ãŒï¼‘ã¤ä»¥ä¸Šé¸æŠã•ã‚Œã¦ã„ãŸæ™‚ã¯ã€ã‚°ãƒ©ãƒ•ã‚’è¡¨ç¤ºã™ã‚‹
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 try
@@ -257,7 +261,7 @@ namespace SerialCommBME688
                     {
                         Debug.WriteLine(row.Index + " : : " + row.Cells[0].Value + " ");
                     }
-                    // ƒf[ƒ^‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚½‚ÍAÚ×ƒ_ƒCƒAƒƒO‚ğ•\¦‚·‚é
+                    // ãƒ‡ãƒ¼ã‚¿ãŒé¸æŠã•ã‚Œã¦ã„ãŸæ™‚ã¯ã€è©³ç´°ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’è¡¨ç¤ºã™ã‚‹
                     DataDetailDialog dialog = new DataDetailDialog();
                     dialog.Owner = this;
                     dialog.Show();
@@ -295,9 +299,9 @@ namespace SerialCommBME688
                     sendUrl = urlDatabaseToEntry.Text;
                 }
                 txtConsole_2.Text = "--- START RECEIVE [" + txtPort_2.Text + "] (" + txtDataCategory.Text + ") ---\r\n";
-                if (myReceiver_2.startReceive(txtPort_2.Text, category, sendUrl, txtConsole_2))
+                if (myReceiver_2.startReceive(txtPort_2.Text, category, sendUrl, chkDbEntrySingle.Checked, txtConsole_2))
                 {
-                    // ƒf[ƒ^‚ÌóMŠJn
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡é–‹å§‹
                     btnConnect_2.Enabled = false;
                     btnStop_2.Enabled = true;
                     btnExport.Enabled = false;
@@ -305,11 +309,12 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
                     chkEntryDatabase.Enabled = false;
+                    chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
                 }
                 else
                 {
-                    // ƒf[ƒ^‚ÌóMŠJn‚É¸”s
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡é–‹å§‹ã«å¤±æ•—
                     btnConnect_2.Enabled = true;
                     btnStop_2.Enabled = false;
                     btnExport.Enabled = true;
@@ -317,6 +322,7 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
                     chkEntryDatabase.Enabled = true;
+                    chkDbEntrySingle.Enabled = true;
                     urlDatabaseToEntry.Enabled = true;
                 }
             }
@@ -332,7 +338,7 @@ namespace SerialCommBME688
             {
                 if (myReceiver_2.stopReceive())
                 {
-                    // ƒf[ƒ^‚ÌóMŠ®—¹
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡å®Œäº†
                     btnConnect_2.Enabled = true;
                     btnStop_2.Enabled = false;
                     btnExport.Enabled = true;
@@ -341,11 +347,12 @@ namespace SerialCommBME688
                     btnReset.Enabled = true;
                     //txtConsole_2.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
                     chkEntryDatabase.Enabled = true;
+                    chkDbEntrySingle.Enabled = true;
                     urlDatabaseToEntry.Enabled = true;
                 }
                 else
                 {
-                    // ƒf[ƒ^‚ÌóMI—¹‚É¸”s
+                    // ãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡çµ‚äº†ã«å¤±æ•—
                     btnConnect_2.Enabled = false;
                     btnStop_2.Enabled = true;
                     btnExport.Enabled = false;
@@ -353,6 +360,7 @@ namespace SerialCommBME688
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
                     chkEntryDatabase.Enabled = false;
+                    chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
                 }
             }

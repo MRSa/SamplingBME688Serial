@@ -33,6 +33,7 @@ namespace SerialCommBME688
 
         public String entryData(String category,
                                String sendUrl,
+                               bool isSingleEntry,
                                int gas_index, 
                                int meas_index,
                                Int64 serial_number,
@@ -56,6 +57,7 @@ namespace SerialCommBME688
                     {
                         sendData.receivedData(
                             sendUrl,
+                            isSingleEntry,
                             category,
                             sensorId,
                             gas_index,

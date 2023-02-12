@@ -31,7 +31,7 @@ namespace SerialCommBME688
             outputArea = aOutputArea;
         }
 
-        public void parseReceivedData(String categoryName, String sendUrl, String data)
+        public void parseReceivedData(String categoryName, String sendUrl, bool isSingleEntry, String data)
         {
             //  データを受信したとき...
             try
@@ -65,6 +65,7 @@ namespace SerialCommBME688
                 // データを格納する。
                 String itemData = dataHolder.entryData(categoryName,
                                                        sendUrl,
+                                                       isSingleEntry,
                                                        gas_index,
                                                        meas_index,
                                                        serial_number,
