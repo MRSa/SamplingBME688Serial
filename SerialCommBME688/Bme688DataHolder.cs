@@ -28,7 +28,7 @@ namespace SerialCommBME688
             this.callback = callback;
             this.sensorId = sensorId;
             this.notify = notify;
-            this.sendData = new PostJsonData(NUMBER_OF_INDEX, this);
+            this.sendData = new PostJsonData(sensorId, NUMBER_OF_INDEX, this);
         }
 
         public String entryData(String category,
