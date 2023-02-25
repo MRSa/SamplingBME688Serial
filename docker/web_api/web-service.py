@@ -38,6 +38,15 @@ def entry_data():
     return jsonify(res='ok'), 200
 
 #  --------------- データ情報
+@app.route("/sensor/list")
+def data_list():
+    # ----- DBよりデータリストの取得
+    result = adapter.dataList()
+
+    # --- return 200: OK
+    return jsonify(data=result), 200
+
+#  --------------- データ情報
 @app.route("/info/")
 def information():
     response = "<p>Information : (host -> {0}[{1}], user -> {2})</p>".format(os.getenv("SENSOR_DB_ACCESS_HOST"), os.getenv("SENSOR_DB_NAME"), os.getenv("SENSOR_DB_USER"))

@@ -2,7 +2,7 @@ import datetime
 import os
 import sys
 import SensorData
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, distinct
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -40,6 +40,18 @@ class StorageAdapter:
             return True
         return True
 
+    def dataList(self):
+        response = ""
+        try:
+            session = self.Session()
+            response = self.listOfDataCount(session)
+            session.close()
+
+        except Exception as e:
+            print(" -=- Received Exception : {0} {1} ".format(e.args, self.db_url), file=sys.stderr)
+        
+        return response
+
     def testDump(self, jsonData):
         try:
             # 接続する
@@ -67,6 +79,46 @@ class StorageAdapter:
             print(" - - - - -", file=sys.stderr)
             return True
         return True
+
+    def listOfDataCount(self, session):
+        data = ''
+        category_result = []
+        sensor_id_result = []
+        entry_count = []
+        try:
+            # ---------------
+            categories = session.query(distinct(SensorData.SensorData.category)).all()
+            for category in categories:
+                #print("{0}  {1}  {2}".format(category, category[0], count), file=sys.stderr)
+                try:
+                    #print(" --- {0} {1} --- ".format(category[0], category), file=sys.stderr)
+                    category_result.append(category[0])
+                except Exception as ex:
+                    print(" XXX Received Exception : {0} {1} ".format(ex.args, category), file=sys.stderr)
+            # ---------------
+            sensors = session.query(distinct(SensorData.SensorData.sensor_id)).all()
+            for sensor in sensors:
+                try:
+                    #print(" --- {0} {1} --- ".format(sensor[0], sensor), file=sys.stderr)
+                    sensor_id_result.append(sensor[0])
+                except Exception as ex:
+                    print(" xXx Received Exception : {0} {1} ".format(ex.args, category), file=sys.stderr)
+            # ---------------
+            for category in category_result:
+                for sensor_id in sensor_id_result:
+                    try:
+                        dataCount = session.query(SensorData.SensorData).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).count()
+                        print("  {0}({1}) : {2} ".format(category, sensor_id, dataCount), file=sys.stderr)
+                        entry_count.append((category, sensor_id, dataCount))
+                    except Exception as ex:
+                        print(" XxX Received Exception : {0} {1} ".format(ex.args, category), file=sys.stderr)
+
+            data = entry_count # 'OK' # categories
+            #print(category_result, file=sys.stderr)
+        except Exception as e:
+            print(" xxx Received Exception : {0} {1} ".format(e.args, " "), file=sys.stderr)
+
+        return data
 
     def entryFromJson(self, jsonObject, session):
         category = ''
