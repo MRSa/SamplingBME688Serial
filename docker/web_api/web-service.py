@@ -37,14 +37,35 @@ def entry_data():
     # --- return 200: OK
     return jsonify(res='ok'), 200
 
-#  --------------- データ情報
+#  --------------- 登録済データの情報(データ数)
 @app.route("/sensor/list")
 def data_list():
     # ----- DBよりデータリストの取得
     result = adapter.dataList()
 
     # --- return 200: OK
-    return jsonify(data=result), 200
+    return jsonify(result=result), 200
+
+#  --------------- データの取得
+@app.route("/sensor/get")
+def get_sensor_data():
+    # ----- パラメータの取得 
+    #    category:  カテゴリ
+    #    sensor_id: センサID
+    #    limit:     最大取得件数(省略可)
+    #    offset:    先頭位置(省略可)
+    #    option:    オプション(省略可)
+    category = request.args.get('category', '')
+    sensor_id = request.args.get('sensor_id', '')
+    limit = request.args.get('limit', '')
+    offset = request.args.get('offset', '')
+    option = request.args.get('option', '')
+
+    # ----- DBからデータリストを取得する
+    result = adapter.getSensorData(category, sensor_id, limit, offset, option)
+
+    # --- return 200: OK
+    return jsonify(result=result), 200
 
 #  --------------- データ情報
 @app.route("/info/")
