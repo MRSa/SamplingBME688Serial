@@ -96,17 +96,22 @@ class StorageAdapter:
         response = ''
         try:
             session = self.Session()
-            response = self.getDataFromDatabase(session, category, sensor_id, limit, offset, option)
+            if len(option) > 0:
+                # ----- DBからデータをとってきて応答する（オプション指定あり）
+                response = self.getDataFromDatabaseWithOption(session, category, sensor_id, limit, offset, option)
+            else:
+                # ----- DBからデータをとってきて応答する（オプション指定なし）
+                response = self.getDataFromDatabase(session, category, sensor_id, limit, offset)
             session.close()
         except Exception as e:
             print(" === Received Exception : {0} {1} ".format(e.args, " "), file=sys.stderr)
         return response
 
 
-    def getDataFromDatabase(self, session, category, sensor_id, limit, offset, option):
+    def getDataFromDatabase(self, session, category, sensor_id, limit, offset):
         data = []
         try:
-            print(" Category: {0}, sensor id:{1} limit: {2}, (offset:{3}, option:{4})".format(category, sensor_id, limit, offset, option), file=sys.stderr)
+            print(" Category: {0}, sensor id:{1} limit: {2}, (offset:{3})".format(category, sensor_id, limit, offset), file=sys.stderr)
             #session.query(SensorData.SensorData).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).count()
             if len(limit) > 0 or len(offset) > 0:
                 if len(limit) <= 0:
@@ -124,6 +129,98 @@ class StorageAdapter:
 
             for result in results:
                 item = dict(index = result[0], value = result[1])
+                data.append(item)
+            #print(data, file=sys.stderr)
+        except Exception as e:
+            print(" ___ Received Exception : {0} {1} ".format(e.args, " "), file=sys.stderr)
+
+        return dict(category = category, sensor_id = sensor_id, data = data)
+
+    def getDataFromDatabaseWithOption(self, session, category, sensor_id, limit, offset, option):
+        data = []
+        try:
+            print(" Category: {0}, sensor id:{1} limit: {2}, (offset:{3}, option:{4})".format(category, sensor_id, limit, offset, option), file=sys.stderr)
+            #session.query(SensorData.SensorData).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).count()
+            if len(limit) > 0 or len(offset) > 0:
+                if len(limit) <= 0:
+                    # offset だけ指定された
+                    results = session.query(
+                        SensorData.SensorData.serial,
+                        SensorData.SensorData.datetime,
+                        SensorData.SensorData.sensor_id,
+                        SensorData.SensorData.category,
+                        SensorData.SensorData.gas_index,
+                        SensorData.SensorData.temperature,
+                        SensorData.SensorData.humidity,
+                        SensorData.SensorData.pressure,
+                        SensorData.SensorData.gas_registance,
+                        SensorData.SensorData.gas_registance_log,
+                        SensorData.SensorData.gas_registance_diff,
+                        SensorData.SensorData.comment
+                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).offset(offset).all()
+                elif len(offset) <= 0:
+                    # limit だけ指定された
+                    results = session.query(
+                        SensorData.SensorData.serial,
+                        SensorData.SensorData.datetime,
+                        SensorData.SensorData.sensor_id,
+                        SensorData.SensorData.category,
+                        SensorData.SensorData.gas_index,
+                        SensorData.SensorData.temperature,
+                        SensorData.SensorData.humidity,
+                        SensorData.SensorData.pressure,
+                        SensorData.SensorData.gas_registance,
+                        SensorData.SensorData.gas_registance_log,
+                        SensorData.SensorData.gas_registance_diff,
+                        SensorData.SensorData.comment
+                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).limit(limit).all()
+                else:
+                    # limit と offsetの両方が指定された
+                    results = session.query(
+                        SensorData.SensorData.serial,
+                        SensorData.SensorData.datetime,
+                        SensorData.SensorData.sensor_id,
+                        SensorData.SensorData.category,
+                        SensorData.SensorData.gas_index,
+                        SensorData.SensorData.temperature,
+                        SensorData.SensorData.humidity,
+                        SensorData.SensorData.pressure,
+                        SensorData.SensorData.gas_registance,
+                        SensorData.SensorData.gas_registance_log,
+                        SensorData.SensorData.gas_registance_diff,
+                        SensorData.SensorData.comment
+                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).limit(limit).offset(offset).all()
+            else:
+                # limit と offsetの両方とも指定がなかった
+                results = session.query(
+                        SensorData.SensorData.serial,
+                        SensorData.SensorData.datetime,
+                        SensorData.SensorData.sensor_id,
+                        SensorData.SensorData.category,
+                        SensorData.SensorData.gas_index,
+                        SensorData.SensorData.temperature,
+                        SensorData.SensorData.humidity,
+                        SensorData.SensorData.pressure,
+                        SensorData.SensorData.gas_registance,
+                        SensorData.SensorData.gas_registance_log,
+                        SensorData.SensorData.gas_registance_diff,
+                        SensorData.SensorData.comment
+                    ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).all()
+
+            for result in results:
+                item = dict(
+                    serial = result[0],
+                    datetime = result[1],
+                    sensor_id = result[2],
+                    category = result[3],
+                    index = result[4],
+                    temperature = result[5],
+                    humidity = result[6],
+                    pressure = result[7],
+                    gas_registance = result[8],
+                    gas_registance_log = result[9],
+                    gas_registance_diff = result[10],
+                    comment = result[11])
                 data.append(item)
             #print(data, file=sys.stderr)
         except Exception as e:
