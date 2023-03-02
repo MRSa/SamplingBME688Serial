@@ -31,7 +31,7 @@ namespace SerialCommBME688
                 String sendUrl = "";
                 if (chkEntryDatabase.Checked)
                 {
-                    sendUrl = urlDatabaseToEntry.Text;
+                    sendUrl = urlDatabaseToEntry.Text + "sensor/entry";
                 }
 
                 if (myReceiver.startReceive(txtPort.Text, category, sendUrl, chkDbEntrySingle.Checked, txtConsole))
@@ -43,6 +43,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
+                    btnDbStatus.Enabled = false;
                     chkEntryDatabase.Enabled = false;
                     chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
@@ -56,6 +57,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
+                    btnDbStatus.Enabled = true;
                     chkEntryDatabase.Enabled = true;
                     chkDbEntrySingle.Enabled = true;
                     urlDatabaseToEntry.Enabled = true;
@@ -79,6 +81,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
+                    btnDbStatus.Enabled = true;
                     chkEntryDatabase.Enabled = true;
                     chkDbEntrySingle.Enabled = true;
                     urlDatabaseToEntry.Enabled = true;
@@ -93,6 +96,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
+                    btnDbStatus.Enabled = false;
                     chkEntryDatabase.Enabled = false;
                     chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
@@ -178,7 +182,7 @@ namespace SerialCommBME688
                     {
                         try
                         {
-                            if ((categoryList2.Contains(item))||(!myReceiver_2.isDataReceived()))
+                            if ((categoryList2.Contains(item)) || (!myReceiver_2.isDataReceived()))
                             {
                                 // センサ１とセンサ２で同じカテゴリがあった場合だけ、ヘッダ部分に出力する
                                 writer.Write(item + ", ");
@@ -296,7 +300,7 @@ namespace SerialCommBME688
                 String sendUrl = "";
                 if (chkEntryDatabase.Checked)
                 {
-                    sendUrl = urlDatabaseToEntry.Text;
+                    sendUrl = urlDatabaseToEntry.Text + "sensor/entry";
                 }
                 txtConsole_2.Text = "--- START RECEIVE [" + txtPort_2.Text + "] (" + txtDataCategory.Text + ") ---\r\n";
                 if (myReceiver_2.startReceive(txtPort_2.Text, category, sendUrl, chkDbEntrySingle.Checked, txtConsole_2))
@@ -308,6 +312,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
+                    btnDbStatus.Enabled = false;
                     chkEntryDatabase.Enabled = false;
                     chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
@@ -321,6 +326,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
+                    btnDbStatus.Enabled = true;
                     chkEntryDatabase.Enabled = true;
                     chkDbEntrySingle.Enabled = true;
                     urlDatabaseToEntry.Enabled = true;
@@ -345,6 +351,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
+                    btnDbStatus.Enabled = true;
                     //txtConsole_2.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
                     chkEntryDatabase.Enabled = true;
                     chkDbEntrySingle.Enabled = true;
@@ -359,6 +366,7 @@ namespace SerialCommBME688
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
+                    btnDbStatus.Enabled = false;
                     chkEntryDatabase.Enabled = false;
                     chkDbEntrySingle.Enabled = false;
                     urlDatabaseToEntry.Enabled = false;
@@ -368,6 +376,24 @@ namespace SerialCommBME688
             {
                 Debug.WriteLine(ex.StackTrace);
                 txtConsole.AppendText(ex.Message);
+            }
+        }
+
+        private void btnDbStatus_Click(object sender, EventArgs e)
+        {
+            // DBのステータスボタンを押したとき...
+            String statusUrl = urlDatabaseToEntry.Text + "sensor/entry";
+
+            try
+            {
+                // ダイアログ（？）を表示する
+                DbStatusDialog dialog = new DbStatusDialog();
+                dialog.Owner = this;
+                dialog.Show();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " btnDbStatus_Click()" + ex.Message);
             }
         }
     }

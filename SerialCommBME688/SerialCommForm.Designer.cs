@@ -26,417 +26,407 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnConnect = new System.Windows.Forms.Button();
-            this.txtPort = new System.Windows.Forms.TextBox();
-            this.grpPort = new System.Windows.Forms.GroupBox();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.txtConsole = new System.Windows.Forms.TextBox();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.grpDataCategory = new System.Windows.Forms.GroupBox();
-            this.txtDataCategory = new System.Windows.Forms.TextBox();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.grpData = new System.Windows.Forms.GroupBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.chkExportOnlyGasRegistanceLogarithm = new System.Windows.Forms.CheckBox();
-            this.btnReset = new System.Windows.Forms.Button();
-            this.btnShowGraph = new System.Windows.Forms.Button();
-            this.numDuplicate = new System.Windows.Forms.NumericUpDown();
-            this.lblDuplicate = new System.Windows.Forms.Label();
-            this.txtConsole_2 = new System.Windows.Forms.TextBox();
-            this.grpPort_2 = new System.Windows.Forms.GroupBox();
-            this.btnStop_2 = new System.Windows.Forms.Button();
-            this.btnConnect_2 = new System.Windows.Forms.Button();
-            this.txtPort_2 = new System.Windows.Forms.TextBox();
-            this.grpLogConsole = new System.Windows.Forms.GroupBox();
-            this.grpExportOption = new System.Windows.Forms.GroupBox();
-            this.chkCombineSensor = new System.Windows.Forms.CheckBox();
-            this.grpEntryDatabase = new System.Windows.Forms.GroupBox();
-            this.chkDbEntrySingle = new System.Windows.Forms.CheckBox();
-            this.urlDatabaseToEntry = new System.Windows.Forms.TextBox();
-            this.chkEntryDatabase = new System.Windows.Forms.CheckBox();
-            this.grpPort.SuspendLayout();
-            this.grpDataCategory.SuspendLayout();
-            this.grpData.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDuplicate)).BeginInit();
-            this.grpPort_2.SuspendLayout();
-            this.grpLogConsole.SuspendLayout();
-            this.grpExportOption.SuspendLayout();
-            this.grpEntryDatabase.SuspendLayout();
-            this.SuspendLayout();
+            btnConnect = new Button();
+            txtPort = new TextBox();
+            grpPort = new GroupBox();
+            btnStop = new Button();
+            txtConsole = new TextBox();
+            btnClear = new Button();
+            grpDataCategory = new GroupBox();
+            txtDataCategory = new TextBox();
+            btnExport = new Button();
+            grpData = new GroupBox();
+            dataGridView1 = new DataGridView();
+            chkExportOnlyGasRegistanceLogarithm = new CheckBox();
+            btnReset = new Button();
+            btnShowGraph = new Button();
+            numDuplicate = new NumericUpDown();
+            lblDuplicate = new Label();
+            txtConsole_2 = new TextBox();
+            grpPort_2 = new GroupBox();
+            btnStop_2 = new Button();
+            btnConnect_2 = new Button();
+            txtPort_2 = new TextBox();
+            grpLogConsole = new GroupBox();
+            grpExportOption = new GroupBox();
+            chkCombineSensor = new CheckBox();
+            grpEntryDatabase = new GroupBox();
+            btnDbStatus = new Button();
+            chkDbEntrySingle = new CheckBox();
+            urlDatabaseToEntry = new TextBox();
+            chkEntryDatabase = new CheckBox();
+            grpPort.SuspendLayout();
+            grpDataCategory.SuspendLayout();
+            grpData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numDuplicate).BeginInit();
+            grpPort_2.SuspendLayout();
+            grpLogConsole.SuspendLayout();
+            grpExportOption.SuspendLayout();
+            grpEntryDatabase.SuspendLayout();
+            SuspendLayout();
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(76, 20);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect.TabIndex = 0;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            btnConnect.Location = new Point(76, 20);
+            btnConnect.Name = "btnConnect";
+            btnConnect.Size = new Size(75, 23);
+            btnConnect.TabIndex = 0;
+            btnConnect.Text = "Connect";
+            btnConnect.UseVisualStyleBackColor = true;
+            btnConnect.Click += btnConnect_Click;
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(6, 21);
-            this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(64, 23);
-            this.txtPort.TabIndex = 2;
-            this.txtPort.Text = "COM7";
-            this.txtPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            txtPort.Location = new Point(6, 21);
+            txtPort.Name = "txtPort";
+            txtPort.Size = new Size(64, 23);
+            txtPort.TabIndex = 2;
+            txtPort.Text = "COM7";
+            txtPort.TextAlign = HorizontalAlignment.Center;
             // 
             // grpPort
             // 
-            this.grpPort.Controls.Add(this.btnStop);
-            this.grpPort.Controls.Add(this.btnConnect);
-            this.grpPort.Controls.Add(this.txtPort);
-            this.grpPort.Location = new System.Drawing.Point(233, 12);
-            this.grpPort.Name = "grpPort";
-            this.grpPort.Size = new System.Drawing.Size(240, 56);
-            this.grpPort.TabIndex = 3;
-            this.grpPort.TabStop = false;
-            this.grpPort.Text = "Sensor1";
+            grpPort.Controls.Add(btnStop);
+            grpPort.Controls.Add(btnConnect);
+            grpPort.Controls.Add(txtPort);
+            grpPort.Location = new Point(233, 12);
+            grpPort.Name = "grpPort";
+            grpPort.Size = new Size(240, 56);
+            grpPort.TabIndex = 3;
+            grpPort.TabStop = false;
+            grpPort.Text = "Sensor1";
             // 
             // btnStop
             // 
-            this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(157, 20);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(75, 23);
-            this.btnStop.TabIndex = 3;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            btnStop.Enabled = false;
+            btnStop.Location = new Point(157, 20);
+            btnStop.Name = "btnStop";
+            btnStop.Size = new Size(75, 23);
+            btnStop.TabIndex = 3;
+            btnStop.Text = "Stop";
+            btnStop.UseVisualStyleBackColor = true;
+            btnStop.Click += btnStop_Click;
             // 
             // txtConsole
             // 
-            this.txtConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtConsole.HideSelection = false;
-            this.txtConsole.Location = new System.Drawing.Point(3, 24);
-            this.txtConsole.Multiline = true;
-            this.txtConsole.Name = "txtConsole";
-            this.txtConsole.ReadOnly = true;
-            this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole.Size = new System.Drawing.Size(803, 87);
-            this.txtConsole.TabIndex = 4;
+            txtConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtConsole.HideSelection = false;
+            txtConsole.Location = new Point(3, 24);
+            txtConsole.Multiline = true;
+            txtConsole.Name = "txtConsole";
+            txtConsole.ReadOnly = true;
+            txtConsole.ScrollBars = ScrollBars.Vertical;
+            txtConsole.Size = new Size(803, 87);
+            txtConsole.TabIndex = 4;
             // 
             // btnClear
             // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(747, 33);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(79, 23);
-            this.btnClear.TabIndex = 5;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            btnClear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClear.Location = new Point(747, 33);
+            btnClear.Name = "btnClear";
+            btnClear.Size = new Size(79, 23);
+            btnClear.TabIndex = 5;
+            btnClear.Text = "Clear";
+            btnClear.UseVisualStyleBackColor = true;
+            btnClear.Click += btnClear_Click;
             // 
             // grpDataCategory
             // 
-            this.grpDataCategory.Controls.Add(this.txtDataCategory);
-            this.grpDataCategory.Location = new System.Drawing.Point(12, 12);
-            this.grpDataCategory.Name = "grpDataCategory";
-            this.grpDataCategory.Size = new System.Drawing.Size(215, 56);
-            this.grpDataCategory.TabIndex = 6;
-            this.grpDataCategory.TabStop = false;
-            this.grpDataCategory.Text = "Data Category";
+            grpDataCategory.Controls.Add(txtDataCategory);
+            grpDataCategory.Location = new Point(12, 12);
+            grpDataCategory.Name = "grpDataCategory";
+            grpDataCategory.Size = new Size(215, 56);
+            grpDataCategory.TabIndex = 6;
+            grpDataCategory.TabStop = false;
+            grpDataCategory.Text = "Data Category";
             // 
             // txtDataCategory
             // 
-            this.txtDataCategory.Location = new System.Drawing.Point(6, 20);
-            this.txtDataCategory.Name = "txtDataCategory";
-            this.txtDataCategory.Size = new System.Drawing.Size(203, 23);
-            this.txtDataCategory.TabIndex = 0;
+            txtDataCategory.Location = new Point(6, 20);
+            txtDataCategory.Name = "txtDataCategory";
+            txtDataCategory.Size = new Size(203, 23);
+            txtDataCategory.TabIndex = 0;
             // 
             // btnExport
             // 
-            this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExport.Location = new System.Drawing.Point(703, 438);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(123, 22);
-            this.btnExport.TabIndex = 7;
-            this.btnExport.Text = "Export CSV";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            btnExport.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnExport.Location = new Point(703, 438);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(123, 22);
+            btnExport.TabIndex = 7;
+            btnExport.Text = "Export CSV";
+            btnExport.UseVisualStyleBackColor = true;
+            btnExport.Click += btnExport_Click;
             // 
             // grpData
             // 
-            this.grpData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpData.Controls.Add(this.dataGridView1);
-            this.grpData.Location = new System.Drawing.Point(12, 375);
-            this.grpData.Name = "grpData";
-            this.grpData.Size = new System.Drawing.Size(685, 313);
-            this.grpData.TabIndex = 8;
-            this.grpData.TabStop = false;
-            this.grpData.Text = "Collected Data";
+            grpData.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            grpData.Controls.Add(dataGridView1);
+            grpData.Location = new Point(12, 375);
+            grpData.Name = "grpData";
+            grpData.Size = new Size(685, 313);
+            grpData.TabIndex = 8;
+            grpData.TabStop = false;
+            grpData.Text = "Collected Data";
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 19);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(679, 291);
-            this.dataGridView1.TabIndex = 0;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToOrderColumns = true;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(3, 19);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(679, 291);
+            dataGridView1.TabIndex = 0;
             // 
             // chkExportOnlyGasRegistanceLogarithm
             // 
-            this.chkExportOnlyGasRegistanceLogarithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
-            this.chkExportOnlyGasRegistanceLogarithm.Checked = true;
-            this.chkExportOnlyGasRegistanceLogarithm.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkExportOnlyGasRegistanceLogarithm.Location = new System.Drawing.Point(6, 22);
-            this.chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
-            this.chkExportOnlyGasRegistanceLogarithm.Size = new System.Drawing.Size(114, 19);
-            this.chkExportOnlyGasRegistanceLogarithm.TabIndex = 9;
-            this.chkExportOnlyGasRegistanceLogarithm.Text = "Only Gas R.(Log)";
-            this.chkExportOnlyGasRegistanceLogarithm.UseVisualStyleBackColor = true;
-            this.chkExportOnlyGasRegistanceLogarithm.CheckedChanged += new System.EventHandler(this.chkExportOnlyGasRegistanceLogarithm_CheckedChanged);
+            chkExportOnlyGasRegistanceLogarithm.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
+            chkExportOnlyGasRegistanceLogarithm.Checked = true;
+            chkExportOnlyGasRegistanceLogarithm.CheckState = CheckState.Checked;
+            chkExportOnlyGasRegistanceLogarithm.Location = new Point(6, 22);
+            chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
+            chkExportOnlyGasRegistanceLogarithm.Size = new Size(114, 19);
+            chkExportOnlyGasRegistanceLogarithm.TabIndex = 9;
+            chkExportOnlyGasRegistanceLogarithm.Text = "Only Gas R.(Log)";
+            chkExportOnlyGasRegistanceLogarithm.UseVisualStyleBackColor = true;
+            chkExportOnlyGasRegistanceLogarithm.CheckedChanged += chkExportOnlyGasRegistanceLogarithm_CheckedChanged;
             // 
             // btnReset
             // 
-            this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(703, 663);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(123, 22);
-            this.btnReset.TabIndex = 10;
-            this.btnReset.Text = "Reset";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            btnReset.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnReset.Location = new Point(703, 663);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(123, 22);
+            btnReset.TabIndex = 10;
+            btnReset.Text = "Reset";
+            btnReset.UseVisualStyleBackColor = true;
+            btnReset.Click += btnReset_Click;
             // 
             // btnShowGraph
             // 
-            this.btnShowGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowGraph.Location = new System.Drawing.Point(703, 581);
-            this.btnShowGraph.Name = "btnShowGraph";
-            this.btnShowGraph.Size = new System.Drawing.Size(123, 23);
-            this.btnShowGraph.TabIndex = 11;
-            this.btnShowGraph.Text = "Show Graph";
-            this.btnShowGraph.UseVisualStyleBackColor = true;
-            this.btnShowGraph.Visible = false;
-            this.btnShowGraph.Click += new System.EventHandler(this.btnShowGraph_Click);
+            btnShowGraph.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnShowGraph.Location = new Point(703, 581);
+            btnShowGraph.Name = "btnShowGraph";
+            btnShowGraph.Size = new Size(123, 23);
+            btnShowGraph.TabIndex = 11;
+            btnShowGraph.Text = "Show Graph";
+            btnShowGraph.UseVisualStyleBackColor = true;
+            btnShowGraph.Visible = false;
+            btnShowGraph.Click += btnShowGraph_Click;
             // 
             // numDuplicate
             // 
-            this.numDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.numDuplicate.Location = new System.Drawing.Point(67, 78);
-            this.numDuplicate.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numDuplicate.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numDuplicate.Name = "numDuplicate";
-            this.numDuplicate.Size = new System.Drawing.Size(56, 23);
-            this.numDuplicate.TabIndex = 12;
-            this.numDuplicate.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            numDuplicate.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            numDuplicate.Location = new Point(67, 78);
+            numDuplicate.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numDuplicate.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numDuplicate.Name = "numDuplicate";
+            numDuplicate.Size = new Size(56, 23);
+            numDuplicate.TabIndex = 12;
+            numDuplicate.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // lblDuplicate
             // 
-            this.lblDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDuplicate.AutoSize = true;
-            this.lblDuplicate.Location = new System.Drawing.Point(4, 80);
-            this.lblDuplicate.Name = "lblDuplicate";
-            this.lblDuplicate.Size = new System.Drawing.Size(57, 15);
-            this.lblDuplicate.TabIndex = 13;
-            this.lblDuplicate.Text = "Duplicate";
-            this.lblDuplicate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            lblDuplicate.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblDuplicate.AutoSize = true;
+            lblDuplicate.Location = new Point(4, 80);
+            lblDuplicate.Name = "lblDuplicate";
+            lblDuplicate.Size = new Size(57, 15);
+            lblDuplicate.TabIndex = 13;
+            lblDuplicate.Text = "Duplicate";
+            lblDuplicate.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtConsole_2
             // 
-            this.txtConsole_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtConsole_2.HideSelection = false;
-            this.txtConsole_2.Location = new System.Drawing.Point(3, 117);
-            this.txtConsole_2.Multiline = true;
-            this.txtConsole_2.Name = "txtConsole_2";
-            this.txtConsole_2.ReadOnly = true;
-            this.txtConsole_2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole_2.Size = new System.Drawing.Size(803, 108);
-            this.txtConsole_2.TabIndex = 14;
+            txtConsole_2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtConsole_2.HideSelection = false;
+            txtConsole_2.Location = new Point(3, 117);
+            txtConsole_2.Multiline = true;
+            txtConsole_2.Name = "txtConsole_2";
+            txtConsole_2.ReadOnly = true;
+            txtConsole_2.ScrollBars = ScrollBars.Vertical;
+            txtConsole_2.Size = new Size(803, 108);
+            txtConsole_2.TabIndex = 14;
             // 
             // grpPort_2
             // 
-            this.grpPort_2.Controls.Add(this.btnStop_2);
-            this.grpPort_2.Controls.Add(this.btnConnect_2);
-            this.grpPort_2.Controls.Add(this.txtPort_2);
-            this.grpPort_2.Location = new System.Drawing.Point(479, 12);
-            this.grpPort_2.Name = "grpPort_2";
-            this.grpPort_2.Size = new System.Drawing.Size(240, 56);
-            this.grpPort_2.TabIndex = 15;
-            this.grpPort_2.TabStop = false;
-            this.grpPort_2.Text = "Sensor2";
+            grpPort_2.Controls.Add(btnStop_2);
+            grpPort_2.Controls.Add(btnConnect_2);
+            grpPort_2.Controls.Add(txtPort_2);
+            grpPort_2.Location = new Point(479, 12);
+            grpPort_2.Name = "grpPort_2";
+            grpPort_2.Size = new Size(240, 56);
+            grpPort_2.TabIndex = 15;
+            grpPort_2.TabStop = false;
+            grpPort_2.Text = "Sensor2";
             // 
             // btnStop_2
             // 
-            this.btnStop_2.Enabled = false;
-            this.btnStop_2.Location = new System.Drawing.Point(157, 20);
-            this.btnStop_2.Name = "btnStop_2";
-            this.btnStop_2.Size = new System.Drawing.Size(75, 23);
-            this.btnStop_2.TabIndex = 3;
-            this.btnStop_2.Text = "Stop";
-            this.btnStop_2.UseVisualStyleBackColor = true;
-            this.btnStop_2.Click += new System.EventHandler(this.btnStop_2_Click);
+            btnStop_2.Enabled = false;
+            btnStop_2.Location = new Point(157, 20);
+            btnStop_2.Name = "btnStop_2";
+            btnStop_2.Size = new Size(75, 23);
+            btnStop_2.TabIndex = 3;
+            btnStop_2.Text = "Stop";
+            btnStop_2.UseVisualStyleBackColor = true;
+            btnStop_2.Click += btnStop_2_Click;
             // 
             // btnConnect_2
             // 
-            this.btnConnect_2.Location = new System.Drawing.Point(76, 20);
-            this.btnConnect_2.Name = "btnConnect_2";
-            this.btnConnect_2.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect_2.TabIndex = 0;
-            this.btnConnect_2.Text = "Connect";
-            this.btnConnect_2.UseVisualStyleBackColor = true;
-            this.btnConnect_2.Click += new System.EventHandler(this.btnConnect_2_Click);
+            btnConnect_2.Location = new Point(76, 20);
+            btnConnect_2.Name = "btnConnect_2";
+            btnConnect_2.Size = new Size(75, 23);
+            btnConnect_2.TabIndex = 0;
+            btnConnect_2.Text = "Connect";
+            btnConnect_2.UseVisualStyleBackColor = true;
+            btnConnect_2.Click += btnConnect_2_Click;
             // 
             // txtPort_2
             // 
-            this.txtPort_2.Location = new System.Drawing.Point(6, 21);
-            this.txtPort_2.Name = "txtPort_2";
-            this.txtPort_2.Size = new System.Drawing.Size(64, 23);
-            this.txtPort_2.TabIndex = 2;
-            this.txtPort_2.Text = "COM6";
-            this.txtPort_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            txtPort_2.Location = new Point(6, 21);
+            txtPort_2.Name = "txtPort_2";
+            txtPort_2.Size = new Size(64, 23);
+            txtPort_2.TabIndex = 2;
+            txtPort_2.Text = "COM6";
+            txtPort_2.TextAlign = HorizontalAlignment.Center;
             // 
             // grpLogConsole
             // 
-            this.grpLogConsole.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpLogConsole.Controls.Add(this.txtConsole_2);
-            this.grpLogConsole.Controls.Add(this.txtConsole);
-            this.grpLogConsole.Location = new System.Drawing.Point(12, 138);
-            this.grpLogConsole.Name = "grpLogConsole";
-            this.grpLogConsole.Size = new System.Drawing.Size(814, 231);
-            this.grpLogConsole.TabIndex = 16;
-            this.grpLogConsole.TabStop = false;
-            this.grpLogConsole.Text = "Sampling Status";
+            grpLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            grpLogConsole.Controls.Add(txtConsole_2);
+            grpLogConsole.Controls.Add(txtConsole);
+            grpLogConsole.Location = new Point(12, 138);
+            grpLogConsole.Name = "grpLogConsole";
+            grpLogConsole.Size = new Size(814, 231);
+            grpLogConsole.TabIndex = 16;
+            grpLogConsole.TabStop = false;
+            grpLogConsole.Text = "Sampling Status";
             // 
             // grpExportOption
             // 
-            this.grpExportOption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpExportOption.Controls.Add(this.chkCombineSensor);
-            this.grpExportOption.Controls.Add(this.numDuplicate);
-            this.grpExportOption.Controls.Add(this.lblDuplicate);
-            this.grpExportOption.Controls.Add(this.chkExportOnlyGasRegistanceLogarithm);
-            this.grpExportOption.Location = new System.Drawing.Point(703, 468);
-            this.grpExportOption.Name = "grpExportOption";
-            this.grpExportOption.Size = new System.Drawing.Size(129, 107);
-            this.grpExportOption.TabIndex = 17;
-            this.grpExportOption.TabStop = false;
-            this.grpExportOption.Text = "Export Option";
+            grpExportOption.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            grpExportOption.Controls.Add(chkCombineSensor);
+            grpExportOption.Controls.Add(numDuplicate);
+            grpExportOption.Controls.Add(lblDuplicate);
+            grpExportOption.Controls.Add(chkExportOnlyGasRegistanceLogarithm);
+            grpExportOption.Location = new Point(703, 468);
+            grpExportOption.Name = "grpExportOption";
+            grpExportOption.Size = new Size(129, 107);
+            grpExportOption.TabIndex = 17;
+            grpExportOption.TabStop = false;
+            grpExportOption.Text = "Export Option";
             // 
             // chkCombineSensor
             // 
-            this.chkCombineSensor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkCombineSensor.AutoSize = true;
-            this.chkCombineSensor.Location = new System.Drawing.Point(6, 47);
-            this.chkCombineSensor.Name = "chkCombineSensor";
-            this.chkCombineSensor.Size = new System.Drawing.Size(110, 19);
-            this.chkCombineSensor.TabIndex = 14;
-            this.chkCombineSensor.Text = "Combine sensor";
-            this.chkCombineSensor.UseVisualStyleBackColor = true;
+            chkCombineSensor.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            chkCombineSensor.AutoSize = true;
+            chkCombineSensor.Location = new Point(6, 47);
+            chkCombineSensor.Name = "chkCombineSensor";
+            chkCombineSensor.Size = new Size(110, 19);
+            chkCombineSensor.TabIndex = 14;
+            chkCombineSensor.Text = "Combine sensor";
+            chkCombineSensor.UseVisualStyleBackColor = true;
             // 
             // grpEntryDatabase
             // 
-            this.grpEntryDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpEntryDatabase.Controls.Add(this.chkDbEntrySingle);
-            this.grpEntryDatabase.Controls.Add(this.urlDatabaseToEntry);
-            this.grpEntryDatabase.Controls.Add(this.chkEntryDatabase);
-            this.grpEntryDatabase.Location = new System.Drawing.Point(12, 74);
-            this.grpEntryDatabase.Name = "grpEntryDatabase";
-            this.grpEntryDatabase.Size = new System.Drawing.Size(814, 58);
-            this.grpEntryDatabase.TabIndex = 18;
-            this.grpEntryDatabase.TabStop = false;
-            this.grpEntryDatabase.Text = "Database Entry";
+            grpEntryDatabase.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            grpEntryDatabase.Controls.Add(btnDbStatus);
+            grpEntryDatabase.Controls.Add(chkDbEntrySingle);
+            grpEntryDatabase.Controls.Add(urlDatabaseToEntry);
+            grpEntryDatabase.Controls.Add(chkEntryDatabase);
+            grpEntryDatabase.Location = new Point(12, 74);
+            grpEntryDatabase.Name = "grpEntryDatabase";
+            grpEntryDatabase.Size = new Size(814, 58);
+            grpEntryDatabase.TabIndex = 18;
+            grpEntryDatabase.TabStop = false;
+            grpEntryDatabase.Text = "Database Entry";
+            // 
+            // btnDbStatus
+            // 
+            btnDbStatus.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnDbStatus.Location = new Point(735, 22);
+            btnDbStatus.Name = "btnDbStatus";
+            btnDbStatus.Size = new Size(71, 23);
+            btnDbStatus.TabIndex = 6;
+            btnDbStatus.Text = "Status";
+            btnDbStatus.UseVisualStyleBackColor = true;
+            btnDbStatus.Click += btnDbStatus_Click;
             // 
             // chkDbEntrySingle
             // 
-            this.chkDbEntrySingle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDbEntrySingle.AutoSize = true;
-            this.chkDbEntrySingle.Location = new System.Drawing.Point(709, 25);
-            this.chkDbEntrySingle.Name = "chkDbEntrySingle";
-            this.chkDbEntrySingle.Size = new System.Drawing.Size(97, 19);
-            this.chkDbEntrySingle.TabIndex = 2;
-            this.chkDbEntrySingle.Text = "Entry All Data";
-            this.chkDbEntrySingle.UseVisualStyleBackColor = true;
+            chkDbEntrySingle.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            chkDbEntrySingle.AutoSize = true;
+            chkDbEntrySingle.Location = new Point(632, 25);
+            chkDbEntrySingle.Name = "chkDbEntrySingle";
+            chkDbEntrySingle.Size = new Size(97, 19);
+            chkDbEntrySingle.TabIndex = 2;
+            chkDbEntrySingle.Text = "Entry All Data";
+            chkDbEntrySingle.UseVisualStyleBackColor = true;
             // 
             // urlDatabaseToEntry
             // 
-            this.urlDatabaseToEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.urlDatabaseToEntry.Location = new System.Drawing.Point(77, 23);
-            this.urlDatabaseToEntry.Name = "urlDatabaseToEntry";
-            this.urlDatabaseToEntry.Size = new System.Drawing.Size(626, 23);
-            this.urlDatabaseToEntry.TabIndex = 1;
-            this.urlDatabaseToEntry.Text = "http://localhost:3010/sensor/entry";
+            urlDatabaseToEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            urlDatabaseToEntry.Location = new Point(77, 23);
+            urlDatabaseToEntry.Name = "urlDatabaseToEntry";
+            urlDatabaseToEntry.Size = new Size(541, 23);
+            urlDatabaseToEntry.TabIndex = 1;
+            urlDatabaseToEntry.Text = "http://localhost:3010/";
             // 
             // chkEntryDatabase
             // 
-            this.chkEntryDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkEntryDatabase.AutoSize = true;
-            this.chkEntryDatabase.Location = new System.Drawing.Point(6, 25);
-            this.chkEntryDatabase.Name = "chkEntryDatabase";
-            this.chkEntryDatabase.Size = new System.Drawing.Size(68, 19);
-            this.chkEntryDatabase.TabIndex = 1;
-            this.chkEntryDatabase.Text = "     URL :";
-            this.chkEntryDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkEntryDatabase.UseVisualStyleBackColor = true;
+            chkEntryDatabase.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            chkEntryDatabase.AutoSize = true;
+            chkEntryDatabase.Location = new Point(6, 25);
+            chkEntryDatabase.Name = "chkEntryDatabase";
+            chkEntryDatabase.Size = new Size(68, 19);
+            chkEntryDatabase.TabIndex = 1;
+            chkEntryDatabase.Text = "     URL :";
+            chkEntryDatabase.TextAlign = ContentAlignment.MiddleRight;
+            chkEntryDatabase.UseVisualStyleBackColor = true;
             // 
             // SerialCommForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(838, 700);
-            this.Controls.Add(this.grpEntryDatabase);
-            this.Controls.Add(this.grpExportOption);
-            this.Controls.Add(this.grpPort_2);
-            this.Controls.Add(this.btnShowGraph);
-            this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.grpData);
-            this.Controls.Add(this.btnExport);
-            this.Controls.Add(this.grpDataCategory);
-            this.Controls.Add(this.btnClear);
-            this.Controls.Add(this.grpPort);
-            this.Controls.Add(this.grpLogConsole);
-            this.Name = "SerialCommForm";
-            this.Text = "BME688 Sampling";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SerialCommForm_FormClosing);
-            this.Load += new System.EventHandler(this.SerialCommForm_Load);
-            this.grpPort.ResumeLayout(false);
-            this.grpPort.PerformLayout();
-            this.grpDataCategory.ResumeLayout(false);
-            this.grpDataCategory.PerformLayout();
-            this.grpData.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDuplicate)).EndInit();
-            this.grpPort_2.ResumeLayout(false);
-            this.grpPort_2.PerformLayout();
-            this.grpLogConsole.ResumeLayout(false);
-            this.grpLogConsole.PerformLayout();
-            this.grpExportOption.ResumeLayout(false);
-            this.grpExportOption.PerformLayout();
-            this.grpEntryDatabase.ResumeLayout(false);
-            this.grpEntryDatabase.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(838, 700);
+            Controls.Add(grpEntryDatabase);
+            Controls.Add(grpExportOption);
+            Controls.Add(grpPort_2);
+            Controls.Add(btnShowGraph);
+            Controls.Add(btnReset);
+            Controls.Add(grpData);
+            Controls.Add(btnExport);
+            Controls.Add(grpDataCategory);
+            Controls.Add(btnClear);
+            Controls.Add(grpPort);
+            Controls.Add(grpLogConsole);
+            Name = "SerialCommForm";
+            Text = "BME688 Sampling";
+            FormClosing += SerialCommForm_FormClosing;
+            Load += SerialCommForm_Load;
+            grpPort.ResumeLayout(false);
+            grpPort.PerformLayout();
+            grpDataCategory.ResumeLayout(false);
+            grpDataCategory.PerformLayout();
+            grpData.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numDuplicate).EndInit();
+            grpPort_2.ResumeLayout(false);
+            grpPort_2.PerformLayout();
+            grpLogConsole.ResumeLayout(false);
+            grpLogConsole.PerformLayout();
+            grpExportOption.ResumeLayout(false);
+            grpExportOption.PerformLayout();
+            grpEntryDatabase.ResumeLayout(false);
+            grpEntryDatabase.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -469,5 +459,6 @@
         private TextBox urlDatabaseToEntry;
         private CheckBox chkEntryDatabase;
         private CheckBox chkDbEntrySingle;
+        private Button btnDbStatus;
     }
 }
