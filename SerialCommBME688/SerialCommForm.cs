@@ -1,9 +1,13 @@
 using SamplingBME688Serial;
 using System;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SerialCommBME688
 {
@@ -12,7 +16,7 @@ namespace SerialCommBME688
         private GridDataSourceProvider dataSourceProvider;// = new GridDataSourceProvider();
         private SerialReceiver myReceiver;// = new SerialReceiver(1, dataSourceProvider);
         private SerialReceiver myReceiver_2;// = new SerialReceiver(2, dataSourceProvider);
-
+        private DataTable sensorDataList = new DataTable();
 
         public SerialCommForm()
         {
@@ -382,19 +386,46 @@ namespace SerialCommBME688
         private void btnDbStatus_Click(object sender, EventArgs e)
         {
             // DBのステータスボタンを押したとき...
-            String statusUrl = urlDatabaseToEntry.Text + "sensor/entry";
-
             try
             {
+                // 一覧情報を取得する
+                //sensorDataList.Clear();
+                String listUrl = urlDatabaseToEntry.Text + "sensor/list";
+                getSensorDataList(listUrl);
+
                 // ダイアログ（？）を表示する
-                DbStatusDialog dialog = new DbStatusDialog();
+                DbStatusDialog dialog = new DbStatusDialog(sensorDataList);
                 dialog.Owner = this;
                 dialog.Show();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(DateTime.Now + " btnDbStatus_Click()" + ex.Message);
+                Debug.WriteLine(DateTime.Now + " btnDbStatus_Click() " + ex.Message);
             }
         }
+
+        private async void getSensorDataList(String listUrl)
+        {
+            try
+            {
+                var result = await new HttpClient().GetAsync(listUrl, HttpCompletionOption.ResponseHeadersRead);
+                String response = await result.Content.ReadAsStringAsync();
+
+                // 応答に合わせてデータを設定する
+                sensorDataList = new DataTable();
+                sensorDataList.Clear();
+                sensorDataList.Columns.Add("category");
+                sensorDataList.Columns.Add("sensor_id");
+                sensorDataList.Columns.Add("count");
+
+                Debug.WriteLine(DateTime.Now + " getSensorDataList() : " + response);
+                GC.Collect();
+            }
+            catch (Exception ex)
+            { 
+                Debug.WriteLine(DateTime.Now + " getSensorDataList() " + ex.Message);
+            }
+        }
+
     }
 }

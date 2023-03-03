@@ -12,9 +12,14 @@ namespace SamplingBME688Serial
 {
     public partial class DbStatusDialog : Form
     {
-        public DbStatusDialog()
+        public DbStatusDialog(DataTable dataToShow)
         {
             InitializeComponent();
+
+            gridDbStatus.DataSource = dataToShow;
+            gridDbStatus.ReadOnly = true;
+            gridDbStatus.RowHeadersVisible = false;
         }
+
     }
 }

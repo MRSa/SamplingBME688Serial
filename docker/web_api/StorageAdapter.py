@@ -81,7 +81,7 @@ class StorageAdapter:
                     try:
                         dataCount = session.query(SensorData.SensorData).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).count()
                         print("  {0}({1}) : {2} ".format(category, sensor_id, dataCount), file=sys.stderr)
-                        entry_count.append((category, sensor_id, dataCount))
+                        entry_count.append(dict(category = category, sensor_id = sensor_id, count = dataCount))
                     except Exception as ex:
                         print(" XxX Received Exception : {0} {1} ".format(ex.args, category), file=sys.stderr)
 
