@@ -17,6 +17,7 @@ namespace SerialCommBME688
         private SerialReceiver myReceiver;// = new SerialReceiver(1, dataSourceProvider);
         private SerialReceiver myReceiver_2;// = new SerialReceiver(2, dataSourceProvider);
         private DataTable sensorDataList = new DataTable();
+        private DbStatusDialog? dbStatusDialog = null;
 
         public SerialCommForm()
         {
@@ -394,9 +395,20 @@ namespace SerialCommBME688
                 getSensorDataList(listUrl);
 
                 // ダイアログ（？）を表示する
-                DbStatusDialog dialog = new DbStatusDialog(sensorDataList);
-                dialog.Owner = this;
-                dialog.Show();
+                if ((dbStatusDialog == null)||(dbStatusDialog.IsDisposed))
+                {
+                    dbStatusDialog = new DbStatusDialog(sensorDataList);
+                }
+                dbStatusDialog.Owner = this;
+                if (!dbStatusDialog.Visible)
+                {
+                    //dbStatusDialog.Show();
+                    dbStatusDialog.ShowDialog();
+                }
+                else
+                {
+                    dbStatusDialog.Activate();
+                }
             }
             catch (Exception ex)
             {
