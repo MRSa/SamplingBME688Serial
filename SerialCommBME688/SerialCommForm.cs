@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Security.Policy;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -430,13 +431,44 @@ namespace SerialCommBME688
                 sensorDataList.Columns.Add("sensor_id");
                 sensorDataList.Columns.Add("count");
 
-                Debug.WriteLine(DateTime.Now + " getSensorDataList() : " + response);
+                try
+                {
+                    // Debug.WriteLine(DateTime.Now + " getSensorDataList() : " + response);
+                    var dataList = JsonSerializer.Deserialize<SensorDataResult>(response);
+                    if ((dataList != null)&&(dataList.result != null))
+                    {
+                        foreach (SensorData data in dataList.result)
+                        {
+                            sensorDataList.Rows.Add(data.category, data.sensor_id, data.count);
+                        }
+                    }
+                    if (dbStatusDialog != null)
+                    {
+                        dbStatusDialog.setDataTable(sensorDataList);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(DateTime.Now + " getSensorDataList() " + e.Message);
+                }
                 GC.Collect();
             }
             catch (Exception ex)
             { 
                 Debug.WriteLine(DateTime.Now + " getSensorDataList() " + ex.Message);
             }
+        }
+
+        private class SensorDataResult
+        {
+            public SensorData[]? result { get; set;  }
+        }
+
+        private class SensorData
+        {
+            public String? category { get; set;  }
+            public int sensor_id { get; set;  }
+            public int count { get; set; }
         }
 
     }

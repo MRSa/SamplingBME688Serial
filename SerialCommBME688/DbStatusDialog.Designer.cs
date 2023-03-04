@@ -49,7 +49,7 @@
             ClientSize = new Size(482, 302);
             Controls.Add(gridDbStatus);
             Name = "DbStatusDialog";
-            Text = "Dabase Status";
+            Text = "Dabase Entry Status";
             ((System.ComponentModel.ISupportInitialize)gridDbStatus).EndInit();
             ResumeLayout(false);
         }

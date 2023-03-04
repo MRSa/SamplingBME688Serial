@@ -21,5 +21,10 @@ namespace SamplingBME688Serial
             gridDbStatus.RowHeadersVisible = false;
         }
 
+        public void setDataTable(DataTable dataToShow)
+        {
+            gridDbStatus.DataSource = dataToShow;
+        }
+
     }
 }
