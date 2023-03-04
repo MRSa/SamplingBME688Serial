@@ -17,12 +17,12 @@ namespace SerialCommBME688
         private GridDataSourceProvider dataSourceProvider;// = new GridDataSourceProvider();
         private SerialReceiver myReceiver;// = new SerialReceiver(1, dataSourceProvider);
         private SerialReceiver myReceiver_2;// = new SerialReceiver(2, dataSourceProvider);
-        private DataTable sensorDataList = new DataTable();
-        private DbStatusDialog? dbStatusDialog = null;
+        private DbEntryStatusView statusView;
 
         public SerialCommForm()
         {
             dataSourceProvider = new GridDataSourceProvider();
+            statusView = new DbEntryStatusView(this);
             myReceiver = new SerialReceiver(1, dataSourceProvider);
             myReceiver_2 = new SerialReceiver(2, dataSourceProvider);
             InitializeComponent();
@@ -387,89 +387,15 @@ namespace SerialCommBME688
 
         private void btnDbStatus_Click(object sender, EventArgs e)
         {
-            // DBのステータスボタンを押したとき...
+            // DBのステータスボタンを押したとき...センサのデータ登録情報を表示する
             try
             {
-                // 一覧情報を取得する
-                //sensorDataList.Clear();
-                String listUrl = urlDatabaseToEntry.Text + "sensor/list";
-                getSensorDataList(listUrl);
-
-                // ダイアログ（？）を表示する
-                if ((dbStatusDialog == null)||(dbStatusDialog.IsDisposed))
-                {
-                    dbStatusDialog = new DbStatusDialog(sensorDataList);
-                }
-                dbStatusDialog.Owner = this;
-                if (!dbStatusDialog.Visible)
-                {
-                    //dbStatusDialog.Show();
-                    dbStatusDialog.ShowDialog();
-                }
-                else
-                {
-                    dbStatusDialog.Activate();
-                }
+                statusView.showDbEntryStatus(urlDatabaseToEntry.Text + "sensor/list");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(DateTime.Now + " btnDbStatus_Click() " + ex.Message);
             }
         }
-
-        private async void getSensorDataList(String listUrl)
-        {
-            try
-            {
-                var result = await new HttpClient().GetAsync(listUrl, HttpCompletionOption.ResponseHeadersRead);
-                String response = await result.Content.ReadAsStringAsync();
-
-                // 応答に合わせてデータを設定する
-                sensorDataList = new DataTable();
-                sensorDataList.Clear();
-                sensorDataList.Columns.Add("category");
-                sensorDataList.Columns.Add("sensor_id");
-                sensorDataList.Columns.Add("count");
-
-                try
-                {
-                    // Debug.WriteLine(DateTime.Now + " getSensorDataList() : " + response);
-                    var dataList = JsonSerializer.Deserialize<SensorDataResult>(response);
-                    if ((dataList != null)&&(dataList.result != null))
-                    {
-                        foreach (SensorData data in dataList.result)
-                        {
-                            sensorDataList.Rows.Add(data.category, data.sensor_id, data.count);
-                        }
-                    }
-                    if (dbStatusDialog != null)
-                    {
-                        dbStatusDialog.setDataTable(sensorDataList);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(DateTime.Now + " getSensorDataList() " + e.Message);
-                }
-                GC.Collect();
-            }
-            catch (Exception ex)
-            { 
-                Debug.WriteLine(DateTime.Now + " getSensorDataList() " + ex.Message);
-            }
-        }
-
-        private class SensorDataResult
-        {
-            public SensorData[]? result { get; set;  }
-        }
-
-        private class SensorData
-        {
-            public String? category { get; set;  }
-            public int sensor_id { get; set;  }
-            public int count { get; set; }
-        }
-
     }
 }
