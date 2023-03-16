@@ -7,10 +7,11 @@ https://github.com/MRSa/SamplingBME688Serial
 ![Overview](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/Overview2.png?raw=true)
 
 - Atom LiteにGrove(I2C)経由で接続したBME688から、シリアルポートにデータを出力するスケッチ (AtomLite/sketch_BME688_SAMPLING.ino)
-- シリアルポート経由でつないだAtom Liteから、BME688のデータを受信してCSVファイルに出力するWindows(C#)アプリ (SerialCommBME688/ 以下)
+- シリアルポート経由でつないだAtom Liteから、BME688のデータを受信してCSVファイルまたはデータベースへ出力するWindows(C#)アプリ (SerialCommBME688/ 以下)
 - CSV形式のファイルから、LSTMで学習しH5形式のモデルファイルを作成する pythonスクリプト (python/create_smell_model.py)
 - 学習したH5形式のモデルファイルを使って、CSV形式のファイルに記録していたデータの種別を判定する (python/check_smell.py)
-
+- Windows(C#)アプリから送られてきたJSONデータをPostgreSQLに格納するコンテナ群(docker-database/ 以下)
+- PostgreSQLに格納されているデータをJSONデータ形式で取り出し、LSTMで学習しH5形式のモデルファイルを作成する pythonスクリプト (python/create_smell_model_from_url.py)
 
 ## BME688-Atom Lite
 
