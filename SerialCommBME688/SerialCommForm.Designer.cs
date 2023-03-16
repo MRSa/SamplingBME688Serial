@@ -346,7 +346,7 @@
             grpEntryDatabase.Size = new Size(814, 58);
             grpEntryDatabase.TabIndex = 18;
             grpEntryDatabase.TabStop = false;
-            grpEntryDatabase.Text = "Database Entry";
+            grpEntryDatabase.Text = "Entry Database";
             // 
             // btnDbStatus
             // 
