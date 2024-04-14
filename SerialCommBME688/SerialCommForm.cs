@@ -262,6 +262,8 @@ namespace SerialCommBME688
 
         private void btnShowGraph_Click(object sender, EventArgs e)
         {
+            Dictionary<int, DataGridViewRow> selectedData = new Dictionary<int, DataGridViewRow>();
+
             //  データが１つ以上選択されていた時は、グラフを表示する
             if (dataGridView1.SelectedRows.Count > 0)
             {
@@ -269,10 +271,12 @@ namespace SerialCommBME688
                 {
                     foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                     {
-                        Debug.WriteLine(row.Index + " : : " + row.Cells[0].Value + " ");
+                        Debug.WriteLine("[" + row.Index + "] : : " + row.Cells[0].Value + " ");
+                        selectedData.Add(row.Index, row);
                     }
                     // データが選択されていた時は、詳細ダイアログを表示する
                     DataDetailDialog dialog = new DataDetailDialog();
+                    dialog.setSelectedData(ref selectedData, myReceiver.getGasRegLogDataSet(), myReceiver_2.getGasRegLogDataSet());
                     dialog.Owner = this;
                     dialog.Show();
                 }
@@ -280,6 +284,14 @@ namespace SerialCommBME688
                 {
                     Debug.WriteLine(DateTime.Now + " btnShowGraph_Click()" + ex.Message);
                 }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Please select a row.", 
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
         }
 

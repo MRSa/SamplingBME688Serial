@@ -218,7 +218,6 @@
             btnShowGraph.TabIndex = 11;
             btnShowGraph.Text = "Show Graph";
             btnShowGraph.UseVisualStyleBackColor = true;
-            btnShowGraph.Visible = false;
             btnShowGraph.Click += btnShowGraph_Click;
             // 
             // numDuplicate
