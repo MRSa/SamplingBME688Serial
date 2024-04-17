@@ -15,9 +15,15 @@ namespace SamplingBME688Serial
         private Dictionary<String, List<List<double>>> dataSet1;
         private Dictionary<String, List<List<double>>> dataSet2;
 
+        private const String fontName = "Yu Gothic UI";
+        private const int fontSize = 10;
+        private const int POSITION_TOP = -1;
+        private const int POSITION_MIDDLE = 0;
+        private const int POSITION_BOTTOM = 1;
         private const float heightMargin = 20;
         private const float widthMargin = 30;
-        private const float area = 10;
+        private const float area = 10.0f;
+        private const float maxRange = 20.0f;
 
         public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<double>>> dataSet1, Dictionary<String, List<List<double>>> dataSet2)
         {
@@ -47,12 +53,7 @@ namespace SamplingBME688Serial
             }
             Debug.WriteLine(" ----- ");
 
-
-
-
         }
-
-
 
         // 背景の描画実処理
         public void drawBackground(Graphics g, RectangleF drawArea)
@@ -67,7 +68,7 @@ namespace SamplingBME688Serial
         {
             float bottomMargin = 5;
             float axisArea = drawArea.Width / area;
-
+            //float axisArea = ((drawArea.Right - drawArea.Left) - 2 * widthMargin) / (area + 1);
 
             Pen axisPen = new Pen(Color.LightGray);
             float lineTop = drawArea.Top + heightMargin;
@@ -75,7 +76,7 @@ namespace SamplingBME688Serial
 
 
             SolidBrush brush = new SolidBrush(Color.LightGray);
-            Font font = new Font("Yu Gothic UI", 10);
+            Font font = new Font(fontName, fontSize);
 
             int index = 0;
             while (index <= area)
@@ -86,6 +87,20 @@ namespace SamplingBME688Serial
                 g.DrawString($"{index}", font, brush, lineX - (size.Width / 2.0f), lineBottom + bottomMargin);
                 index++;
             }
+
+            float areaSize = drawArea.Height - heightMargin - heightMargin;
+            float startX = drawArea.Left + widthMargin;
+            float finishX = startX + (axisArea * (area - 1));// drawArea.Right - widthMargin;
+            float data = 0.0f;
+            while (data <= maxRange)
+            {
+                float posY = ((float)(maxRange - data)) * (areaSize / maxRange) + heightMargin;
+
+                g.DrawLine(axisPen, startX, posY, finishX, posY);
+
+                data += 2.0f;
+            }
+
             axisPen.Dispose();
         }
 
@@ -94,12 +109,7 @@ namespace SamplingBME688Serial
             //Debug.WriteLine(DateTime.Now + " ----- drawUsage -----");
             try
             {
-
-
-
-
-
-
+                // 凡例を描く
 
             }
             catch (Exception ex)
@@ -115,6 +125,7 @@ namespace SamplingBME688Serial
             Debug.WriteLine(DateTime.Now + " ----- drawGraph -----");
             try
             {
+                //  選択されているグラフを書く
                 foreach (KeyValuePair<int, DataGridViewRow> pair in selectedData)
                 {
                     int index = pair.Key;
@@ -125,18 +136,21 @@ namespace SamplingBME688Serial
                     String categoryName = key ?? "";
                     List<List<double>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
 
-                    int startCount = 0;
-                    int middleCount = targetDataSet.Count / 2;
-                    int finishCount = targetDataSet.Count - 1;
+                    int startCount = 0;                            // 先頭データの場所
+                    int middleCount = targetDataSet.Count / 2;     // 真ん中データの場所
+                    int finishCount = targetDataSet.Count - 1;     // 末尾データの場所
 
+                    // 先頭データ
                     List<double> startDataset = targetDataSet[startCount];
-                    drawLines(g, drawArea, new Pen(Color.AliceBlue), categoryName + " (" + sensorIdStr + ")", startDataset);
+                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP)), categoryName + " (" + sensorIdStr + ")", startDataset);
 
+                    // 真ん中データ
                     List<double> middleDataset = targetDataSet[middleCount];
-                    drawLines(g, drawArea, new Pen(Color.DarkBlue), "", middleDataset);
+                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE)), "", middleDataset);
 
+                    // 末尾データ
                     List<double> finishDataset = targetDataSet[finishCount];
-                    drawLines(g, drawArea, new Pen(Color.LightBlue), "", finishDataset);
+                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM)), "", finishDataset);
 
 
                     Debug.WriteLine($"{rowData.Cells[0].Value}[Sensor{rowData.Cells[1].Value}] ({startCount} / {middleCount} / {finishCount})");
@@ -150,11 +164,50 @@ namespace SamplingBME688Serial
 
         }
 
+        private Color getColor(int indexNo, int sensorId, int position)
+        {
+            Color retColor = Color.DarkBlue;
+            if (sensorId == 1)
+            {
+
+                switch (position)
+                {
+                    case POSITION_BOTTOM:
+                        retColor = Color.LightBlue;
+                        break;
+                    case POSITION_TOP:
+                        retColor = Color.AliceBlue;
+                        break;
+                    case POSITION_MIDDLE:
+                    default:
+                        retColor = Color.DarkBlue;
+                        break;
+                }
+            }
+            else
+            {
+                switch (position)
+                {
+                    case POSITION_BOTTOM:
+                        retColor = Color.LightGreen;
+                        break;
+                    case POSITION_TOP:
+                        retColor = Color.GreenYellow;
+                        break;
+                    case POSITION_MIDDLE:
+                    default:
+                        retColor = Color.DarkGreen;
+                        break;
+
+                }
+            }
+            return (retColor);
+        }
+
         private void drawLines(Graphics g, RectangleF drawArea, Pen pen, String label, List<double> dataset)
         {
             Debug.WriteLine(" ");
 
-            float maxValue = 20.0f;
             float axisArea = drawArea.Width / area;
             float areaSize = drawArea.Height - heightMargin - heightMargin;
 
@@ -163,13 +216,13 @@ namespace SamplingBME688Serial
             foreach (double data in dataset)
             {
                 float lineX = drawArea.Left + widthMargin + axisArea * ((float)index);
-                float posY =((float)(maxValue - data)) * (areaSize / maxValue) + heightMargin;
+                float posY =((float)(maxRange - data)) * (areaSize / maxRange) + heightMargin;
                 Debug.WriteLine($" drawLines() ({lineX},{posY}) : {areaSize}");
                 points[index] = new PointF(lineX, posY);
                 index++;
             }
             g.DrawLines(pen, points);
-            g.DrawString(label, new Font("Yu Gothic UI", 10), new SolidBrush(Color.DarkGray), new PointF((drawArea.Left + widthMargin), points[0].Y + 5));
+            g.DrawString(label, new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), new PointF((drawArea.Left + widthMargin), points[0].Y + 5));
         }
     }
 

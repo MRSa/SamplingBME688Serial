@@ -55,6 +55,7 @@
             chkDbEntrySingle = new CheckBox();
             urlDatabaseToEntry = new TextBox();
             chkEntryDatabase = new CheckBox();
+            btnImport = new Button();
             grpPort.SuspendLayout();
             grpDataCategory.SuspendLayout();
             grpData.SuspendLayout();
@@ -390,11 +391,23 @@
             chkEntryDatabase.TextAlign = ContentAlignment.MiddleRight;
             chkEntryDatabase.UseVisualStyleBackColor = true;
             // 
+            // btnImport
+            // 
+            btnImport.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnImport.Location = new Point(703, 394);
+            btnImport.Name = "btnImport";
+            btnImport.Size = new Size(123, 22);
+            btnImport.TabIndex = 19;
+            btnImport.Text = "Import CSV";
+            btnImport.UseVisualStyleBackColor = true;
+            btnImport.Click += btnImport_Click;
+            // 
             // SerialCommForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(838, 700);
+            Controls.Add(btnImport);
             Controls.Add(grpEntryDatabase);
             Controls.Add(grpExportOption);
             Controls.Add(grpPort_2);
@@ -459,5 +472,6 @@
         private CheckBox chkEntryDatabase;
         private CheckBox chkDbEntrySingle;
         private Button btnDbStatus;
+        private Button btnImport;
     }
 }

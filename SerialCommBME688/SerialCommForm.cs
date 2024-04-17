@@ -46,6 +46,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = false;
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
+                    btnImport.Enabled = false;
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
@@ -60,6 +61,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = true;
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
+                    btnImport.Enabled = true;
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
@@ -84,6 +86,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = true;
                     btnStop.Enabled = false;
                     btnExport.Enabled = true;
+                    btnImport.Enabled = true;
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
@@ -99,6 +102,7 @@ namespace SerialCommBME688
                     btnConnect.Enabled = false;
                     btnStop.Enabled = true;
                     btnExport.Enabled = false;
+                    btnImport.Enabled = false;
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
@@ -288,7 +292,7 @@ namespace SerialCommBME688
             else
             {
                 MessageBox.Show(
-                    "Please select a row.", 
+                    "Please select a row.",
                     "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -327,6 +331,7 @@ namespace SerialCommBME688
                     btnConnect_2.Enabled = false;
                     btnStop_2.Enabled = true;
                     btnExport.Enabled = false;
+                    btnImport.Enabled = false;
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
@@ -341,6 +346,7 @@ namespace SerialCommBME688
                     btnConnect_2.Enabled = true;
                     btnStop_2.Enabled = false;
                     btnExport.Enabled = true;
+                    btnImport.Enabled = true;
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
@@ -366,6 +372,7 @@ namespace SerialCommBME688
                     btnConnect_2.Enabled = true;
                     btnStop_2.Enabled = false;
                     btnExport.Enabled = true;
+                    btnImport.Enabled = true;
                     grpExportOption.Enabled = true;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = true;
                     btnReset.Enabled = true;
@@ -381,6 +388,7 @@ namespace SerialCommBME688
                     btnConnect_2.Enabled = false;
                     btnStop_2.Enabled = true;
                     btnExport.Enabled = false;
+                    btnImport.Enabled = false;
                     grpExportOption.Enabled = false;
                     chkExportOnlyGasRegistanceLogarithm.Enabled = false;
                     btnReset.Enabled = false;
@@ -407,6 +415,51 @@ namespace SerialCommBME688
             catch (Exception ex)
             {
                 Debug.WriteLine(DateTime.Now + " btnDbStatus_Click() " + ex.Message);
+            }
+        }
+
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // CSVファイルを読み出す...
+                Stream myStream;
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+                openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                openFileDialog1.Filter = "CSV files (*.csv)|*.csv";
+                openFileDialog1.FilterIndex = 2;
+                openFileDialog1.RestoreDirectory = true;
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+
+                    String filePath = openFileDialog1.FileName;
+                    myStream = openFileDialog1.OpenFile();
+
+                    try
+                    {
+                        DataImporter importer = new DataImporter(myReceiver, myReceiver_2);
+                        bool ret = importer.importDataFromCsv(myStream);
+                        if (ret)
+                        {
+                            MessageBox.Show(
+                                "Import success : " + filePath,
+                                "Information",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                        }
+                    }
+                    catch (Exception ee)
+                    {
+
+                        Debug.WriteLine(DateTime.Now + " btnImport_Click(): Read " + filePath + " " + ee.Message);
+                    }
+                    myStream.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " btnImport_Click() " + ex.Message);
             }
         }
     }

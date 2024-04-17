@@ -112,6 +112,11 @@ namespace SerialCommBME688
             Debug.WriteLine("  ----- FINISH ReadSerial() -----");
         }
 
+        public void importSingleData(String categoryName, int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
+        {
+            dataParser.importSingleData(categoryName, gas_index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
+
+        }
 
         public void startExportAllDataToCsv(Stream myStream, bool isWriteHeader)
         {

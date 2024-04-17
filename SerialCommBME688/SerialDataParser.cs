@@ -87,6 +87,33 @@ namespace SerialCommBME688
             }
         }
 
+        public void importSingleData(String categoryName, int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
+        {
+            try
+            {
+                // データを格納する。
+                String itemData = dataHolder.entryData(categoryName,
+                                                       "",
+                                                       false,
+                                                       gas_index,
+                                                       0,
+                                                       0,
+                                                       0,
+                                                       0,
+                                                       temperature,
+                                                       humidity,
+                                                       pressure,
+                                                       gas_registance,
+                                                       gas_registance_log,
+                                                       gas_registance_diff);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " importData() : " + ex.Message);
+            }
+        }
+
+
         private void appendText(String itemData)
         {
             try
