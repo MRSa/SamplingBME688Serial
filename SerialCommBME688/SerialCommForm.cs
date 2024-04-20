@@ -12,7 +12,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SerialCommBME688
 {
-    public partial class SerialCommForm : Form
+    public partial class SerialCommForm : Form, IDataImportCallback
     {
         private GridDataSourceProvider dataSourceProvider;// = new GridDataSourceProvider();
         private SerialReceiver myReceiver;// = new SerialReceiver(1, dataSourceProvider);
@@ -422,6 +422,31 @@ namespace SerialCommBME688
         {
             try
             {
+                DialogResult choice = MessageBox.Show(
+                    "This program is poorly structured and freezes while importing the data file. Please be aware of this notice.",
+                    "Warning",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Warning);
+                if (choice != DialogResult.OK)
+                {
+                    // 処理を中止する
+                    MessageBox.Show(
+                        "Import canceled.",
+                        "Canceled",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
+
+                    return;
+                }
+            }
+            catch (Exception ee)
+            {
+                Debug.WriteLine(DateTime.Now + " btnImport_Click() : START " + ee.Message);
+            }
+
+
+            try
+            {
                 // CSVファイルを読み出す...
                 Stream myStream;
                 OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -438,16 +463,20 @@ namespace SerialCommBME688
 
                     try
                     {
-                        DataImporter importer = new DataImporter(myReceiver, myReceiver_2);
-                        bool ret = importer.importDataFromCsv(myStream);
-                        if (ret)
+                        DataImporter importer = new DataImporter(myReceiver, myReceiver_2, this, openFileDialog1);
+                        importer.importDataFromCsv();
+                        /*
+                        try
                         {
-                            MessageBox.Show(
-                                "Import success : " + filePath,
-                                "Information",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                            Thread thread = new Thread(new ThreadStart(importer.importDataFromCsv));
+                            thread.IsBackground = true;
+                            thread.Start();
                         }
+                        catch (Exception ex1)
+                        {
+                            Debug.WriteLine(DateTime.Now + " btnImport_Click(): thread " + filePath + " " + ex1.Message);
+                        }
+                        */
                     }
                     catch (Exception ee)
                     {
@@ -461,6 +490,41 @@ namespace SerialCommBME688
             {
                 Debug.WriteLine(DateTime.Now + " btnImport_Click() " + ex.Message);
             }
+        }
+
+        public void dataImportFinished(bool isSuccess, String message)
+        {
+            myReceiver.stopReceive();
+            myReceiver_2.stopReceive();
+            Debug.WriteLine(DateTime.Now + " dataImportFinished : " + isSuccess + " " + message);
+            if (isSuccess)
+            {
+                MessageBox.Show(
+                    message,
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show(
+                    message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        public void dataImportProgress(int lineNumber, int totalLines)
+        {
+            String message = " Read " + lineNumber + " lines.";
+            if (totalLines > 0)
+            {
+                
+                double percentage = ((double) lineNumber / (double) totalLines) * 100.0d;
+                message = message + $" ({percentage:F1} %)";
+            }
+            //Debug.WriteLine(DateTime.Now + " dataImportProgress : " + message);
         }
     }
 }

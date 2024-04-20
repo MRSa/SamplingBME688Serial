@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,21 +13,28 @@ namespace SamplingBME688Serial
 {
     internal class DataImporter
     {
+        private String fileName;
         private SerialReceiver receiver1;
         private SerialReceiver receiver2;
-        public DataImporter(SerialReceiver receiver1, SerialReceiver receiver2)
+        private IDataImportCallback callback;
+        private Stream myStream;
+
+        public DataImporter(SerialReceiver receiver1, SerialReceiver receiver2, IDataImportCallback callback, OpenFileDialog fileDialog)
         {
             this.receiver1 = receiver1;
             this.receiver2 = receiver2;
+            this.callback = callback;
+            this.myStream = Stream.Synchronized(fileDialog.OpenFile());
+            this.fileName = fileDialog.FileName;
         }
 
-        public bool importDataFromCsv(Stream myStream)
+
+        public void importDataFromCsv()
         {
-            bool result = false;
             try
             {
                 int readLines = 0;
-                using (TextFieldParser csvParser = new TextFieldParser(myStream))
+                using (TextFieldParser csvParser = new TextFieldParser(this.myStream))
                 {
                     csvParser.SetDelimiters(",");
                     while (!csvParser.EndOfData)
@@ -34,7 +42,7 @@ namespace SamplingBME688Serial
                         try
                         {
                             String[] values = csvParser.ReadFields();
-                            if ((readLines > 0)&&(values != null))
+                            if ((readLines > 0) && (values != null))
                             {
                                 int sensorId = parseIntFromString(values[0]);
                                 String categoryName = values[1];
@@ -58,6 +66,7 @@ namespace SamplingBME688Serial
                             }
                         }
                         catch (Exception ee) { }
+                        callback.dataImportProgress(readLines, -1);
                         readLines++;
                     }
                 }
@@ -67,15 +76,13 @@ namespace SamplingBME688Serial
                 // 受信終了を呼び出す
                 receiver1.stopReceive();
                 receiver2.stopReceive();
-                result = true;
-
+                callback.dataImportFinished(true, "Import success : " + fileName + "\r\n Read " + readLines + " lines.");
             }
             catch (Exception ex)
             {
-
-                Debug.WriteLine(DateTime.Now + " importDataFromCsv(): Read " + ex.Message);
+                Debug.WriteLine(DateTime.Now + " importDataFromCsv(): Read ::" + ex.Message);
+                callback.dataImportFinished(false, "Import error : " + ex.Message);
             }
-            return (result);
         }
 
         private double parseDoubleFromString(String data)
