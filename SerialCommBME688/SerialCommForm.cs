@@ -520,11 +520,22 @@ namespace SerialCommBME688
             String message = " Read " + lineNumber + " lines.";
             if (totalLines > 0)
             {
-                
-                double percentage = ((double) lineNumber / (double) totalLines) * 100.0d;
+
+                double percentage = ((double)lineNumber / (double)totalLines) * 100.0d;
                 message = message + $" ({percentage:F1} %)";
             }
             //Debug.WriteLine(DateTime.Now + " dataImportProgress : " + message);
+        }
+
+        private void btnCreateModel_Click(object sender, EventArgs e)
+        {
+            // モデルの作成コマンド
+            MessageBox.Show("Create models",
+                "Information",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+
+
         }
     }
 }

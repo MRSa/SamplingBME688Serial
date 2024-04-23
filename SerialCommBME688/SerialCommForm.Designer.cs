@@ -56,6 +56,8 @@
             urlDatabaseToEntry = new TextBox();
             chkEntryDatabase = new CheckBox();
             btnImport = new Button();
+            btnCreateModel = new Button();
+            chkAnalyze = new CheckBox();
             grpPort.SuspendLayout();
             grpDataCategory.SuspendLayout();
             grpData.SuspendLayout();
@@ -83,7 +85,7 @@
             txtPort.Name = "txtPort";
             txtPort.Size = new Size(64, 23);
             txtPort.TabIndex = 2;
-            txtPort.Text = "COM7";
+            txtPort.Text = "COM5";
             txtPort.TextAlign = HorizontalAlignment.Center;
             // 
             // grpPort
@@ -124,7 +126,7 @@
             // btnClear
             // 
             btnClear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnClear.Location = new Point(747, 33);
+            btnClear.Location = new Point(744, 33);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(79, 23);
             btnClear.TabIndex = 5;
@@ -189,8 +191,6 @@
             // 
             chkExportOnlyGasRegistanceLogarithm.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
-            chkExportOnlyGasRegistanceLogarithm.Checked = true;
-            chkExportOnlyGasRegistanceLogarithm.CheckState = CheckState.Checked;
             chkExportOnlyGasRegistanceLogarithm.Location = new Point(6, 22);
             chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
             chkExportOnlyGasRegistanceLogarithm.Size = new Size(114, 19);
@@ -294,7 +294,7 @@
             txtPort_2.Name = "txtPort_2";
             txtPort_2.Size = new Size(64, 23);
             txtPort_2.TabIndex = 2;
-            txtPort_2.Text = "COM6";
+            txtPort_2.Text = "COM8";
             txtPort_2.TextAlign = HorizontalAlignment.Center;
             // 
             // grpLogConsole
@@ -402,11 +402,37 @@
             btnImport.UseVisualStyleBackColor = true;
             btnImport.Click += btnImport_Click;
             // 
+            // btnCreateModel
+            // 
+            btnCreateModel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCreateModel.Location = new Point(703, 635);
+            btnCreateModel.Name = "btnCreateModel";
+            btnCreateModel.Size = new Size(123, 22);
+            btnCreateModel.TabIndex = 20;
+            btnCreateModel.Text = "Create Model";
+            btnCreateModel.UseVisualStyleBackColor = true;
+            btnCreateModel.Visible = false;
+            btnCreateModel.Click += btnCreateModel_Click;
+            // 
+            // chkAnalyze
+            // 
+            chkAnalyze.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            chkAnalyze.AutoSize = true;
+            chkAnalyze.Location = new Point(733, 62);
+            chkAnalyze.Name = "chkAnalyze";
+            chkAnalyze.Size = new Size(93, 19);
+            chkAnalyze.TabIndex = 15;
+            chkAnalyze.Text = "Analyze data";
+            chkAnalyze.UseVisualStyleBackColor = true;
+            chkAnalyze.Visible = false;
+            // 
             // SerialCommForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(838, 700);
+            Controls.Add(chkAnalyze);
+            Controls.Add(btnCreateModel);
             Controls.Add(btnImport);
             Controls.Add(grpEntryDatabase);
             Controls.Add(grpExportOption);
@@ -439,6 +465,7 @@
             grpEntryDatabase.ResumeLayout(false);
             grpEntryDatabase.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -473,5 +500,7 @@
         private CheckBox chkDbEntrySingle;
         private Button btnDbStatus;
         private Button btnImport;
+        private Button btnCreateModel;
+        private CheckBox chkAnalyze;
     }
 }
