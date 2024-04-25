@@ -24,6 +24,7 @@ namespace SamplingBME688Serial
         private const float widthMargin = 30;
         private const float area = 10.0f;
         private const float maxRange = 20.0f;
+        private const bool isDebug = false;
 
         public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<double>>> dataSet1, Dictionary<String, List<List<double>>> dataSet2)
         {
@@ -120,12 +121,13 @@ namespace SamplingBME688Serial
         }
 
 
-        public void drawGraph(Graphics g, RectangleF drawArea)
+        public void drawGraph(Graphics g, RectangleF drawArea, int strongLineIndex)
         {
-            Debug.WriteLine(DateTime.Now + " ----- drawGraph -----");
+            Debug.WriteLine(DateTime.Now + " ----- drawGraph ----- : " + strongLineIndex);
             try
             {
                 //  選択されているグラフを書く
+                int strongIndex = 1;
                 foreach (KeyValuePair<int, DataGridViewRow> pair in selectedData)
                 {
                     int index = pair.Key;
@@ -139,21 +141,25 @@ namespace SamplingBME688Serial
                     int startCount = 0;                            // 先頭データの場所
                     int middleCount = targetDataSet.Count / 2;     // 真ん中データの場所
                     int finishCount = targetDataSet.Count - 1;     // 末尾データの場所
+                    int lineStroke = (strongLineIndex == strongIndex) ? 5 : 0;
 
                     // 先頭データ
                     List<double> startDataset = targetDataSet[startCount];
-                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP)), categoryName + " (" + sensorIdStr + ")", startDataset);
+                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP), lineStroke), categoryName + " (" + sensorIdStr + ")", startDataset);
 
                     // 真ん中データ
                     List<double> middleDataset = targetDataSet[middleCount];
-                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE)), "", middleDataset);
+                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE), lineStroke), "", middleDataset);
 
                     // 末尾データ
                     List<double> finishDataset = targetDataSet[finishCount];
-                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM)), "", finishDataset);
+                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM), lineStroke), "", finishDataset);
 
-
-                    Debug.WriteLine($"{rowData.Cells[0].Value}[Sensor{rowData.Cells[1].Value}] ({startCount} / {middleCount} / {finishCount})");
+                    if (isDebug)
+                    {
+                        Debug.WriteLine($"{rowData.Cells[0].Value}[Sensor{rowData.Cells[1].Value}] ({startCount} / {middleCount} / {finishCount})");
+                    }
+                    strongIndex++;
                 }
             }
             catch (Exception ex)

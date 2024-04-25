@@ -11,9 +11,15 @@ namespace SamplingBME688Serial
 {
     class DataDetailDialog : System.Windows.Forms.Form
     {
-        private System.Windows.Forms.Button? btnClose;
         private System.ComponentModel.Container? components = null;
+        private Button btnNext;
+        private Button btnPrev;
+        private TextBox fldIndex;
         private DrawDataGraph graphDrawer = new DrawDataGraph();
+        private int currentIndexNumber = 1;
+        private Label lblSelectedIndex;
+        private int maxIndexNumber = 1;
+        private List<String> labelList = new List<String>();
 
 
 
@@ -36,36 +42,67 @@ namespace SamplingBME688Serial
 
         private void InitializeComponent()
         {
-            btnClose = new Button();
+            btnNext = new Button();
+            btnPrev = new Button();
+            fldIndex = new TextBox();
+            lblSelectedIndex = new Label();
             SuspendLayout();
             // 
-            // btnClose
+            // btnNext
             // 
-            btnClose.Anchor = AnchorStyles.Bottom;
-            btnClose.DialogResult = DialogResult.Cancel;
-            btnClose.Location = new Point(248, 319);
-            btnClose.Name = "btnClose";
-            btnClose.Size = new Size(88, 30);
-            btnClose.TabIndex = 0;
-            btnClose.Text = "Close";
-            btnClose.Click += btnClose_Click;
+            btnNext.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnNext.DialogResult = DialogResult.Cancel;
+            btnNext.Location = new Point(113, 324);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(35, 30);
+            btnNext.TabIndex = 3;
+            btnNext.Text = "→";
+            btnNext.Click += btnNext_Click;
+            // 
+            // btnPrev
+            // 
+            btnPrev.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnPrev.DialogResult = DialogResult.Cancel;
+            btnPrev.Location = new Point(12, 324);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(35, 30);
+            btnPrev.TabIndex = 1;
+            btnPrev.Text = "←";
+            btnPrev.Click += btnPrev_Click;
+            // 
+            // fldIndex
+            // 
+            fldIndex.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            fldIndex.Location = new Point(53, 329);
+            fldIndex.Name = "fldIndex";
+            fldIndex.ReadOnly = true;
+            fldIndex.Size = new Size(54, 23);
+            fldIndex.TabIndex = 2;
+            fldIndex.TextAlign = HorizontalAlignment.Center;
+            // 
+            // lblSelectedIndex
+            // 
+            lblSelectedIndex.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblSelectedIndex.AutoSize = true;
+            lblSelectedIndex.Location = new Point(154, 332);
+            lblSelectedIndex.Name = "lblSelectedIndex";
+            lblSelectedIndex.Size = new Size(0, 15);
+            lblSelectedIndex.TabIndex = 4;
             // 
             // DataDetailDialog
             // 
-            AcceptButton = btnClose;
             AutoScaleBaseSize = new Size(6, 16);
             ClientSize = new Size(584, 361);
-            Controls.Add(btnClose);
+            Controls.Add(lblSelectedIndex);
+            Controls.Add(fldIndex);
+            Controls.Add(btnPrev);
+            Controls.Add(btnNext);
             DoubleBuffered = true;
             Name = "DataDetailDialog";
             Text = "Data Detail";
             Load += DataDetailDialog_Load;
             ResumeLayout(false);
-        }
-
-        private void btnClose_Click(object? sender, System.EventArgs e)
-        {
-            this.Close();
+            PerformLayout();
         }
 
         private void DataDetailDialog_Load(object sender, EventArgs e)
@@ -111,13 +148,54 @@ namespace SamplingBME688Serial
             graphDrawer.drawUsage(g, drawArea);
 
             // グラフの描画
-            graphDrawer.drawGraph(g, drawArea);
+            graphDrawer.drawGraph(g, drawArea, currentIndexNumber);
         }
 
-        public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData,  Dictionary<String, List<List<double>>> dataSet1, Dictionary<String, List<List<double>>> dataSet2)
+        public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<double>>> dataSet1, Dictionary<String, List<List<double>>> dataSet2)
         {
             // 描画クラスに描画するデータを送り込む
             graphDrawer.setDataToDraw(ref selectedData, dataSet1, dataSet2);
+
+            maxIndexNumber = selectedData.Count;
+
+            fldIndex.Text = currentIndexNumber + "/" + maxIndexNumber;
+
+            labelList.Clear();
+
+            foreach (KeyValuePair<int, DataGridViewRow> pair in selectedData)
+            {
+                DataGridViewRow rowData = pair.Value;
+                String sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
+                int sensorId = int.Parse(sensorIdStr);
+                String? key = rowData.Cells[0].Value.ToString();
+                String categoryName = key ?? "";
+                labelList.Add(categoryName + "(" + sensorIdStr + ")");
+            }
+            lblSelectedIndex.Text = labelList[0];
+         }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            currentIndexNumber--;
+            if (currentIndexNumber <= 0)
+            {
+                currentIndexNumber = maxIndexNumber;
+            }
+            fldIndex.Text = currentIndexNumber + "/" + maxIndexNumber;
+            lblSelectedIndex.Text = labelList[currentIndexNumber - 1];
+            this.Invalidate();
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            currentIndexNumber++;
+            if (currentIndexNumber > maxIndexNumber)
+            {
+                currentIndexNumber = 1;
+            }
+            fldIndex.Text = currentIndexNumber + "/" + maxIndexNumber;
+            lblSelectedIndex.Text = labelList[currentIndexNumber - 1];
+            this.Invalidate();
         }
     }
 }
