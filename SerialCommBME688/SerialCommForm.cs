@@ -43,32 +43,12 @@ namespace SerialCommBME688
                 if (myReceiver.startReceive(txtPort.Text, category, sendUrl, chkDbEntrySingle.Checked, txtConsole))
                 {
                     // データの受信開始
-                    btnConnect.Enabled = false;
-                    btnStop.Enabled = true;
-                    btnExport.Enabled = false;
-                    btnImport.Enabled = false;
-                    grpExportOption.Enabled = false;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = false;
-                    btnReset.Enabled = false;
-                    btnDbStatus.Enabled = false;
-                    chkEntryDatabase.Enabled = false;
-                    chkDbEntrySingle.Enabled = false;
-                    urlDatabaseToEntry.Enabled = false;
+                    controlButton1Enable(false);
                 }
                 else
                 {
                     // データの受信開始に失敗
-                    btnConnect.Enabled = true;
-                    btnStop.Enabled = false;
-                    btnExport.Enabled = true;
-                    btnImport.Enabled = true;
-                    grpExportOption.Enabled = true;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = true;
-                    btnReset.Enabled = true;
-                    btnDbStatus.Enabled = true;
-                    chkEntryDatabase.Enabled = true;
-                    chkDbEntrySingle.Enabled = true;
-                    urlDatabaseToEntry.Enabled = true;
+                    controlButton1Enable(true);
                 }
             }
             catch (Exception ex)
@@ -83,33 +63,13 @@ namespace SerialCommBME688
                 if (myReceiver.stopReceive())
                 {
                     // データの受信完了
-                    btnConnect.Enabled = true;
-                    btnStop.Enabled = false;
-                    btnExport.Enabled = true;
-                    btnImport.Enabled = true;
-                    grpExportOption.Enabled = true;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = true;
-                    btnReset.Enabled = true;
-                    btnDbStatus.Enabled = true;
-                    chkEntryDatabase.Enabled = true;
-                    chkDbEntrySingle.Enabled = true;
-                    urlDatabaseToEntry.Enabled = true;
+                    controlButton1Enable(true);
                     //txtConsole.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
                 }
                 else
                 {
                     // データの受信終了に失敗
-                    btnConnect.Enabled = false;
-                    btnStop.Enabled = true;
-                    btnExport.Enabled = false;
-                    btnImport.Enabled = false;
-                    grpExportOption.Enabled = false;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = false;
-                    btnReset.Enabled = false;
-                    btnDbStatus.Enabled = false;
-                    chkEntryDatabase.Enabled = false;
-                    chkDbEntrySingle.Enabled = false;
-                    urlDatabaseToEntry.Enabled = false;
+                    controlButton1Enable(false);
                 }
             }
             catch (Exception ex)
@@ -118,6 +78,54 @@ namespace SerialCommBME688
                 txtConsole.AppendText(ex.Message);
             }
         }
+
+        private void controlButton1Enable(bool isEnable)
+        {
+            btnConnect.Enabled = isEnable;
+            btnStop.Enabled = !isEnable;
+            btnExport.Enabled = isEnable;
+            btnImport.Enabled = isEnable;
+            grpExportOption.Enabled = isEnable;
+            chkExportOnlyGasRegistanceLogarithm.Enabled = isEnable;
+            btnReset.Enabled = isEnable;
+            btnDbStatus.Enabled = isEnable;
+            chkEntryDatabase.Enabled = isEnable;
+            chkDbEntrySingle.Enabled = isEnable;
+            urlDatabaseToEntry.Enabled = isEnable;
+            btnShowGraph.Enabled = isEnable;
+            grpAnalysis.Enabled = isEnable;
+
+            lblResult1.Enabled = isEnable;
+            fldResult1.Enabled = isEnable;
+            lblResult2.Enabled = isEnable;
+            fldResult2.Enabled = isEnable;
+            chkAnalysis.Enabled = isEnable;
+        }
+
+        private void controlButton2Enable(bool isEnable)
+        {
+            btnConnect_2.Enabled = isEnable;
+            btnStop_2.Enabled = !isEnable;
+            btnExport.Enabled = isEnable;
+            btnImport.Enabled = isEnable;
+            grpExportOption.Enabled = isEnable;
+            chkExportOnlyGasRegistanceLogarithm.Enabled = isEnable;
+            btnReset.Enabled = isEnable;
+            btnDbStatus.Enabled = isEnable;
+            chkEntryDatabase.Enabled = isEnable;
+            chkDbEntrySingle.Enabled = isEnable;
+            urlDatabaseToEntry.Enabled = isEnable;
+            btnShowGraph.Enabled = isEnable;
+            grpAnalysis.Enabled = isEnable;
+
+            lblResult1.Enabled = isEnable;
+            fldResult1.Enabled = isEnable;
+            lblResult2.Enabled = isEnable;
+            fldResult2.Enabled = isEnable;
+            chkAnalysis.Enabled = isEnable;
+        }
+
+
 
         private void btnClear_Click(object sender, EventArgs e)
         {
@@ -140,6 +148,10 @@ namespace SerialCommBME688
             saveFileDialog1.FilterIndex = 2;
             saveFileDialog1.RestoreDirectory = true;
 
+            int fromValue = decimal.ToInt32(importFromPercent.Value);
+            int toValue = decimal.ToInt32(importToPercent.Value);
+
+
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 if ((myStream = saveFileDialog1.OpenFile()) != null)
@@ -150,8 +162,8 @@ namespace SerialCommBME688
                     if (!chkExportOnlyGasRegistanceLogarithm.Checked)
                     {
                         // 全データのエクスポート
-                        myReceiver.startExportAllDataToCsv(myStream, true);
-                        myReceiver_2.startExportAllDataToCsv(myStream, false);
+                        myReceiver.startExportAllDataToCsv(myStream, true, fromValue, toValue);
+                        myReceiver_2.startExportAllDataToCsv(myStream, false, fromValue, toValue);
                     }
                     else
                     {
@@ -328,32 +340,12 @@ namespace SerialCommBME688
                 if (myReceiver_2.startReceive(txtPort_2.Text, category, sendUrl, chkDbEntrySingle.Checked, txtConsole_2))
                 {
                     // データの受信開始
-                    btnConnect_2.Enabled = false;
-                    btnStop_2.Enabled = true;
-                    btnExport.Enabled = false;
-                    btnImport.Enabled = false;
-                    grpExportOption.Enabled = false;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = false;
-                    btnReset.Enabled = false;
-                    btnDbStatus.Enabled = false;
-                    chkEntryDatabase.Enabled = false;
-                    chkDbEntrySingle.Enabled = false;
-                    urlDatabaseToEntry.Enabled = false;
+                    controlButton2Enable(false);
                 }
                 else
                 {
                     // データの受信開始に失敗
-                    btnConnect_2.Enabled = true;
-                    btnStop_2.Enabled = false;
-                    btnExport.Enabled = true;
-                    btnImport.Enabled = true;
-                    grpExportOption.Enabled = true;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = true;
-                    btnReset.Enabled = true;
-                    btnDbStatus.Enabled = true;
-                    chkEntryDatabase.Enabled = true;
-                    chkDbEntrySingle.Enabled = true;
-                    urlDatabaseToEntry.Enabled = true;
+                    controlButton2Enable(true);
                 }
             }
             catch (Exception ex)
@@ -369,33 +361,12 @@ namespace SerialCommBME688
                 if (myReceiver_2.stopReceive())
                 {
                     // データの受信完了
-                    btnConnect_2.Enabled = true;
-                    btnStop_2.Enabled = false;
-                    btnExport.Enabled = true;
-                    btnImport.Enabled = true;
-                    grpExportOption.Enabled = true;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = true;
-                    btnReset.Enabled = true;
-                    btnDbStatus.Enabled = true;
-                    //txtConsole_2.AppendText("\r\n--- FINISH RECEIVE ---\r\n");
-                    chkEntryDatabase.Enabled = true;
-                    chkDbEntrySingle.Enabled = true;
-                    urlDatabaseToEntry.Enabled = true;
+                    controlButton2Enable(true);
                 }
                 else
                 {
                     // データの受信終了に失敗
-                    btnConnect_2.Enabled = false;
-                    btnStop_2.Enabled = true;
-                    btnExport.Enabled = false;
-                    btnImport.Enabled = false;
-                    grpExportOption.Enabled = false;
-                    chkExportOnlyGasRegistanceLogarithm.Enabled = false;
-                    btnReset.Enabled = false;
-                    btnDbStatus.Enabled = false;
-                    chkEntryDatabase.Enabled = false;
-                    chkDbEntrySingle.Enabled = false;
-                    urlDatabaseToEntry.Enabled = false;
+                    controlButton2Enable(false);
                 }
             }
             catch (Exception ex)

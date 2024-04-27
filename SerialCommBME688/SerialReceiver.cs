@@ -118,14 +118,14 @@ namespace SerialCommBME688
 
         }
 
-        public void startExportAllDataToCsv(Stream myStream, bool isWriteHeader)
+        public void startExportAllDataToCsv(Stream myStream, bool isWriteHeader, int startPosition, int endPosition)
         {
             try
             {
                 // このままだと固まるはずなので、本当はここでコンテキストを切りたい...
                 //Thread writeThread = new Thread(exportCsvData);
                 //writeThread.Start();
-                dataParser.exportCsvData(myStream, isWriteHeader);
+                dataParser.exportCsvData(myStream, isWriteHeader, startPosition, endPosition);
             }
             catch (Exception e)
             {

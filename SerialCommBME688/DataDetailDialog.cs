@@ -99,6 +99,7 @@ namespace SamplingBME688Serial
             // 
             lblSelectedIndex.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblSelectedIndex.AutoSize = true;
+            lblSelectedIndex.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
             lblSelectedIndex.Location = new Point(12, 506);
             lblSelectedIndex.Name = "lblSelectedIndex";
             lblSelectedIndex.Size = new Size(28, 15);
@@ -146,6 +147,7 @@ namespace SamplingBME688Serial
             label1Value.Size = new Size(38, 15);
             label1Value.TabIndex = 8;
             label1Value.Text = "label1";
+            label1Value.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2Value
             // 
@@ -156,6 +158,7 @@ namespace SamplingBME688Serial
             label2Value.Size = new Size(38, 15);
             label2Value.TabIndex = 9;
             label2Value.Text = "label2";
+            label2Value.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label3Value
             // 
@@ -166,6 +169,7 @@ namespace SamplingBME688Serial
             label3Value.Size = new Size(38, 15);
             label3Value.TabIndex = 10;
             label3Value.Text = "label3";
+            label3Value.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DataDetailDialog
             // 
@@ -212,14 +216,12 @@ namespace SamplingBME688Serial
             // ウィンドウサイズ
             int margin = 10;
             int topMargin = 5;
-            int bottomMargin = 120;
 
             // ----- 描画領域サイズの決定
             float topLeftX = margin;
             float topLeftY = topMargin;
             float areaWidth = Size.Width - (margin * 4);
-            float areaHeight = Size.Height - bottomMargin;
-
+            float areaHeight = lblSelectedIndex.Location.Y - (topMargin * 3);
 
             // Graphics オブジェクトを取得
             Graphics g = e.Graphics;

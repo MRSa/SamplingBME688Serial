@@ -85,7 +85,13 @@ namespace SamplingBME688Serial
                 float lineX = drawArea.Left + widthMargin + axisArea * ((float)index);
                 g.DrawLine(axisPen, lineX, lineTop, lineX, lineBottom);
                 SizeF size = g.MeasureString($"{index}", font);
-                g.DrawString($"{index}", font, brush, lineX - (size.Width / 2.0f), lineBottom + bottomMargin);
+                float textPointY = lineBottom + bottomMargin;
+                if (textPointY + size.Height > drawArea.Bottom)
+                {
+                    // 描画領域を下に抜ける場合は、文字を書く場所はちょっと上にする
+                    textPointY = drawArea.Bottom - size.Height;
+                }
+                g.DrawString($"{index}", font, brush, lineX - (size.Width / 2.0f), textPointY);
                 index++;
             }
 

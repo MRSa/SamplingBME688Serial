@@ -306,9 +306,9 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvData(Stream myStream, bool isWriteHeader)
+        public void exportCsvData(Stream myStream, bool isWriteHeader, int startPosition, int endPosition)
         {
-            // （欠損のない）受信データを全部ファイルにCSV形式で保管する
+            // （欠損のない）受信データを指定した範囲について、全部ファイルにCSV形式で保管する
             try
             {
                 Debug.WriteLine("exportCsvData() : canWrite: " + myStream.CanWrite);
@@ -320,15 +320,24 @@ namespace SerialCommBME688
                 {
                     writer.WriteLine("; sensorId, category, index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff");
                 }
+
                 foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
                 {
                     String category = item.Key;
                     List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
+
+                    // ----- 出力データの位置を決める
+                    int dataSize = dataSet.Count;
+                    float fromPosition = ((float)dataSize * ((float)startPosition / 100.0f));
+                    float toPosition = ((float)dataSize * ((float)endPosition / 100.0f));
+
+                    Debug.WriteLine(DateTime.Now + " Export : " + item.Key + " from: " + ((int)fromPosition) + " to: " + ((int)toPosition) + " count: " + dataSize);
+                    int index = 0;
                     foreach (Bme688DataSet collectedData in dataSet)
                     {
-                        if (collectedData.lack_data == 0)
+                        if ((collectedData.lack_data == 0)&&(index >= (int) (fromPosition))&&(index <= ((int) toPosition)))
                         {
-                            // データが欠損していない場合、ファイルに出力する
+                            // データが指定範囲内かつ欠損していない場合、ファイルに出力する
                             for (int dataIndex = 0; dataIndex < NUMBER_OF_INDEX; dataIndex++)
                             {
                                 try
@@ -342,6 +351,7 @@ namespace SerialCommBME688
                                 }
                             }
                         }
+                        index++;
                     }
                 }
             }

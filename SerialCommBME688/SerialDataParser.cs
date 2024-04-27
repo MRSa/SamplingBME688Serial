@@ -151,12 +151,12 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvData(Stream myStream, bool isWriteHeader)
+        public void exportCsvData(Stream myStream, bool isWriteHeader, int startPosition, int endPosition)
         {
             try
             {
                 appendText("----- exportCsvData(" + isWriteHeader + ") : START...\r\n");
-                dataHolder.exportCsvData(myStream, isWriteHeader);
+                dataHolder.exportCsvData(myStream, isWriteHeader, startPosition, endPosition);
                 appendText("----- exportCsvData(" + isWriteHeader + ") : FINISHED.\r\n");
             }
             catch (Exception e)
