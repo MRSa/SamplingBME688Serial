@@ -121,7 +121,7 @@ namespace SamplingBME688Serial
         }
 
 
-        public void drawGraph(Graphics g, RectangleF drawArea, int strongLineIndex)
+        public void drawGraph(Graphics g, RectangleF drawArea, int strongLineIndex, float line1Position, float line2Position, float line3Position)
         {
             Debug.WriteLine(DateTime.Now + " ----- drawGraph ----- : " + strongLineIndex);
             try
@@ -138,9 +138,9 @@ namespace SamplingBME688Serial
                     String categoryName = key ?? "";
                     List<List<double>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
 
-                    int startCount = 0;                            // 先頭データの場所
-                    int middleCount = targetDataSet.Count / 2;     // 真ん中データの場所
-                    int finishCount = targetDataSet.Count - 1;     // 末尾データの場所
+                    int startCount =  (int) (targetDataSet.Count * line1Position);  // 先頭データの場所
+                    int middleCount = (int) (targetDataSet.Count * line2Position);  // 真ん中データの場所
+                    int finishCount = (int) (targetDataSet.Count * line3Position);  // 末尾データの場所
                     int lineStroke = (strongLineIndex == strongIndex) ? 5 : 0;
 
                     // 先頭データ
