@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -22,8 +23,11 @@ namespace SamplingBME688Serial
         private const int POSITION_BOTTOM = 1;
         private const float heightMargin = 20;
         private const float widthMargin = 30;
-        private const float area = 10.0f;
-        private const float maxRange = 20.0f;
+        private const float areaX = 10.0f;
+        //private const float maxRange = 20.0f;
+
+        private float upperLimit = 20.0f; // 19.0f; // 20.0f;
+        private float lowerLimit = 0.0f; // 12.5f; // 0.0f;
         private const bool isDebug = false;
 
         public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<double>>> dataSet1, Dictionary<String, List<List<double>>> dataSet2)
@@ -68,7 +72,9 @@ namespace SamplingBME688Serial
         public void drawAixs(Graphics g, RectangleF drawArea)
         {
             float bottomMargin = 5;
-            float axisArea = drawArea.Width / area;
+            float axisArea = drawArea.Width / areaX;
+            float maxRange = upperLimit - lowerLimit;
+            float rangeStep = maxRange / 10.0f;
             //float axisArea = ((drawArea.Right - drawArea.Left) - 2 * widthMargin) / (area + 1);
 
             Pen axisPen = new Pen(Color.LightGray);
@@ -76,11 +82,11 @@ namespace SamplingBME688Serial
             float lineBottom = drawArea.Height - heightMargin;
 
 
-            SolidBrush brush = new SolidBrush(Color.LightGray);
+            SolidBrush textBrush = new SolidBrush(Color.Gray);
             Font font = new Font(fontName, fontSize);
 
             int index = 0;
-            while (index <= area)
+            while (index <= areaX)
             {
                 float lineX = drawArea.Left + widthMargin + axisArea * ((float)index);
                 g.DrawLine(axisPen, lineX, lineTop, lineX, lineBottom);
@@ -91,22 +97,25 @@ namespace SamplingBME688Serial
                     // 描画領域を下に抜ける場合は、文字を書く場所はちょっと上にする
                     textPointY = drawArea.Bottom - size.Height;
                 }
-                g.DrawString($"{index}", font, brush, lineX - (size.Width / 2.0f), textPointY);
+                g.DrawString($"{index}", font, textBrush, lineX - (size.Width / 10.0f), textPointY);
                 index++;
             }
 
             float areaSize = drawArea.Height - heightMargin - heightMargin;
             float startX = drawArea.Left + widthMargin;
-            float finishX = startX + (axisArea * (area - 1));// drawArea.Right - widthMargin;
-            float data = 0.0f;
+            float finishX = startX + (axisArea * (areaX - 1));// drawArea.Right - widthMargin;
+            float data = lowerLimit;
             while (data <= maxRange)
             {
-                float posY = ((float)(maxRange - data)) * (areaSize / maxRange) + heightMargin;
+                float posY = ((float)(upperLimit - (data - lowerLimit))) * (areaSize / maxRange) + heightMargin;
 
                 g.DrawLine(axisPen, startX, posY, finishX, posY);
 
-                data += 2.0f;
+                data += rangeStep;
             }
+
+            g.DrawString($"{lowerLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 8, areaSize);
+            g.DrawString($"{upperLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 8, drawArea.Top);
 
             axisPen.Dispose();
         }
@@ -220,15 +229,17 @@ namespace SamplingBME688Serial
         {
             Debug.WriteLine(" ");
 
-            float axisArea = drawArea.Width / area;
+            float axisArea = drawArea.Width / areaX;
             float areaSize = drawArea.Height - heightMargin - heightMargin;
+            double maxRange = upperLimit - lowerLimit;
 
             int index = 0;
             PointF[] points = new PointF[dataset.Count];
             foreach (double data in dataset)
             {
+                double position = data - lowerLimit;
                 float lineX = drawArea.Left + widthMargin + axisArea * ((float)index);
-                float posY =((float)(maxRange - data)) * (areaSize / maxRange) + heightMargin;
+                float posY =((float)(maxRange - position)) * (areaSize / (float) maxRange) + heightMargin;
                 Debug.WriteLine($" drawLines() ({lineX},{posY}) : {areaSize}");
                 points[index] = new PointF(lineX, posY);
                 index++;

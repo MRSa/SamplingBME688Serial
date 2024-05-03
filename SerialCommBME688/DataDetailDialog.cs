@@ -25,6 +25,8 @@ namespace SamplingBME688Serial
         private Label label1Value;
         private Label label2Value;
         private Label label3Value;
+        private CheckBox chkRangeZoom;
+        private CheckBox chkLogRData;
         private List<String> labelList = new List<String>();
 
 
@@ -58,6 +60,8 @@ namespace SamplingBME688Serial
             label1Value = new Label();
             label2Value = new Label();
             label3Value = new Label();
+            chkRangeZoom = new CheckBox();
+            chkLogRData = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)bar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bar3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bar2).BeginInit();
@@ -119,7 +123,7 @@ namespace SamplingBME688Serial
             // bar3
             // 
             bar3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            bar3.Location = new Point(622, 509);
+            bar3.Location = new Point(622, 504);
             bar3.Maximum = 99;
             bar3.Name = "bar3";
             bar3.Size = new Size(150, 45);
@@ -171,10 +175,36 @@ namespace SamplingBME688Serial
             label3Value.Text = "label3";
             label3Value.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // chkRangeZoom
+            // 
+            chkRangeZoom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            chkRangeZoom.AutoSize = true;
+            chkRangeZoom.Location = new Point(791, 531);
+            chkRangeZoom.Name = "chkRangeZoom";
+            chkRangeZoom.Size = new Size(57, 19);
+            chkRangeZoom.TabIndex = 11;
+            chkRangeZoom.Text = "Zoom";
+            chkRangeZoom.UseVisualStyleBackColor = true;
+            chkRangeZoom.CheckedChanged += chkRangeZoom_CheckedChanged;
+            // 
+            // chkLogRData
+            // 
+            chkLogRData.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            chkLogRData.AutoSize = true;
+            chkLogRData.Location = new Point(791, 506);
+            chkLogRData.Name = "chkLogRData";
+            chkLogRData.Size = new Size(46, 19);
+            chkLogRData.TabIndex = 12;
+            chkLogRData.Text = "Log";
+            chkLogRData.UseVisualStyleBackColor = true;
+            chkLogRData.CheckedChanged += chkLogRData_CheckedChanged;
+            // 
             // DataDetailDialog
             // 
             AutoScaleBaseSize = new Size(6, 16);
-            ClientSize = new Size(784, 561);
+            ClientSize = new Size(884, 561);
+            Controls.Add(chkLogRData);
+            Controls.Add(chkRangeZoom);
             Controls.Add(label3Value);
             Controls.Add(label2Value);
             Controls.Add(label1Value);
@@ -307,6 +337,16 @@ namespace SamplingBME688Serial
         {
             label3Value.Text = bar3.Value + "%";
             this.Invalidate();
+        }
+
+        private void chkLogRData_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkRangeZoom_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

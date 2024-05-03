@@ -189,6 +189,9 @@ namespace SerialCommBME688
         {
             try
             {
+                int fromValue = decimal.ToInt32(importFromPercent.Value);
+                int toValue = decimal.ToInt32(importToPercent.Value);
+
                 StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
                 writer.AutoFlush = true;
 
@@ -252,6 +255,8 @@ namespace SerialCommBME688
         {
             try
             {
+                int fromValue = decimal.ToInt32(importFromPercent.Value);
+                int toValue = decimal.ToInt32(importToPercent.Value);
                 CombinedSensorDataCsvExporter exporter = new CombinedSensorDataCsvExporter(myReceiver, myReceiver_2);
                 exporter.startExportCsvCombine(myStream, dataSourceProvider.getValidCount(), Decimal.ToInt32(numDuplicate.Value));
             }
