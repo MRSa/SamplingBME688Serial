@@ -26,7 +26,7 @@ namespace SamplingBME688Serial
         private const int POSITION_MIDDLE = 0;
         private const int POSITION_BOTTOM = 1;
         private const float heightMargin = 20;
-        private const float widthMargin = 30;
+        private const float widthMargin = 30; // 30;
         private const float areaX = 10.0f;
 
         private bool useGasRegistanceLog = false;
@@ -39,13 +39,13 @@ namespace SamplingBME688Serial
             this.useGasRegistanceLog = useGasRegistanceLog;
             if (useGasRegistanceLog)
             {
-                this.currentLowerLimit = (isZoom) ? lowerLimitZoom.gas_registance_log : lowerLimit.gas_registance_log;
-                this.currentUpperLimit = (isZoom) ? upperLimitZoom.gas_registance_log : upperLimit.gas_registance_log;
+                this.currentLowerLimit = Math.Floor((isZoom) ? lowerLimitZoom.gas_registance_log : lowerLimit.gas_registance_log);
+                this.currentUpperLimit = Math.Ceiling((isZoom) ? upperLimitZoom.gas_registance_log : upperLimit.gas_registance_log);
             }
             else
             {
-                this.currentLowerLimit = (isZoom) ? lowerLimitZoom.gas_registance : lowerLimit.gas_registance;
-                this.currentUpperLimit = (isZoom) ? upperLimitZoom.gas_registance : upperLimit.gas_registance;
+                this.currentLowerLimit = Math.Floor((isZoom) ? lowerLimitZoom.gas_registance : lowerLimit.gas_registance);
+                this.currentUpperLimit = Math.Ceiling((isZoom) ? upperLimitZoom.gas_registance : upperLimit.gas_registance);
             }
         }
 
@@ -95,14 +95,10 @@ namespace SamplingBME688Serial
         {
             float bottomMargin = 5;
             float axisArea = drawArea.Width / areaX;
-            float maxRange = (float) (currentUpperLimit - currentLowerLimit);
-            float rangeStep = maxRange / 10.0f;
-            //float axisArea = ((drawArea.Right - drawArea.Left) - 2 * widthMargin) / (area + 1);
 
             Pen axisPen = new Pen(Color.LightGray);
             float lineTop = drawArea.Top + heightMargin;
             float lineBottom = drawArea.Height - heightMargin;
-
 
             SolidBrush textBrush = new SolidBrush(Color.Gray);
             Font font = new Font(fontName, fontSize);
@@ -126,24 +122,24 @@ namespace SamplingBME688Serial
             float areaSize = drawArea.Height - heightMargin - heightMargin;
             float startX = drawArea.Left + widthMargin;
             float finishX = startX + (axisArea * (areaX - 1));
-            double data = currentLowerLimit;
-            while (data <= maxRange)
+            float rangeStep = areaSize / 10.0f;
+            index = 0;
+            while (index <= 10)
             {
-                float posY = ((float)(currentUpperLimit - (data - currentLowerLimit))) * (areaSize / maxRange) + heightMargin;
-
+                float posY = rangeStep * index + heightMargin;
                 g.DrawLine(axisPen, startX, posY, finishX, posY);
-
-                data += rangeStep;
+                index++;
             }
 
-            g.DrawString($"{currentLowerLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, areaSize);
-            g.DrawString($"{currentUpperLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, drawArea.Top);
+            g.DrawString($"{currentLowerLimit:F0}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, areaSize);
+            g.DrawString($"{currentUpperLimit:F0}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, drawArea.Top);
 
             axisPen.Dispose();
         }
 
         public void drawUsage(Graphics g, RectangleF drawArea)
         {
+/*
             //Debug.WriteLine(DateTime.Now + " ----- drawUsage -----");
             try
             {
@@ -155,6 +151,7 @@ namespace SamplingBME688Serial
                 Debug.WriteLine(DateTime.Now + " drawUsage()" + ex.Message);
             }
             //Debug.WriteLine(" ----- ");
+*/
         }
 
 
@@ -241,7 +238,6 @@ namespace SamplingBME688Serial
                     default:
                         retColor = Color.DarkGreen;
                         break;
-
                 }
             }
             return (retColor);
@@ -249,7 +245,7 @@ namespace SamplingBME688Serial
 
         private void drawLines(Graphics g, RectangleF drawArea, Pen pen, String label, List<GraphDataValue> dataset)
         {
-            Debug.WriteLine(" ");
+            // Debug.WriteLine(" ");
 
             float axisArea = drawArea.Width / areaX;
             float areaSize = drawArea.Height - heightMargin - heightMargin;
@@ -262,7 +258,10 @@ namespace SamplingBME688Serial
                 double data = ((useGasRegistanceLog) ? dataValue.gas_registance_log : dataValue.gas_registance) - currentLowerLimit;
                 float lineX = drawArea.Left + widthMargin + axisArea * ((float)index);
                 float posY =((float)(maxRange - data)) * (areaSize / (float) maxRange) + heightMargin;
-                Debug.WriteLine($" drawLines() ({lineX},{posY}) : {areaSize}");
+                if (isDebug)
+                {
+                    Debug.WriteLine($" drawLines() ({lineX},{posY}) : {areaSize}");
+                }
                 points[index] = new PointF(lineX, posY);
                 index++;
             }
@@ -270,5 +269,4 @@ namespace SamplingBME688Serial
             g.DrawString(label, new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), new PointF((drawArea.Left + widthMargin), points[0].Y + 5));
         }
     }
-
 }
