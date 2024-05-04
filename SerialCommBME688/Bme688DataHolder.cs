@@ -92,7 +92,7 @@ namespace SerialCommBME688
                             targetDataSet.startReceiveDataSet(temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
                             expectedIndexNumber = 1;
                             receivedDataCount++;
-                            result = category + " (" + receivedDataCount + ")\r\n";
+                            result = category + " (" + receivedDataCount + ") " + DateTime.Now + "\r\n";
                             return (result);
                         }
 
@@ -125,7 +125,7 @@ namespace SerialCommBME688
                 {
                     // データが欠損して、待っている番号よりも小さい値が来た場合...
                     // (前データを上書きしてしまうが...)
-                    result = " INDEX MISMATCH :" + expectedIndexNumber + " - " + gas_index + " (" + sensorId + ")" + "\r\n";
+                    result = " INDEX MISMATCH :" + expectedIndexNumber + " - " + gas_index + " (" + sensorId + ") " + DateTime.Now + "\r\n";
                 }
 
                 if (result.Length == 0)
@@ -136,7 +136,7 @@ namespace SerialCommBME688
                 {
                     // 待っていたデータが来たので、そのまま入れる
                     targetDataSet.setReceivedData(gas_index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
-                    Debug.WriteLine("ENTRY" + sensorId + "[" + targetDataSet.dataGroupName + "]  : " + gas_index + " " + temperature + " " + humidity + " " + gas_registance + "");
+                    //Debug.WriteLine("ENTRY" + sensorId + "[" + targetDataSet.dataGroupName + "]  : " + gas_index + " " + temperature + " " + humidity + " " + gas_registance + ""); // これを入れるとかなり遅くなる...
                 }
 
                 expectedIndexNumber++;
@@ -180,7 +180,7 @@ namespace SerialCommBME688
                 expectedIndexNumber = 0;
 
                 // 受信停止時、とりあえずカテゴリごとの有効データ数を画面表示する
-                result = "\r\n-----\r\n";
+                result = "\r\n----- " + DateTime.Now + "\r\n";
                 foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
                 {
                     result = result + item.Key + "/" + item.Value.dataGroupName + " ";

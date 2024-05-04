@@ -513,7 +513,6 @@
             btnCreateModel.TabIndex = 20;
             btnCreateModel.Text = "Create Model";
             btnCreateModel.UseVisualStyleBackColor = true;
-            btnCreateModel.Visible = false;
             btnCreateModel.Click += btnCreateModel_Click;
             // 
             // chkAnalyze

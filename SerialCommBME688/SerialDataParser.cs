@@ -155,9 +155,9 @@ namespace SerialCommBME688
         {
             try
             {
-                appendText("----- exportCsvData(" + isWriteHeader + ") : START...\r\n");
+                appendText("----- exportCsvData(" + isWriteHeader + ") : START..." + DateTime.Now + "\r\n");
                 dataHolder.exportCsvData(myStream, isWriteHeader, startPosition, endPosition);
-                appendText("----- exportCsvData(" + isWriteHeader + ") : FINISHED.\r\n");
+                appendText("----- exportCsvData(" + isWriteHeader + ") : FINISHED." + DateTime.Now + "\r\n");
             }
             catch (Exception e)
             {

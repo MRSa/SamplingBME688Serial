@@ -70,7 +70,7 @@ namespace SerialCommBME688
                 Console.WriteLine(e.StackTrace);
                 if (aOutputArea != null)
                 {
-                    String message = "=== Open ERROR (" + comPort + ") === " + "\r\n";
+                    String message = "=== Open ERROR (" + comPort + ") === : " + DateTime.Now + "\r\n";
                     message = message + " " + e.Message + "\r\n" + e.StackTrace;
 
                     aOutputArea.Text = message;
@@ -88,7 +88,7 @@ namespace SerialCommBME688
 
         public void ReadSerial()
         {
-            Debug.WriteLine("  ----- START ReadSerial() -----");
+            Debug.WriteLine("  ----- START ReadSerial() ----- : " + DateTime.Now);
             while (_continue)
             {
                 try
@@ -109,7 +109,7 @@ namespace SerialCommBME688
             {
                 Debug.WriteLine(DateTime.Now + " ReadSerial() : Close " + e.Message);
             }
-            Debug.WriteLine("  ----- FINISH ReadSerial() -----");
+            Debug.WriteLine("  ----- FINISH ReadSerial() ----- : " + DateTime.Now);
         }
 
         public void importSingleData(String categoryName, int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)

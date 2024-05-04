@@ -1,3 +1,4 @@
+using Microsoft.ML;
 using SamplingBME688Serial;
 using System;
 using System.Collections.ObjectModel;
@@ -14,9 +15,10 @@ namespace SerialCommBME688
 {
     public partial class SerialCommForm : Form, IDataImportCallback
     {
-        private GridDataSourceProvider dataSourceProvider;// = new GridDataSourceProvider();
-        private SerialReceiver myReceiver;// = new SerialReceiver(1, dataSourceProvider);
-        private SerialReceiver myReceiver_2;// = new SerialReceiver(2, dataSourceProvider);
+        private GridDataSourceProvider dataSourceProvider; // = new GridDataSourceProvider();
+        private SerialReceiver myReceiver;                 // = new SerialReceiver(1, dataSourceProvider);
+        private SerialReceiver myReceiver_2;               // = new SerialReceiver(2, dataSourceProvider);
+        private MLContext mlContext;                       // = new MLContext(seed: 0);
         private DbEntryStatusView statusView;
 
         public SerialCommForm()
@@ -25,6 +27,7 @@ namespace SerialCommBME688
             statusView = new DbEntryStatusView(this);
             myReceiver = new SerialReceiver(1, dataSourceProvider);
             myReceiver_2 = new SerialReceiver(2, dataSourceProvider);
+            mlContext = new MLContext(seed: 0);
             InitializeComponent();
         }
 
@@ -33,7 +36,7 @@ namespace SerialCommBME688
             try
             {
                 String category = txtDataCategory.Text;
-                txtConsole.Text = "--- START RECEIVE [" + txtPort.Text + "] (" + txtDataCategory.Text + ") ---\r\n";
+                txtConsole.Text = "--- START RECEIVE [" + txtPort.Text + "] " + DateTime.Now + " (" + txtDataCategory.Text + ") ---\r\n";
                 String sendUrl = "";
                 if (chkEntryDatabase.Checked)
                 {
@@ -95,6 +98,9 @@ namespace SerialCommBME688
             btnShowGraph.Enabled = isEnable;
             grpAnalysis.Enabled = isEnable;
 
+            //btnCreateModel.Visible = isEnable;
+            btnCreateModel.Enabled = isEnable;
+
             lblResult1.Enabled = isEnable;
             fldResult1.Enabled = isEnable;
             lblResult2.Enabled = isEnable;
@@ -117,6 +123,9 @@ namespace SerialCommBME688
             urlDatabaseToEntry.Enabled = isEnable;
             btnShowGraph.Enabled = isEnable;
             grpAnalysis.Enabled = isEnable;
+
+            //btnCreateModel.Visible = isEnable;
+            btnCreateModel.Enabled = isEnable;
 
             lblResult1.Enabled = isEnable;
             fldResult1.Enabled = isEnable;
@@ -370,7 +379,7 @@ namespace SerialCommBME688
                 {
                     sendUrl = urlDatabaseToEntry.Text + "sensor/entry";
                 }
-                txtConsole_2.Text = "--- START RECEIVE [" + txtPort_2.Text + "] (" + txtDataCategory.Text + ") ---\r\n";
+                txtConsole_2.Text = "--- START RECEIVE [" + txtPort_2.Text + "] " + DateTime.Now + " (" + txtDataCategory.Text + ") ---\r\n";
                 if (myReceiver_2.startReceive(txtPort_2.Text, category, sendUrl, chkDbEntrySingle.Checked, txtConsole_2))
                 {
                     // データの受信開始
@@ -534,6 +543,13 @@ namespace SerialCommBME688
 
         private void btnCreateModel_Click(object sender, EventArgs e)
         {
+            // ----- モデル作成ダイアログ
+            CreateModelDialog createModelDialog = new CreateModelDialog();
+            createModelDialog.setup();
+
+            // ----- モーダルダイアログの表示
+            createModelDialog.ShowDialog();
+
             // モデルの作成コマンド
             MessageBox.Show("Create models",
                 "Information",
