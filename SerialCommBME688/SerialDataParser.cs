@@ -205,6 +205,11 @@ namespace SerialCommBME688
             return (dataHolder.getGasRegLogDataSet());
         }
 
+        public Dictionary<String, List<List<GraphDataValue>>> getGasRegDataSet()
+        {
+            return (dataHolder.getGasRegDataSet());
+        }
+
         public List<String> getCollectedCategoryList()
         {
             return (dataHolder.getCollectedCategoryList());

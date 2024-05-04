@@ -453,6 +453,50 @@ namespace SerialCommBME688
             return (data);
         }
 
+        public Dictionary<String, List<List<GraphDataValue>>> getGasRegDataSet()
+        {
+            // GasRegistanceの値を（カテゴリごとに詰めて）応答する
+            Dictionary<String, List<List<GraphDataValue>>> data = new Dictionary<String, List<List<GraphDataValue>>>();
+            try
+            {
+                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+                {
+                    String category = item.Key;
+                    List<List<GraphDataValue>> outputData = new List<List<GraphDataValue>>();
+                    List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
+                    foreach (Bme688DataSet collectedData in dataSet)
+                    {
+                        if (collectedData.lack_data == 0)
+                        {
+                            // データが欠損していない場合、データを詰める
+                            List<GraphDataValue> collected = new List<GraphDataValue>();
+                            for (int dataIndex = 0; dataIndex < NUMBER_OF_INDEX; dataIndex++)
+                            {
+                                try
+                                {
+                                    Bme688Data collectedValue = collectedData.getBme688Data(dataIndex);
+                                    collected.Add(new GraphDataValue(collectedValue.gas_registance, collectedValue.gas_registance_log));
+                                }
+                                catch (Exception ee)
+                                {
+                                    Debug.WriteLine(DateTime.Now + " Bme688Data() : " + ee.Message + " ");
+                                }
+                            }
+                            outputData.Add(collected);
+                        }
+                    }
+                    data[category] = outputData;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " updateDataTable() : " + e.Message);
+            }
+            return (data);
+        }
+
+
+
         public List<String> getCollectedCategoryList()
         {
             List<String> categoryList = new List<String>();

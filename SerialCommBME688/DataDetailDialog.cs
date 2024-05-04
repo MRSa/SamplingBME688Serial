@@ -1,12 +1,4 @@
-﻿using SerialCommBME688;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-
+﻿
 namespace SamplingBME688Serial
 {
     class DataDetailDialog : System.Windows.Forms.Form
@@ -28,7 +20,6 @@ namespace SamplingBME688Serial
         private CheckBox chkRangeZoom;
         private CheckBox chkLogRData;
         private List<String> labelList = new List<String>();
-
 
 
         public DataDetailDialog()
@@ -270,10 +261,10 @@ namespace SamplingBME688Serial
             graphDrawer.drawGraph(g, drawArea, currentIndexNumber, bar1.Value / 100.0f, bar2.Value / 100.0f, bar3.Value / 100.0f);
         }
 
-        public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<double>>> dataSet1, Dictionary<String, List<List<double>>> dataSet2)
+        public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<GraphDataValue>>> dataSet1, Dictionary<String, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
         {
             // 描画クラスに描画するデータを送り込む
-            graphDrawer.setDataToDraw(ref selectedData, dataSet1, dataSet2);
+            graphDrawer.setDataToDraw(ref selectedData, dataSet1, dataSet2, lowerLimit, upperLimit, lowerLimitZoom, upperLimitZoom);
 
             maxIndexNumber = selectedData.Count;
 
@@ -339,14 +330,22 @@ namespace SamplingBME688Serial
             this.Invalidate();
         }
 
+        private void selectGraphData()
+        {
+            // ---- 表示するグラフデータ、表示幅の更新
+            graphDrawer.selectGraphData(chkLogRData.Checked, chkRangeZoom.Checked);
+            this.Invalidate();
+        }
+
+
         private void chkLogRData_CheckedChanged(object sender, EventArgs e)
         {
-
+            selectGraphData();
         }
 
         private void chkRangeZoom_CheckedChanged(object sender, EventArgs e)
         {
-
+            selectGraphData();
         }
     }
 }

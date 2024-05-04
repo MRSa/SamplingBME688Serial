@@ -188,10 +188,18 @@ namespace SerialCommBME688
             // データをリセットする
             dataParser.reset();
         }
+
         public Dictionary<String, List<List<double>>> getGasRegLogDataSet()
         {
             return (dataParser.getGasRegLogDataSet());
         }
+
+        public Dictionary<String, List<List<GraphDataValue>>> getGasRegDataSet()
+        {
+            return (dataParser.getGasRegDataSet());
+        }
+
+
         public List<String> getCollectedCategoryList()
         {
             return (dataParser.getCollectedCategoryList());

@@ -12,9 +12,13 @@ namespace SamplingBME688Serial
 {
     internal class DrawDataGraph
     {
-        private Dictionary<int, DataGridViewRow> selectedData;
-        private Dictionary<String, List<List<double>>> dataSet1;
-        private Dictionary<String, List<List<double>>> dataSet2;
+        private Dictionary<int, DataGridViewRow>? selectedData;
+        private Dictionary<String, List<List<GraphDataValue>>> dataSet1;
+        private Dictionary<String, List<List<GraphDataValue>>> dataSet2;
+        private GraphDataValue lowerLimit;
+        private GraphDataValue upperLimit;
+        private GraphDataValue lowerLimitZoom;
+        private GraphDataValue upperLimitZoom;
 
         private const String fontName = "Yu Gothic UI";
         private const int fontSize = 10;
@@ -24,18 +28,36 @@ namespace SamplingBME688Serial
         private const float heightMargin = 20;
         private const float widthMargin = 30;
         private const float areaX = 10.0f;
-        //private const float maxRange = 20.0f;
 
-        private float upperLimit = 20.0f; // 19.0f; // 20.0f;
-        private float lowerLimit = 0.0f; // 12.5f; // 0.0f;
+        private bool useGasRegistanceLog = false;
+        private double currentUpperLimit = 110000000.0f;
+        private double currentLowerLimit = 0.0f;
         private const bool isDebug = false;
 
-        public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<double>>> dataSet1, Dictionary<String, List<List<double>>> dataSet2)
+        public void selectGraphData(bool useGasRegistanceLog, bool isZoom)
+        {
+            this.useGasRegistanceLog = useGasRegistanceLog;
+            if (useGasRegistanceLog)
+            {
+                this.currentLowerLimit = (isZoom) ? lowerLimitZoom.gas_registance_log : lowerLimit.gas_registance_log;
+                this.currentUpperLimit = (isZoom) ? upperLimitZoom.gas_registance_log : upperLimit.gas_registance_log;
+            }
+            else
+            {
+                this.currentLowerLimit = (isZoom) ? lowerLimitZoom.gas_registance : lowerLimit.gas_registance;
+                this.currentUpperLimit = (isZoom) ? upperLimitZoom.gas_registance : upperLimit.gas_registance;
+            }
+        }
+
+        public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<GraphDataValue>>> dataSet1, Dictionary<String, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
         {
             this.selectedData = selectedData;
             this.dataSet1 = dataSet1;
             this.dataSet2 = dataSet2;
-
+            this.upperLimit = upperLimit;
+            this.lowerLimit = lowerLimit;
+            this.upperLimitZoom = upperLimitZoom;
+            this.lowerLimitZoom = lowerLimitZoom;
 
             Debug.WriteLine(DateTime.Now + " ----- setDataToDraw -----");
             try
@@ -48,7 +70,7 @@ namespace SamplingBME688Serial
                     int sensorId = int.Parse(sensorIdStr);
                     String? key = rowData.Cells[0].Value.ToString();
                     String categoryName = key ?? "";
-                    List<List<double>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
+                    List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
                     Debug.WriteLine($"{index}:{rowData.Cells[0].Value}[{rowData.Cells[1].Value}]{rowData.Cells[2].Value}  {targetDataSet.Count}");
                 }
             }
@@ -73,7 +95,7 @@ namespace SamplingBME688Serial
         {
             float bottomMargin = 5;
             float axisArea = drawArea.Width / areaX;
-            float maxRange = upperLimit - lowerLimit;
+            float maxRange = (float) (currentUpperLimit - currentLowerLimit);
             float rangeStep = maxRange / 10.0f;
             //float axisArea = ((drawArea.Right - drawArea.Left) - 2 * widthMargin) / (area + 1);
 
@@ -97,25 +119,25 @@ namespace SamplingBME688Serial
                     // 描画領域を下に抜ける場合は、文字を書く場所はちょっと上にする
                     textPointY = drawArea.Bottom - size.Height;
                 }
-                g.DrawString($"{index}", font, textBrush, lineX - (size.Width / 10.0f), textPointY);
+                g.DrawString($"{index}", font, textBrush, lineX - (size.Width / 2.0f), textPointY);
                 index++;
             }
 
             float areaSize = drawArea.Height - heightMargin - heightMargin;
             float startX = drawArea.Left + widthMargin;
-            float finishX = startX + (axisArea * (areaX - 1));// drawArea.Right - widthMargin;
-            float data = lowerLimit;
+            float finishX = startX + (axisArea * (areaX - 1));
+            double data = currentLowerLimit;
             while (data <= maxRange)
             {
-                float posY = ((float)(upperLimit - (data - lowerLimit))) * (areaSize / maxRange) + heightMargin;
+                float posY = ((float)(currentUpperLimit - (data - currentLowerLimit))) * (areaSize / maxRange) + heightMargin;
 
                 g.DrawLine(axisPen, startX, posY, finishX, posY);
 
                 data += rangeStep;
             }
 
-            g.DrawString($"{lowerLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 8, areaSize);
-            g.DrawString($"{upperLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 8, drawArea.Top);
+            g.DrawString($"{currentLowerLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, areaSize);
+            g.DrawString($"{currentUpperLimit}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, drawArea.Top);
 
             axisPen.Dispose();
         }
@@ -151,7 +173,7 @@ namespace SamplingBME688Serial
                     int sensorId = int.Parse(sensorIdStr);
                     String? key = rowData.Cells[0].Value.ToString();
                     String categoryName = key ?? "";
-                    List<List<double>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
+                    List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
 
                     int startCount =  (int) (targetDataSet.Count * line1Position);  // 先頭データの場所
                     int middleCount = (int) (targetDataSet.Count * line2Position);  // 真ん中データの場所
@@ -159,15 +181,15 @@ namespace SamplingBME688Serial
                     int lineStroke = (strongLineIndex == strongIndex) ? 5 : 0;
 
                     // 先頭データ
-                    List<double> startDataset = targetDataSet[startCount];
+                    List<GraphDataValue> startDataset = targetDataSet[startCount];
                     drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP), lineStroke), categoryName + " (" + sensorIdStr + ")", startDataset);
 
                     // 真ん中データ
-                    List<double> middleDataset = targetDataSet[middleCount];
+                    List<GraphDataValue> middleDataset = targetDataSet[middleCount];
                     drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE), lineStroke), "", middleDataset);
 
                     // 末尾データ
-                    List<double> finishDataset = targetDataSet[finishCount];
+                    List<GraphDataValue> finishDataset = targetDataSet[finishCount];
                     drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM), lineStroke), "", finishDataset);
 
                     if (isDebug)
@@ -225,21 +247,21 @@ namespace SamplingBME688Serial
             return (retColor);
         }
 
-        private void drawLines(Graphics g, RectangleF drawArea, Pen pen, String label, List<double> dataset)
+        private void drawLines(Graphics g, RectangleF drawArea, Pen pen, String label, List<GraphDataValue> dataset)
         {
             Debug.WriteLine(" ");
 
             float axisArea = drawArea.Width / areaX;
             float areaSize = drawArea.Height - heightMargin - heightMargin;
-            double maxRange = upperLimit - lowerLimit;
+            double maxRange = currentUpperLimit - currentLowerLimit;
 
             int index = 0;
             PointF[] points = new PointF[dataset.Count];
-            foreach (double data in dataset)
+            foreach (GraphDataValue dataValue in dataset)
             {
-                double position = data - lowerLimit;
+                double data = ((useGasRegistanceLog) ? dataValue.gas_registance_log : dataValue.gas_registance) - currentLowerLimit;
                 float lineX = drawArea.Left + widthMargin + axisArea * ((float)index);
-                float posY =((float)(maxRange - position)) * (areaSize / (float) maxRange) + heightMargin;
+                float posY =((float)(maxRange - data)) * (areaSize / (float) maxRange) + heightMargin;
                 Debug.WriteLine($" drawLines() ({lineX},{posY}) : {areaSize}");
                 points[index] = new PointF(lineX, posY);
                 index++;

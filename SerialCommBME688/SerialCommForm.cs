@@ -285,19 +285,48 @@ namespace SerialCommBME688
         {
             Dictionary<int, DataGridViewRow> selectedData = new Dictionary<int, DataGridViewRow>();
 
+            GraphDataValue lowerLimit = new GraphDataValue(0.0f, 0.0f);
+            GraphDataValue upperLimit = new GraphDataValue(110000000.0f, 20.0f); ;
+
             //  データが１つ以上選択されていた時は、グラフを表示する
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 try
                 {
+                    double lowerLimitZoomRLog = Double.MaxValue;
+                    double upperLimitZoomRLog = Double.MinValue;
+                    double lowerLimitZoomR = Double.MaxValue;
+                    double upperLimitZoomR = Double.MinValue;
                     foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                     {
+                        try
+                        {
+                            double minValueR = double.Parse(row.Cells[11].Value.ToString());
+                            double minValueRLog = double.Parse(row.Cells[13].Value.ToString());
+                            double maxValueR = double.Parse(row.Cells[10].Value.ToString());
+                            double maxValueRLog = double.Parse(row.Cells[12].Value.ToString());
+
+                            lowerLimitZoomRLog = (lowerLimitZoomRLog >= minValueRLog) ? minValueRLog : lowerLimitZoomRLog;
+                            upperLimitZoomRLog = (upperLimitZoomRLog <= maxValueRLog) ? maxValueRLog : upperLimitZoomRLog;
+
+                            lowerLimitZoomR = (lowerLimitZoomR >= minValueR) ? minValueR : lowerLimitZoomR;
+                            upperLimitZoomR = (upperLimitZoomR <= maxValueR) ? maxValueR : upperLimitZoomR;
+                        }
+                        catch (Exception eex)
+                        {
+                            // --- 最大値・最小値のデータが取れなかった...
+                            Debug.WriteLine(DateTime.Now + " ----- btnShowGraph_Click() : cannot get max/min value." + row.Cells[0].Value + " " + eex.Message);
+                        }
                         Debug.WriteLine("[" + row.Index + "] : : " + row.Cells[0].Value + " ");
                         selectedData.Add(row.Index, row);
                     }
+                    GraphDataValue lowerLimitZoom = new GraphDataValue(lowerLimitZoomR, lowerLimitZoomRLog);
+                    GraphDataValue upperLimitZoom = new GraphDataValue(upperLimitZoomR, upperLimitZoomRLog);
+                    Debug.WriteLine(DateTime.Now + " ----- upperLimit(" + upperLimit + " " + upperLimitZoom + ") lowerLimit(" + lowerLimit + " " + lowerLimitZoom + ")");
+
                     // データが選択されていた時は、詳細ダイアログを表示する
                     DataDetailDialog dialog = new DataDetailDialog();
-                    dialog.setSelectedData(ref selectedData, myReceiver.getGasRegLogDataSet(), myReceiver_2.getGasRegLogDataSet());
+                    dialog.setSelectedData(ref selectedData, myReceiver.getGasRegDataSet(), myReceiver_2.getGasRegDataSet(), lowerLimit, upperLimit, lowerLimitZoom, upperLimitZoom);
                     dialog.Owner = this;
                     dialog.Show();
                 }
