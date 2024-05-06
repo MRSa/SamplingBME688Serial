@@ -2,7 +2,7 @@
 
 namespace SamplingBME688Serial
 {
-    public class OdorData
+    public class OdorBothData
     {
         [LoadColumn(0)]
         public float sequence0Value;
@@ -33,5 +33,36 @@ namespace SamplingBME688Serial
 
         [LoadColumn(9)]
         public float sequence9Value;
+
+        [LoadColumn(10)]
+        public float sequence10Value;
+
+        [LoadColumn(11)]
+        public float sequence11Value;
+
+        [LoadColumn(12)]
+        public float sequence12Value;
+
+        [LoadColumn(13)]
+        public float sequence13Value;
+
+        [LoadColumn(14)]
+        public float sequence14Value;
+
+        [LoadColumn(15)]
+        public float sequence15Value;
+
+        [LoadColumn(16)]
+        public float sequence16Value;
+
+        [LoadColumn(17)]
+        public float sequence17Value;
+
+        [LoadColumn(18)]
+        public float sequence18Value;
+
+        [LoadColumn(19)]
+        public float sequence19Value;
     }
+
 }

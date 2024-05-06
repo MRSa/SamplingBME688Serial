@@ -1,7 +1,7 @@
 ﻿
 namespace SamplingBME688Serial
 {
-    internal class GraphDataValue
+    public class GraphDataValue
     {
         public double gas_registance { get; private set; }
         public double gas_registance_log { get; private set; }

@@ -536,23 +536,24 @@
             grpAnalysis.Controls.Add(lblResult2);
             grpAnalysis.Controls.Add(fldResult2);
             grpAnalysis.Controls.Add(fldResult1);
+            grpAnalysis.Enabled = false;
             grpAnalysis.Location = new Point(17, 449);
             grpAnalysis.Name = "grpAnalysis";
             grpAnalysis.Size = new Size(972, 82);
             grpAnalysis.TabIndex = 21;
             grpAnalysis.TabStop = false;
-            grpAnalysis.Text = "Analysis Results";
+            grpAnalysis.Text = "Prediction";
             // 
             // chkAnalysis
             // 
             chkAnalysis.AutoSize = true;
             chkAnalysis.Location = new Point(12, 38);
             chkAnalysis.Name = "chkAnalysis";
-            chkAnalysis.Size = new Size(50, 29);
+            chkAnalysis.Size = new Size(99, 29);
             chkAnalysis.TabIndex = 4;
-            chkAnalysis.Text = "...";
+            chkAnalysis.Text = "Analyze";
             chkAnalysis.UseVisualStyleBackColor = true;
-            chkAnalysis.Visible = false;
+            chkAnalysis.CheckedChanged += chkAnalysis_CheckedChanged;
             // 
             // lblResult1
             // 
@@ -583,7 +584,6 @@
             fldResult2.ReadOnly = true;
             fldResult2.Size = new Size(320, 39);
             fldResult2.TabIndex = 1;
-            fldResult2.Visible = false;
             // 
             // fldResult1
             // 
@@ -594,7 +594,6 @@
             fldResult1.ReadOnly = true;
             fldResult1.Size = new Size(300, 39);
             fldResult1.TabIndex = 0;
-            fldResult1.Visible = false;
             // 
             // SerialCommForm
             // 

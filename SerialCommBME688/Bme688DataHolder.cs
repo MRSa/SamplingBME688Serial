@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace SerialCommBME688
 {
-    internal class Bme688DataHolder : IDataEntryNotify
+    internal class Bme688DataHolder : IDataEntryNotify, IDataHolder
     {
         private const int NUMBER_OF_INDEX = 10;
         private int sensorId;

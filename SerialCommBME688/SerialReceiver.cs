@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace SerialCommBME688
 {
-    internal class SerialReceiver
+    class SerialReceiver
     {
         private int sensorId;
         private Thread? readThread = null;  // new Thread(ReadSerial);
@@ -27,6 +27,11 @@ namespace SerialCommBME688
         {
             this.sensorId = sensorId;
             this.dataParser = new SerialDataParser(sensorId, notify);
+        }
+
+        public IDataHolder getDataHolder()
+        {
+            return (dataParser.getDataHolder());
         }
 
         public bool startReceive(String comPort, String aDataCategory, String aUrl, bool isDbEntrySingle, TextBox aOutputArea)
@@ -133,10 +138,12 @@ namespace SerialCommBME688
             }
         }
 
+/*
         public int getReceivedCount()
         {
             return (0);
         }
+*/
 
         public void startExportCsvOnlyGasRegistance(StreamWriter writer, List<String> categoryList, int validCount, int numOfDuplicate)
         {

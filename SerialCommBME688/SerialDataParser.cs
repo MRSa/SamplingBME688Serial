@@ -14,7 +14,6 @@ namespace SerialCommBME688
     {
         void messageCallback(String message);
     }
-
     internal class SerialDataParser : IMessageCallback
     {
         private const int NUMBER_OF_ITEMS = 13;
@@ -24,6 +23,11 @@ namespace SerialCommBME688
         public SerialDataParser(int sensorId, IDataReceiveNotify notify)
         {
             dataHolder = new Bme688DataHolder(this, notify, sensorId);
+        }
+
+        public IDataHolder getDataHolder()
+        {
+            return (dataHolder);
         }
 
         public void setOutputArea(TextBox aOutputArea)

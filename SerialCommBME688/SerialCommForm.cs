@@ -13,13 +13,15 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SerialCommBME688
 {
-    public partial class SerialCommForm : Form, IDataImportCallback
+    public partial class SerialCommForm : Form, IDataImportCallback, ICreateModelResult
     {
         private GridDataSourceProvider dataSourceProvider; // = new GridDataSourceProvider();
         private SerialReceiver myReceiver;                 // = new SerialReceiver(1, dataSourceProvider);
         private SerialReceiver myReceiver_2;               // = new SerialReceiver(2, dataSourceProvider);
         private MLContext mlContext;                       // = new MLContext(seed: 0);
         private DbEntryStatusView statusView;
+        private SensorToUse predictModelType = SensorToUse.None; // 
+        private IPredictionModel? predictionModel;
 
         public SerialCommForm()
         {
@@ -74,11 +76,16 @@ namespace SerialCommBME688
                     // データの受信終了に失敗
                     controlButton1Enable(false);
                 }
+                predictModelType = SensorToUse.None;
+                updateAnalysisMode();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
                 txtConsole.AppendText(ex.Message);
+
+                predictModelType = SensorToUse.None;
+                updateAnalysisMode();
             }
         }
 
@@ -134,13 +141,45 @@ namespace SerialCommBME688
             chkAnalysis.Enabled = isEnable;
         }
 
+        private void changeStoreOrAnalysisMode(bool isEnable)
+        {
+            Debug.WriteLine(DateTime.Now + " changeStoreOrAnalysisMode : " + isEnable);
 
+            grpDataCategory.Enabled = isEnable;
+            grpPort.Enabled = isEnable;
+            grpPort_2.Enabled = isEnable;
+            grpEntryDatabase.Enabled = isEnable;
+
+            grpAnalysis.Enabled = !isEnable;
+        }
+
+        private void updateAnalysisMode()
+        {
+            try
+            {
+                // ----- 解析モードと蓄積モードの切り替え
+                if (predictModelType == SensorToUse.None)
+                {
+                    changeStoreOrAnalysisMode(true);
+                }
+                else
+                {
+                    changeStoreOrAnalysisMode(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " dataImportProgress : " + ex.Message);
+            }
+        }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
             // ログ表示のクリア
             txtConsole.Text = "";
             txtConsole_2.Text = "";
+            predictModelType = SensorToUse.None;
+            updateAnalysisMode();
         }
 
         private void SerialCommForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -288,6 +327,8 @@ namespace SerialCommBME688
             myReceiver_2.reset();
             dataSourceProvider.reset();
             txtDataCategory.Text = "";
+            predictModelType = SensorToUse.None;
+            updateAnalysisMode();
         }
 
         private void btnShowGraph_Click(object sender, EventArgs e)
@@ -411,11 +452,15 @@ namespace SerialCommBME688
                     // データの受信終了に失敗
                     controlButton2Enable(false);
                 }
+                predictModelType = SensorToUse.None;
+                updateAnalysisMode();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
                 txtConsole.AppendText(ex.Message);
+                predictModelType = SensorToUse.None;
+                updateAnalysisMode();
             }
         }
 
@@ -527,6 +572,8 @@ namespace SerialCommBME688
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+            predictModelType = SensorToUse.None;
+            updateAnalysisMode();
         }
 
         public void dataImportProgress(int lineNumber, int totalLines)
@@ -544,19 +591,69 @@ namespace SerialCommBME688
         private void btnCreateModel_Click(object sender, EventArgs e)
         {
             // ----- モデル作成ダイアログ
-            CreateModelDialog createModelDialog = new CreateModelDialog();
-            createModelDialog.setup();
+            CreateModelDialog createModelDialog = new CreateModelDialog(ref mlContext);
+            createModelDialog.setup(this, myReceiver.getDataHolder(), myReceiver_2.getDataHolder());
 
             // ----- モーダルダイアログの表示
             createModelDialog.ShowDialog();
 
-            // モデルの作成コマンド
-            MessageBox.Show("Create models",
-                "Information",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            //// モデルの作成コマンド
+            //MessageBox.Show("Create models",
+            //    "Information",
+            //    MessageBoxButtons.OK,
+            //    MessageBoxIcon.Information);
+        }
 
+        public void createModelFinished(bool isSuccess, SensorToUse modelType, IPredictionModel? predictionModel, String message)
+        {
+            Debug.WriteLine(DateTime.Now + "  ===== createModelFinished() " + isSuccess + " " + modelType + " " + message);
+            if (isSuccess)
+            {
+                predictModelType = modelType;
+                this.predictionModel = predictionModel;
+            }
+            else
+            {
+                predictModelType = SensorToUse.None;
+                this.predictionModel = null;
+            }
+            updateAnalysisMode();
+        }
 
+        private void chkAnalysis_CheckedChanged(object sender, EventArgs e)
+        {
+            // ----- 解析の開始 / 終了が切り替えられたとき
+            try
+            {
+                if (chkAnalysis.Checked)
+                {
+                    // ----- 解析の開始
+
+                    TestSampleData testData = new TestSampleData();
+
+                    if (predictionModel != null)
+                    {
+                        // --- 予測の実行
+                        String result1 = predictionModel.predictBothData(testData.getBothData1()); // Ristretto
+                        String result2 = predictionModel.predictBothData(testData.getBothData2()); // GreenTea
+                        String result3 = predictionModel.predictBothData(testData.getBothData3()); // Ristretto
+                        String result4 = predictionModel.predictBothData(testData.getBothData4()); // Guatemala
+
+                        // 結果の表示
+                        fldResult1.Text = result1 + " " + result2 + " " + result3 + " " + result4;
+                    }
+                }
+                else
+                {
+                    // ----- 解析の終了
+                    fldResult1.Text = "";
+                    fldResult2.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " chkAnalysis_CheckedChanged : " + ex.Message);
+            }
         }
     }
 }
