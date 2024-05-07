@@ -17,7 +17,6 @@ namespace SamplingBME688Serial
 
     interface ICreatePredictionModel
     {
-        bool executeTraining(SensorToUse usePort, String? outputFileName);
-
+        bool executeTraining(SensorToUse usePort, String? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData);
     }
 }

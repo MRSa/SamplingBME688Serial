@@ -68,6 +68,7 @@
             lblResult2 = new Label();
             fldResult2 = new TextBox();
             fldResult1 = new TextBox();
+            chkAnLog = new CheckBox();
             grpPort.SuspendLayout();
             grpDataCategory.SuspendLayout();
             grpData.SuspendLayout();
@@ -531,6 +532,7 @@
             // grpAnalysis
             // 
             grpAnalysis.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            grpAnalysis.Controls.Add(chkAnLog);
             grpAnalysis.Controls.Add(chkAnalysis);
             grpAnalysis.Controls.Add(lblResult1);
             grpAnalysis.Controls.Add(lblResult2);
@@ -558,27 +560,27 @@
             // lblResult1
             // 
             lblResult1.AutoSize = true;
-            lblResult1.Location = new Point(141, 39);
+            lblResult1.Location = new Point(154, 39);
             lblResult1.Name = "lblResult1";
-            lblResult1.Size = new Size(85, 25);
+            lblResult1.Size = new Size(31, 25);
             lblResult1.TabIndex = 3;
-            lblResult1.Text = "Sensor1: ";
+            lblResult1.Text = "1: ";
             lblResult1.Visible = false;
             // 
             // lblResult2
             // 
             lblResult2.AutoSize = true;
-            lblResult2.Location = new Point(548, 39);
+            lblResult2.Location = new Point(513, 39);
             lblResult2.Name = "lblResult2";
-            lblResult2.Size = new Size(85, 25);
+            lblResult2.Size = new Size(31, 25);
             lblResult2.TabIndex = 2;
-            lblResult2.Text = "Sensor2: ";
+            lblResult2.Text = "2: ";
             lblResult2.Visible = false;
             // 
             // fldResult2
             // 
             fldResult2.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            fldResult2.Location = new Point(639, 30);
+            fldResult2.Location = new Point(550, 30);
             fldResult2.MaxLength = 128;
             fldResult2.Name = "fldResult2";
             fldResult2.ReadOnly = true;
@@ -588,12 +590,22 @@
             // fldResult1
             // 
             fldResult1.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            fldResult1.Location = new Point(232, 30);
+            fldResult1.Location = new Point(191, 30);
             fldResult1.MaxLength = 128;
             fldResult1.Name = "fldResult1";
             fldResult1.ReadOnly = true;
             fldResult1.Size = new Size(300, 39);
             fldResult1.TabIndex = 0;
+            // 
+            // chkAnLog
+            // 
+            chkAnLog.AutoSize = true;
+            chkAnLog.Location = new Point(891, 38);
+            chkAnLog.Name = "chkAnLog";
+            chkAnLog.Size = new Size(68, 29);
+            chkAnLog.TabIndex = 5;
+            chkAnLog.Text = "Log";
+            chkAnLog.UseVisualStyleBackColor = true;
             // 
             // SerialCommForm
             // 
@@ -687,5 +699,6 @@
         private TextBox fldResult2;
         private TextBox fldResult1;
         private CheckBox chkAnalysis;
+        private CheckBox chkAnLog;
     }
 }

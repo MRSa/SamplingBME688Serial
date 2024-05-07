@@ -29,6 +29,7 @@ namespace SamplingBME688Serial
         private ICreateModelResult? callback = null;
         private IDataHolder? port1 = null;
         private IDataHolder? port2 = null;
+        private List<String> categoryList = new List<String>();
         private int minimumDataCount = int.MaxValue;
         private int outputDataCount = 0;
         private int startPosition = 0;
@@ -67,6 +68,7 @@ namespace SamplingBME688Serial
             this.callback = callback;
             this.port1 = port1;
             this.port2 = port2;
+            this.categoryList.Clear();
 
             // ----- 一時データファイルの削除
             deleteDataSourceFile();
@@ -95,6 +97,7 @@ namespace SamplingBME688Serial
                             minimumDataCount = count;
                         }
                         appendText(item.Key + " ");
+                        categoryList.Add(item.Key);
                     }
                     port1CategoryCount = dataSetMap.Count;
                 }
@@ -279,7 +282,7 @@ namespace SamplingBME688Serial
 
             // モデルの作成
             TrainingKMeansModel training = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);
-            training.executeTraining(usePort, null);
+            training.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
 
             // ----- ----- ----- -----
             callback?.createModelFinished(ret, usePort, training, "create model done.");
