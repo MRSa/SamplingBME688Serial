@@ -63,12 +63,12 @@
             btnCreateModel = new Button();
             chkAnalyze = new CheckBox();
             grpAnalysis = new GroupBox();
+            chkAnLog = new CheckBox();
             chkAnalysis = new CheckBox();
             lblResult1 = new Label();
             lblResult2 = new Label();
             fldResult2 = new TextBox();
             fldResult1 = new TextBox();
-            chkAnLog = new CheckBox();
             grpPort.SuspendLayout();
             grpDataCategory.SuspendLayout();
             grpData.SuspendLayout();
@@ -461,6 +461,8 @@
             // 
             chkDbEntrySingle.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chkDbEntrySingle.AutoSize = true;
+            chkDbEntrySingle.Checked = true;
+            chkDbEntrySingle.CheckState = CheckState.Checked;
             chkDbEntrySingle.Location = new Point(892, 42);
             chkDbEntrySingle.Margin = new Padding(4, 5, 4, 5);
             chkDbEntrySingle.Name = "chkDbEntrySingle";
@@ -546,6 +548,16 @@
             grpAnalysis.TabStop = false;
             grpAnalysis.Text = "Prediction";
             // 
+            // chkAnLog
+            // 
+            chkAnLog.AutoSize = true;
+            chkAnLog.Location = new Point(891, 38);
+            chkAnLog.Name = "chkAnLog";
+            chkAnLog.Size = new Size(68, 29);
+            chkAnLog.TabIndex = 5;
+            chkAnLog.Text = "Log";
+            chkAnLog.UseVisualStyleBackColor = true;
+            // 
             // chkAnalysis
             // 
             chkAnalysis.AutoSize = true;
@@ -596,16 +608,6 @@
             fldResult1.ReadOnly = true;
             fldResult1.Size = new Size(300, 39);
             fldResult1.TabIndex = 0;
-            // 
-            // chkAnLog
-            // 
-            chkAnLog.AutoSize = true;
-            chkAnLog.Location = new Point(891, 38);
-            chkAnLog.Name = "chkAnLog";
-            chkAnLog.Size = new Size(68, 29);
-            chkAnLog.TabIndex = 5;
-            chkAnLog.Text = "Log";
-            chkAnLog.UseVisualStyleBackColor = true;
             // 
             // SerialCommForm
             // 

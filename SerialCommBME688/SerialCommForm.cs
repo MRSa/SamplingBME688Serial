@@ -13,12 +13,14 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SerialCommBME688
 {
-    public partial class SerialCommForm : Form, IDataImportCallback, ICreateModelResult
+    public partial class SerialCommForm : Form, IDataImportCallback, ICreateModelResult, IReceivedOdorDataForAnalysis
     {
-        private GridDataSourceProvider dataSourceProvider; // = new GridDataSourceProvider();
-        private SerialReceiver myReceiver;                 // = new SerialReceiver(1, dataSourceProvider);
-        private SerialReceiver myReceiver_2;               // = new SerialReceiver(2, dataSourceProvider);
-        private MLContext mlContext;                       // = new MLContext(seed: 0);
+        private GridDataSourceProvider dataSourceProvider;
+        private SerialReceiver myReceiver;
+        private SerialReceiver myReceiver_2;
+        private SerialReceiverForAnalysis analysisReceiver;
+        private SerialReceiverForAnalysis analysisReceiver_2;
+        private MLContext mlContext;
         private DbEntryStatusView statusView;
         private SensorToUse predictModelType = SensorToUse.None; // 
         private IPredictionModel? predictionModel;
@@ -29,6 +31,8 @@ namespace SerialCommBME688
             statusView = new DbEntryStatusView(this);
             myReceiver = new SerialReceiver(1, dataSourceProvider);
             myReceiver_2 = new SerialReceiver(2, dataSourceProvider);
+            analysisReceiver = new SerialReceiverForAnalysis(1, this);
+            analysisReceiver_2 = new SerialReceiverForAnalysis(2, this);
             mlContext = new MLContext(seed: 0);
             InitializeComponent();
         }
@@ -151,6 +155,11 @@ namespace SerialCommBME688
             grpEntryDatabase.Enabled = isEnable;
 
             grpAnalysis.Enabled = !isEnable;
+            if (isEnable)
+            {
+                // 解析モードが無効になったときは、解析のチェックを必ず落とす
+                chkAnalysis.Checked = false;
+            }
         }
 
         private void updateAnalysisMode()
@@ -620,6 +629,9 @@ namespace SerialCommBME688
             updateAnalysisMode();
         }
 
+
+
+
         private void chkAnalysis_CheckedChanged(object sender, EventArgs e)
         {
             // ----- 解析の開始 / 終了が切り替えられたとき
@@ -628,31 +640,54 @@ namespace SerialCommBME688
                 if (chkAnalysis.Checked)
                 {
                     // ----- 解析の開始
+                    analysisReceiver.startReceive(txtPort.Text, chkAnLog.Checked, txtConsole);
+                    analysisReceiver_2.startReceive(txtPort_2.Text, chkAnLog.Checked, txtConsole_2);
 
-                    TestSampleData testData = new TestSampleData();
+                    /*
+                                        TestSampleData testData = new TestSampleData();
 
-                    if (predictionModel != null)
-                    {
-                        // --- 予測の実行
-                        String result1 = predictionModel.predictBothData(testData.getBothData1()); // Ristretto
-                        String result2 = predictionModel.predictBothData(testData.getBothData2()); // GreenTea
-                        String result3 = predictionModel.predictBothData(testData.getBothData3()); // Ristretto
-                        String result4 = predictionModel.predictBothData(testData.getBothData4()); // Guatemala
+                                        if (predictionModel != null)
+                                        {
+                                            // --- 予測の実行
+                                            String result1 = predictionModel.predictBothData(testData.getBothData1()); // Ristretto
+                                            String result2 = predictionModel.predictBothData(testData.getBothData2()); // GreenTea
+                                            String result3 = predictionModel.predictBothData(testData.getBothData3()); // Ristretto
+                                            String result4 = predictionModel.predictBothData(testData.getBothData4()); // Guatemala
 
-                        // 結果の表示
-                        fldResult1.Text = result1 + " " + result2 + " " + result3 + " " + result4;
-                    }
+                                            // 結果の表示
+                                            fldResult1.Text = result1 + " " + result2 + " " + result3 + " " + result4;
+                                        }
+                    */
                 }
                 else
                 {
                     // ----- 解析の終了
                     fldResult1.Text = "";
                     fldResult2.Text = "";
+
+                    analysisReceiver.stopReceive();
+                    analysisReceiver_2.stopReceive();
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(DateTime.Now + " chkAnalysis_CheckedChanged : " + ex.Message);
+            }
+        }
+        public void receivedOdorDataForAnalysis(OdorOrData receivedData)
+        {
+            // ひとそろえのデータを受信した！
+            if (receivedData.sensorId == 1.0f)
+            {
+                fldResult1.Text = "1: " + receivedData.sequence1Value;
+            }
+            else if (receivedData.sensorId == 2.0f)
+            {
+                fldResult2.Text = "2: " + receivedData.sequence1Value;
+            }
+            else
+            {
+                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId is unknown : " + receivedData.sensorId);
             }
         }
     }
