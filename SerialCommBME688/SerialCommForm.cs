@@ -25,6 +25,9 @@ namespace SerialCommBME688
         private SensorToUse predictModelType = SensorToUse.None; // 
         private IPredictionModel? predictionModel;
 
+        private OdorOrData? analysisData01 = null;
+        private OdorOrData? analysisData02 = null;
+
         public SerialCommForm()
         {
             dataSourceProvider = new GridDataSourceProvider();
@@ -674,20 +677,64 @@ namespace SerialCommBME688
                 Debug.WriteLine(DateTime.Now + " chkAnalysis_CheckedChanged : " + ex.Message);
             }
         }
+
+        private void showResult(int area, String itemData)
+        {
+            System.Windows.Forms.TextBox field = (area == 1) ? fldResult1 : fldResult2;
+            try
+            {
+                if ((field != null) && (itemData.Length > 0))
+                {
+                    if (field.InvokeRequired)
+                    {
+                        Action safeWrite = delegate { field.Clear(); field.AppendText(itemData); };
+                        field.Invoke(safeWrite);
+                    }
+                    else
+                    {
+                        field.Clear();
+                        field.AppendText(itemData);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " showResult() : " + e.Message + "  --- " + itemData);
+            }
+        }
+
+
         public void receivedOdorDataForAnalysis(OdorOrData receivedData)
         {
-            // ひとそろえのデータを受信した！
+            Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() RX[" + receivedData.sensorId + "]");
+
             if (receivedData.sensorId == 1.0f)
             {
-                fldResult1.Text = "1: " + receivedData.sequence1Value;
+                analysisData01 = new OdorOrData(receivedData);
+                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId 1");
+                showResult(1, "");
             }
             else if (receivedData.sensorId == 2.0f)
             {
-                fldResult2.Text = "2: " + receivedData.sequence1Value;
+                analysisData02 = new OdorOrData(receivedData);
+                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId 2");
+                showResult(1, "");
             }
-            else
+
+            // -----ひとそろえのデータを受信した！ 解析する
+            if ((analysisData01 != null)&&(analysisData02 != null)&&((predictionModel != null)))
             {
-                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId is unknown : " + receivedData.sensorId);
+                // ----- 解析を行う
+                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() analysis Both");
+                OdorBothData testData = new OdorBothData(analysisData01, analysisData02);
+                String result = predictionModel.predictBothData(testData);
+
+                // ----- 解析結果を表示する
+                showResult(1, result);
+
+                // ---- 次のデータを待つために表示をクリアする
+                analysisData01 = null;
+                analysisData02 = null;
             }
         }
     }

@@ -75,12 +75,14 @@ namespace SerialCommBME688
 
         public void ReadSerial()
         {
-            Debug.WriteLine("  ----- START ReadSerial() ----- : " + DateTime.Now);
+            Debug.WriteLine("  ----- START ReadSerial(" + mySerialPort.PortName + ") ----- : " + DateTime.Now);
             while (_continue)
             {
                 try
                 {
-                    string message = mySerialPort.ReadLine();
+                    //string message = mySerialPort.ReadLine();
+                    parseReceivedData(mySerialPort.ReadLine());
+
                 }
                 catch (Exception e)
                 {
@@ -95,7 +97,7 @@ namespace SerialCommBME688
             {
                 Debug.WriteLine(DateTime.Now + " ReadSerial() : Close " + e.Message);
             }
-            Debug.WriteLine("  ----- FINISH ReadSerial() ----- : " + DateTime.Now);
+            Debug.WriteLine("  ----- FINISH ReadSerial(" + mySerialPort.PortName + ") ----- : " + DateTime.Now);
         }
 
         private void parseReceivedData(String data)

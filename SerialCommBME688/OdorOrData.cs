@@ -36,5 +36,22 @@ namespace SamplingBME688Serial
 
         [LoadColumn(10)]
         public float sequence9Value;
+
+        public OdorOrData(OdorOrData data)
+        {
+            this.sensorId = data.sensorId;
+            this.sequence0Value = data.sequence0Value;
+            this.sequence1Value = data.sequence1Value;
+            this.sequence2Value = data.sequence2Value;
+            this.sequence3Value = data.sequence3Value;
+            this.sequence4Value = data.sequence4Value;
+            this.sequence5Value = data.sequence5Value;
+            this.sequence6Value = data.sequence6Value;
+            this.sequence7Value = data.sequence7Value;
+            this.sequence8Value = data.sequence8Value;
+            this.sequence9Value = data.sequence9Value;
+        }
+
+        public OdorOrData() { }
     }
 }
