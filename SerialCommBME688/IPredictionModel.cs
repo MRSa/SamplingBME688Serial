@@ -9,5 +9,7 @@ namespace SamplingBME688Serial
     public interface IPredictionModel
     {
         String predictBothData(OdorBothData targetData);
+        String predictOrData(OdorOrData targetData);
+        String predictSingleData(OdorData targetData);
     }
 }

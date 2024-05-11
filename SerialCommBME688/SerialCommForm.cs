@@ -15,6 +15,7 @@ namespace SerialCommBME688
 {
     public partial class SerialCommForm : Form, IDataImportCallback, ICreateModelResult, IReceivedOdorDataForAnalysis
     {
+        private bool isTestDebug = false;
         private GridDataSourceProvider dataSourceProvider;
         private SerialReceiver myReceiver;
         private SerialReceiver myReceiver_2;
@@ -244,7 +245,6 @@ namespace SerialCommBME688
             }
         }
 
-
         private void exportCsvEachSensorSerial(Stream myStream)
         {
             try
@@ -340,7 +340,18 @@ namespace SerialCommBME688
             dataSourceProvider.reset();
             txtDataCategory.Text = "";
             predictModelType = SensorToUse.None;
+            this.predictionModel = null;
             updateAnalysisMode();
+            try
+            {
+                // ----- ガベージコレクションの強制実行
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                // ----- ガベコレで例外が発生したとき
+                Debug.WriteLine(DateTime.Now + " btnReset_Click()" + ex.Message);
+            }
         }
 
         private void btnShowGraph_Click(object sender, EventArgs e)
@@ -602,18 +613,10 @@ namespace SerialCommBME688
 
         private void btnCreateModel_Click(object sender, EventArgs e)
         {
-            // ----- モデル作成ダイアログ
+            // ----- モデル作成ダイアログを表示して、モデルを作成する
             CreateModelDialog createModelDialog = new CreateModelDialog(ref mlContext);
             createModelDialog.setup(this, myReceiver.getDataHolder(), myReceiver_2.getDataHolder());
-
-            // ----- モーダルダイアログの表示
             createModelDialog.ShowDialog();
-
-            //// モデルの作成コマンド
-            //MessageBox.Show("Create models",
-            //    "Information",
-            //    MessageBoxButtons.OK,
-            //    MessageBoxIcon.Information);
         }
 
         public void createModelFinished(bool isSuccess, SensorToUse modelType, IPredictionModel? predictionModel, String message)
@@ -632,49 +635,112 @@ namespace SerialCommBME688
             updateAnalysisMode();
         }
 
-
-
+        private void executePredictionTest()
+        {
+            // --------- テスト用データで予測実行
+            fldResult1.Text = "DEBUG TEST";
+            String message = "";
+            TestSampleData testData = new TestSampleData();
+            if (predictionModel != null)
+            {
+                // ----- 予測の実行
+                switch (predictModelType)
+                {
+                    case SensorToUse.port1and2:
+                        String result1 = predictionModel.predictBothData(testData.getBothData1()); // Ristretto
+                        String result2 = predictionModel.predictBothData(testData.getBothData2()); // GreenTea
+                        String result3 = predictionModel.predictBothData(testData.getBothData3()); // Ristretto
+                        String result4 = predictionModel.predictBothData(testData.getBothData4()); // Guatemala
+                        message = result1 + " " + result2 + " " + result3 + " " + result4;
+                        break;
+                    case SensorToUse.port1or2:
+                        break;
+                    case SensorToUse.port1:
+                        break;
+                    case SensorToUse.port2:
+                        break;
+                    case SensorToUse.None:
+                    default:
+                        break;
+                }
+            }
+            // ----- 予測結果の表示
+            fldResult2.Text = message;
+        }
 
         private void chkAnalysis_CheckedChanged(object sender, EventArgs e)
         {
             // ----- 解析の開始 / 終了が切り替えられたとき
             try
             {
+                String message1 = "";
+                String message2 = "";
                 if (chkAnalysis.Checked)
                 {
+                    if (isTestDebug)
+                    {
+                        // ----------- テストの実行処理
+                        executePredictionTest();
+                        chkAnalysis.Checked = false;
+                        return;
+                    }
+
                     // ----- 解析の開始
-                    analysisReceiver.startReceive(txtPort.Text, chkAnLog.Checked, txtConsole);
-                    analysisReceiver_2.startReceive(txtPort_2.Text, chkAnLog.Checked, txtConsole_2);
-
-                    /*
-                                        TestSampleData testData = new TestSampleData();
-
-                                        if (predictionModel != null)
-                                        {
-                                            // --- 予測の実行
-                                            String result1 = predictionModel.predictBothData(testData.getBothData1()); // Ristretto
-                                            String result2 = predictionModel.predictBothData(testData.getBothData2()); // GreenTea
-                                            String result3 = predictionModel.predictBothData(testData.getBothData3()); // Ristretto
-                                            String result4 = predictionModel.predictBothData(testData.getBothData4()); // Guatemala
-
-                                            // 結果の表示
-                                            fldResult1.Text = result1 + " " + result2 + " " + result3 + " " + result4;
-                                        }
-                    */
+                    message1 = "START";
+                    switch (predictModelType)
+                    {
+                        case SensorToUse.port1and2:
+                        case SensorToUse.port1or2:
+                            analysisReceiver.startReceive(txtPort.Text, chkAnLog.Checked, txtConsole);
+                            analysisReceiver_2.startReceive(txtPort_2.Text, chkAnLog.Checked, txtConsole_2);
+                            message2 = "" + txtPort.Text + " " + txtPort_2.Text;
+                            break;
+                        case SensorToUse.port1:
+                            analysisReceiver.startReceive(txtPort.Text, chkAnLog.Checked, txtConsole);
+                            message2 = "Port1[" + txtPort.Text + "]";
+                            break;
+                        case SensorToUse.port2:
+                            analysisReceiver_2.startReceive(txtPort_2.Text, chkAnLog.Checked, txtConsole_2);
+                            message2 = "Port2[" + txtPort_2.Text + "]";
+                            break;
+                        case SensorToUse.None:
+                        default:
+                            message2 = "(Illegal)";
+                            chkAnalysis.Checked = false;
+                            break;
+                    }
                 }
                 else
                 {
                     // ----- 解析の終了
-                    fldResult1.Text = "";
-                    fldResult2.Text = "";
-
-                    analysisReceiver.stopReceive();
-                    analysisReceiver_2.stopReceive();
+                    switch (predictModelType)
+                    {
+                        case SensorToUse.port1and2:
+                        case SensorToUse.port1or2:
+                            analysisReceiver.stopReceive();
+                            analysisReceiver_2.stopReceive();
+                            break;
+                        case SensorToUse.port1:
+                            analysisReceiver.stopReceive();
+                            break;
+                        case SensorToUse.port2:
+                            analysisReceiver_2.stopReceive();
+                            break;
+                        case SensorToUse.None:
+                        default:
+                            chkAnalysis.Checked = false;
+                            break;
+                    }
                 }
+                fldResult1.Text = message1;
+                fldResult2.Text = message2;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(DateTime.Now + " chkAnalysis_CheckedChanged : " + ex.Message);
+                fldResult1.Text = "Error";
+                fldResult2.Text = ex.Message;
+                chkAnalysis.Checked = false;
             }
         }
 
@@ -706,35 +772,174 @@ namespace SerialCommBME688
 
         public void receivedOdorDataForAnalysis(OdorOrData receivedData)
         {
+            // ------ データを受信した。モデルタイプに合わせて予測処理を実行する
+            Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() RX[" + receivedData.sensorId + "]");
+            try
+            {
+                if (predictionModel == null)
+                {
+                    // ---- モデルがない...終了する
+                    showResult(1, "-- no model --");
+                    showResult(2, "-- no model --");
+                    return;
+                }
+
+                switch (predictModelType)
+                {
+                    case SensorToUse.port1and2:
+                        // ----- センサデータ２つを使う予測処理
+                        receivedOdor1and2DataForAnalysis(receivedData);
+                        break;
+                    case SensorToUse.port1or2:
+                        // ----- センサデータを1 or 2を使用する予測処理
+                        receivedOdor1or2DataForAnalysis(receivedData);
+                        break;
+                    case SensorToUse.port1:
+                    case SensorToUse.port2:
+                        // ----- センサデータ１つしか使用しない予測処理
+                        receivedOdorSingleDataForAnalysis(receivedData);
+                        break;
+                    case SensorToUse.None:
+                    default:
+                        // ---------- モデルタイプが異常なので、予測処理は実行しない
+                        showResult(1, " unknown ");
+                        showResult(2, " unknown ");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " showResult() : " + ex.Message + "  --- " + receivedData.sensorId);
+            }
+        }
+
+        private void receivedOdor1and2DataForAnalysis(OdorOrData receivedData)
+        {
+            // ----- sensor1 と sensor2 のデータを同時に使用して解析する
             Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() RX[" + receivedData.sensorId + "]");
 
             if (receivedData.sensorId == 1.0f)
             {
+                // ----- センサ１のデータを受信
                 analysisData01 = new OdorOrData(receivedData);
                 Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId 1");
                 showResult(1, "");
             }
             else if (receivedData.sensorId == 2.0f)
             {
+                // ----- センサ２のデータを受信
                 analysisData02 = new OdorOrData(receivedData);
                 Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId 2");
                 showResult(1, "");
             }
 
             // -----ひとそろえのデータを受信した！ 解析する
-            if ((analysisData01 != null)&&(analysisData02 != null)&&((predictionModel != null)))
+            if ((analysisData01 != null) && (analysisData02 != null) && ((predictionModel != null)))
             {
                 // ----- 解析を行う
                 Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() analysis Both");
                 OdorBothData testData = new OdorBothData(analysisData01, analysisData02);
                 String result = predictionModel.predictBothData(testData);
+                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() Result: " + result);
 
                 // ----- 解析結果を表示する
+                showResult(1, "---");
                 showResult(1, result);
 
                 // ---- 次のデータを待つために表示をクリアする
                 analysisData01 = null;
                 analysisData02 = null;
+            }
+        }
+
+        private void receivedOdor1or2DataForAnalysis(OdorOrData receivedData)
+        {
+            // ----- 受信したデータを使って予測を実行する
+            Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() RX[" + receivedData.sensorId + "]");
+            int id = 1;
+            try
+            {
+                if (receivedData.sensorId == 1.0f)
+                {
+                    // ----- センサ１のデータを受信
+                    id = 1;
+                    showResult(id, "");
+                }
+                else if (receivedData.sensorId == 2.0f)
+                {
+                    // ----- センサ２のデータを受信
+                    id = 2;
+                    showResult(id, "");
+                }
+                else
+                {
+                    // ----- センサのIDが異常な場合...
+                    showResult(1, "");
+                    showResult(2, "");
+                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() ID: " + receivedData.sensorId + " (Wrong ID)");
+                }
+                if ((predictionModel != null) && (receivedData != null))
+                {
+                    // ----- 解析(データの予測)を行う
+                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() START");
+                    String result = predictionModel.predictOrData(receivedData);
+                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() Result: " + result);
+                    showResult(id, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // ---- 解析時にエラーが発生した...終了する
+                Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() " + ex.Message);
+                showResult(id, "[ERROR]");
+            }
+        }
+
+        private void receivedOdorSingleDataForAnalysis(OdorOrData receivedData)
+        {
+            // ----- 受信したデータを使って予測を実行する
+            Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() RX[" + receivedData.sensorId + "]");
+            int id = 1;
+            try
+            {
+                OdorData? odorData = null;
+                if (receivedData.sensorId == 1.0f)
+                {
+                    // ----- センサ１のデータを受信
+                    odorData = new OdorData(receivedData);
+                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() [1]");
+                    id = 1;
+                    showResult(id, "");
+                }
+                else if (receivedData.sensorId == 2.0f)
+                {
+                    // ----- センサ２のデータを受信
+                    odorData = new OdorData(receivedData);
+                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() [2]");
+                    id = 2;
+                    showResult(id, "");
+                }
+                else
+                {
+                    // ----- センサのIDが異常な場合...
+                    showResult(1, "");
+                    showResult(2, "");
+                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() ID: " + receivedData.sensorId + " (Wrong ID)");
+                }
+                if ((predictionModel != null)&&(odorData != null))
+                {
+                    // ----- 解析(データの予測)を行う
+                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() START");
+                    String result = predictionModel.predictSingleData(odorData);
+                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() Result: " + result);
+                    showResult(id, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // ---- 解析時にエラーが発生した...終了する
+                Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() " + ex.Message);
+                showResult(id, "[ERROR]");
             }
         }
     }

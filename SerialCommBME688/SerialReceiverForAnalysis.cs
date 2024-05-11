@@ -14,7 +14,7 @@ namespace SerialCommBME688
         private const int NUMBER_OF_ITEMS = 13;
         private int sensorId;
         private Boolean isTagetDataLog = false;
-        private TextBox aOutputArea;
+        private TextBox? aOutputArea = null;
         private Thread? readThread = null;  // new Thread(ReadSerial);
         private System.IO.Ports.SerialPort mySerialPort = new System.IO.Ports.SerialPort(new System.ComponentModel.Container());
         private bool _continue = true;
@@ -57,9 +57,8 @@ namespace SerialCommBME688
                 Console.WriteLine(e.StackTrace);
                 if (aOutputArea != null)
                 {
-                    String message = "=== Open ERROR (" + comPort + ") === : " + DateTime.Now + "\r\n";
+                    String message = "=== Open ERROR (" + comPort + ") [" + sensorId + "] === : " + DateTime.Now + "\r\n";
                     message = message + " " + e.Message + "\r\n" + e.StackTrace;
-
                     aOutputArea.Text = message;
                 }
             }
