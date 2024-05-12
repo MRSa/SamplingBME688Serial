@@ -23,8 +23,9 @@ namespace SamplingBME688Serial
 
     public partial class CreateModelDialog : Form, ICreateModelConsole
     {
-
         private String _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
+        private String _validationDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelvalid.csv");
+
         private MLContext mlContext;
         private ICreateModelResult? callback = null;
         private IDataHolder? port1 = null;
@@ -47,7 +48,9 @@ namespace SamplingBME688Serial
 
             // ----- 
             cmbModel.Items.Clear();
-            cmbModel.Items.Add("KMeans");
+            cmbModel.Items.Add("K-Means");
+            cmbModel.Items.Add("Naive Bayes");
+            cmbModel.Items.Add("One versus all");
             cmbModel.SelectedIndex = 0;
 
             // ----- 
@@ -71,7 +74,8 @@ namespace SamplingBME688Serial
             this.categoryList.Clear();
 
             // ----- 一時データファイルの削除
-            deleteDataSourceFile();
+            deleteDataSourceFile(_sourceDataFile);
+            deleteDataSourceFile(_validationDataFile);
 
             // ----- データの最小値を取得する 
             checkMinimumDataCounts();
@@ -156,11 +160,17 @@ namespace SamplingBME688Serial
             }
         }
 
-        private void deleteDataSourceFile()
+        private void deleteDataSourceFile(String fileName)
         {
             try
             {
-                FileInfo file = new FileInfo(_sourceDataFile);
+                if (!File.Exists(fileName))
+                {
+                    // ----- ファイルが存在しない場合は、ファイルの削除は行わない
+                    return;
+                }
+
+                FileInfo file = new FileInfo(fileName);
                 if ((file.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                 {
                     file.Attributes = FileAttributes.Normal;
@@ -169,7 +179,7 @@ namespace SamplingBME688Serial
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(DateTime.Now + " deleteDataSourceFile : " + ex.Message);
+                Debug.WriteLine(DateTime.Now + " deleteDataSourceFile : " + fileName + "  " + ex.Message);
             }
         }
 
@@ -227,6 +237,19 @@ namespace SamplingBME688Serial
             // ----- モデル作成に入る
             Debug.WriteLine(DateTime.Now + " :::: CREATE MODEL : " + _sourceDataFile + " :::::");
 
+            //  作成するモデルのタイプによって処理を変える
+            String? validationFileName = null;
+            switch (cmbModel.SelectedIndex)
+            {
+                case 1:    // Naive Bayes
+                case 2:    // One versus all
+                    validationFileName = _validationDataFile;
+                    break;
+                case 0:    // K-Means
+                default:
+                    break;
+            }
+
             // ----- データ増殖
             int duplicateTimes = 1;
             switch (selDuplicate.SelectedIndex)
@@ -258,7 +281,7 @@ namespace SamplingBME688Serial
             // ===== CSVファイルへの出力 ... チェックボックスの選択によって、出力内容を変更する
             bool ret = false;
             SensorToUse usePort;
-            TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, port1, port2, this);
+            TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, validationFileName, port1, port2, this);
             if (selSensor1and2.Checked)
             {
                 ret = csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
@@ -280,12 +303,30 @@ namespace SamplingBME688Serial
                 usePort = SensorToUse.port1or2;
             }
 
-            // モデルの作成
-            TrainingKMeansModel training = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);
-            training.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+            // ----- モデルの作成
+            IPredictionModel? trainingModel = null;
+            switch (cmbModel.SelectedIndex)
+            {
+                case 1:
+                    TrainingNaiveBayesModel training1 = new TrainingNaiveBayesModel(ref mlContext, _sourceDataFile, _validationDataFile, this);
+                    ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    trainingModel = training1;
+                    break;
+                case 2:
+                    TrainingOneVersusAllModel training2 = new TrainingOneVersusAllModel(ref mlContext, _sourceDataFile, _validationDataFile, this);
+                    ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    trainingModel = training2;
+                    break;
 
-            // ----- ----- ----- -----
-            callback?.createModelFinished(ret, usePort, training, "create model done.");
+                case 0:
+                default:
+                    TrainingKMeansModel training0 = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);
+                    ret = training0.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    trainingModel = training0;
+                    break;
+            }
+            // ----- モデル作成の完了を通知 -----
+            callback?.createModelFinished(ret, usePort, trainingModel, "create model done.");
         }
 
         private void btnLoadModel_Click(object sender, EventArgs e)

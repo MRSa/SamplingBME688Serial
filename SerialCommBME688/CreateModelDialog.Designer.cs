@@ -63,8 +63,7 @@
             // 
             // btnLoadModel
             // 
-            btnLoadModel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnLoadModel.Location = new Point(12, 558);
+            btnLoadModel.Location = new Point(18, 278);
             btnLoadModel.Name = "btnLoadModel";
             btnLoadModel.Size = new Size(150, 34);
             btnLoadModel.TabIndex = 10;
@@ -75,8 +74,7 @@
             // 
             // btnSaveModel
             // 
-            btnSaveModel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnSaveModel.Location = new Point(184, 558);
+            btnSaveModel.Location = new Point(184, 278);
             btnSaveModel.Name = "btnSaveModel";
             btnSaveModel.Size = new Size(150, 34);
             btnSaveModel.TabIndex = 11;
@@ -87,9 +85,9 @@
             // 
             // btnCreateModel
             // 
-            btnCreateModel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCreateModel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCreateModel.Font = new Font("Yu Gothic UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCreateModel.Location = new Point(806, 558);
+            btnCreateModel.Location = new Point(806, 278);
             btnCreateModel.Name = "btnCreateModel";
             btnCreateModel.Size = new Size(150, 34);
             btnCreateModel.TabIndex = 12;
@@ -101,9 +99,9 @@
             // 
             grpInformation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             grpInformation.Controls.Add(txtMessage);
-            grpInformation.Location = new Point(12, 278);
+            grpInformation.Location = new Point(12, 334);
             grpInformation.Name = "grpInformation";
-            grpInformation.Size = new Size(944, 274);
+            grpInformation.Size = new Size(944, 258);
             grpInformation.TabIndex = 3;
             grpInformation.TabStop = false;
             grpInformation.Text = "Message";
@@ -116,7 +114,7 @@
             txtMessage.Name = "txtMessage";
             txtMessage.ReadOnly = true;
             txtMessage.ScrollBars = ScrollBars.Both;
-            txtMessage.Size = new Size(913, 238);
+            txtMessage.Size = new Size(913, 222);
             txtMessage.TabIndex = 0;
             // 
             // grpSensor
@@ -332,9 +330,9 @@
             // 
             // txtResult
             // 
-            txtResult.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtResult.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtResult.Font = new Font("Yu Gothic UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            txtResult.Location = new Point(352, 561);
+            txtResult.Location = new Point(352, 280);
             txtResult.Name = "txtResult";
             txtResult.ReadOnly = true;
             txtResult.Size = new Size(437, 31);

@@ -34,6 +34,9 @@ namespace SamplingBME688Serial
         [LoadColumn(9)]
         public float sequence9Value;
 
+        [LoadColumn(10)]
+        public String? dataLabel;
+
         public OdorData(OdorData data)
         {
             this.sequence0Value = data.sequence0Value;
@@ -46,6 +49,7 @@ namespace SamplingBME688Serial
             this.sequence7Value = data.sequence7Value;
             this.sequence8Value = data.sequence8Value;
             this.sequence9Value = data.sequence9Value;
+            this.dataLabel = data.dataLabel;
         }
 
         public OdorData(OdorOrData data)
@@ -60,6 +64,7 @@ namespace SamplingBME688Serial
             this.sequence7Value = data.sequence7Value;
             this.sequence8Value = data.sequence8Value;
             this.sequence9Value = data.sequence9Value;
+            this.dataLabel = data.dataLabel;
         }
 
         public OdorData() {  }

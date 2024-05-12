@@ -43,7 +43,7 @@ namespace SamplingBME688Serial
             this.console = console;
         }
 
-        public Microsoft.ML.Data.TransformerChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>>? getModel() { return model; }
+        // public Microsoft.ML.Data.TransformerChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>>? getModel() { return model; }
 
         public bool executeTraining(SensorToUse usePort, String? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
         {
@@ -51,8 +51,8 @@ namespace SamplingBME688Serial
             Microsoft.ML.Data.EstimatorChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>> pipeline;
             try
             {
-                Debug.WriteLine(DateTime.Now + " ---------- executeTraining() START  ----------");
-                console.appendText("executeTraining() cluster: " + numberOfClusters + " File: " + outputFileName + "\r\n");
+                Debug.WriteLine(DateTime.Now + " ---------- executeTraining() START " + "K-Means" + " ----------");
+                console.appendText("executeTraining() K-Means cluster: " + numberOfClusters + " Output File: " + outputFileName + "\r\n");
 
                 // ----- データの読み込みの設定
                 if (usePort == SensorToUse.port1and2)
@@ -339,7 +339,8 @@ namespace SamplingBME688Serial
                     List<List<GraphDataValue>> item2data = dataSetMap2[item1.Key];
 
                     int limit = Math.Min(item1data.Count, item2data.Count);
-                    for (int index = 0; index < limit; index += 2)
+                    //for (int index = 0; index < limit; index += 2)
+                    for (int index = 0; index < limit; index ++)
                     {
                         List<GraphDataValue> sample1data = item1data[index];
                         List<GraphDataValue> sample2data = item2data[index];
