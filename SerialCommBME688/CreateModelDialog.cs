@@ -50,7 +50,7 @@ namespace SamplingBME688Serial
             cmbModel.Items.Clear();
             cmbModel.Items.Add("K-Means");
             cmbModel.Items.Add("Naive Bayes");
-            cmbModel.Items.Add("One versus all");
+            cmbModel.Items.Add("SdcaMaximumEntropy");
             cmbModel.SelectedIndex = 0;
 
             // ----- 
@@ -313,7 +313,7 @@ namespace SamplingBME688Serial
                     trainingModel = training1;
                     break;
                 case 2:
-                    TrainingOneVersusAllModel training2 = new TrainingOneVersusAllModel(ref mlContext, _sourceDataFile, _validationDataFile, this);
+                    TrainingSdcaMaximumEntropyModel training2 = new TrainingSdcaMaximumEntropyModel(ref mlContext, _sourceDataFile, _validationDataFile, this);
                     ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
                     trainingModel = training2;
                     break;
