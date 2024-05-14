@@ -23,6 +23,8 @@ namespace SamplingBME688Serial
 
     public partial class CreateModelDialog : Form, ICreateModelConsole
     {
+        private bool forDebugTest = true;
+
         private String _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
         private String _validationDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelvalid.csv");
 
@@ -308,12 +310,14 @@ namespace SamplingBME688Serial
             switch (cmbModel.SelectedIndex)
             {
                 case 1:
-                    TrainingNaiveBayesModel training1 = new TrainingNaiveBayesModel(ref mlContext, _sourceDataFile, _validationDataFile, this);
-                    ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
+                    TrainingMulticlassClassificationBase training1 = new TrainingMulticlassClassificationBase(ref mlContext, "NaiveBayes", ref estimator1, _sourceDataFile, this);
                     trainingModel = training1;
                     break;
+
                 case 2:
-                    TrainingSdcaMaximumEntropyModel training2 = new TrainingSdcaMaximumEntropyModel(ref mlContext, _sourceDataFile, _validationDataFile, this);
+                    IEstimator<ITransformer> estimator2 = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features");
+                    TrainingMulticlassClassificationBase training2 = new TrainingMulticlassClassificationBase(ref mlContext, "SdcaMaximumEntropy", ref estimator2, _sourceDataFile, this);
                     ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
                     trainingModel = training2;
                     break;
@@ -325,8 +329,86 @@ namespace SamplingBME688Serial
                     trainingModel = training0;
                     break;
             }
+
+            // ----------
+            if (forDebugTest)
+            {
+                // テスト実行処理
+                testTrainingResult(ref trainingModel);
+            }
+
             // ----- モデル作成の完了を通知 -----
             callback?.createModelFinished(ret, usePort, trainingModel, "create model done.");
+        }
+
+        private void testTrainingResult(ref IPredictionModel? predictionModel)
+        {
+            try
+            {
+                appendText(" - - - test training - - -\r\n");
+                if (predictionModel == null)
+                {
+                    Debug.WriteLine(DateTime.Now + " [ERROR] testTrainingResult() : predictionModel is null. ");
+                    return;
+                }
+                String result = "";
+                TestSampleData sampleData = new TestSampleData();
+                if (selSensor1and2.Checked)
+                {
+                    result += predictionModel.predictBothData(sampleData.getBothData1());
+                    result += " ";
+                    result += predictionModel.predictBothData(sampleData.getBothData2());
+                    result += " ";
+                    result += predictionModel.predictBothData(sampleData.getBothData3());
+                    result += " ";
+                    result += predictionModel.predictBothData(sampleData.getBothData4());
+                }
+                else if (selSensor1.Checked)
+                {
+                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data1());
+                    result += " ";
+                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data2());
+                    result += " ";
+                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data3());
+                    result += " ";
+                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data4());
+                }
+                else if (selSensor2.Checked)
+                {
+                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data1());
+                    result += " ";
+                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data2());
+                    result += " ";
+                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data3());
+                    result += " ";
+                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data4());
+                }
+                else // if (selSensor1or2.Checked)
+                {
+                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data1());
+                    result += " ";
+                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data2());
+                    result += " ";
+                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data3());
+                    result += " ";
+                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data4());
+                    result += " ";
+                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data1());
+                    result += " ";
+                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data2());
+                    result += " ";
+                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data3());
+                    result += " ";
+                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data4());
+                }
+                result += "\r\n";
+                appendText(result);
+                appendText(" - - - done - - -\r\n");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] testTrainingResult() " + ex.Message);
+            }
         }
 
         private void btnLoadModel_Click(object sender, EventArgs e)

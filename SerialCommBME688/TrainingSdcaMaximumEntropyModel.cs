@@ -465,8 +465,6 @@ namespace SamplingBME688Serial
             }
         }
 
-
-
         public String predictBothData(OdorBothData targetData)
         {
             String result = "";
@@ -481,7 +479,6 @@ namespace SamplingBME688Serial
             }
             return (result);
         }
-
 
         public String predictOrData(OdorOrData targetData)
         {
@@ -498,8 +495,16 @@ namespace SamplingBME688Serial
             return (result);
         }
 
+        public String predictSingle1Data(OdorData targetData)
+        {
+            return (predictSingleData(targetData));
+        }
+        public String predictSingle2Data(OdorData targetData)
+        {
+            return (predictSingleData(targetData));
+        }
 
-        public String predictSingleData(OdorData targetData)
+        private String predictSingleData(OdorData targetData)
         {
             String result = "";
             try

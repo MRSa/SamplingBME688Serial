@@ -10,6 +10,8 @@ namespace SamplingBME688Serial
     {
         String predictBothData(OdorBothData targetData);
         String predictOrData(OdorOrData targetData);
-        String predictSingleData(OdorData targetData);
+        String predictSingle1Data(OdorData targetData);
+
+        String predictSingle2Data(OdorData targetData);
     }
 }

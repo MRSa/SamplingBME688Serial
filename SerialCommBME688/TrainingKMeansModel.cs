@@ -195,7 +195,16 @@ namespace SamplingBME688Serial
             return (clusterId.ToString());
         }
 
-        public String predictSingleData(OdorData targetData)
+        public String predictSingle1Data(OdorData targetData)
+        {
+            return (predictSingleData(targetData));
+        }
+        public String predictSingle2Data(OdorData targetData)
+        {
+            return (predictSingleData(targetData));
+        }
+
+        private String predictSingleData(OdorData targetData)
         {
             uint clusterId = uint.MaxValue;
             try

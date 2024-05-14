@@ -924,13 +924,21 @@ namespace SerialCommBME688
                     // ----- センサのIDが異常な場合...
                     showResult(1, "");
                     showResult(2, "");
-                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() ID: " + receivedData.sensorId + " (Wrong ID)");
+                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() ID: " + receivedData.sensorId + " (Wrong ID)");
                 }
                 if ((predictionModel != null)&&(odorData != null))
                 {
                     // ----- 解析(データの予測)を行う
+                    String result = "";
                     Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() START");
-                    String result = predictionModel.predictSingleData(odorData);
+                    if (id == 1)
+                    {
+                        result = predictionModel.predictSingle1Data(odorData);
+                    }
+                    else
+                    {
+                        result = predictionModel.predictSingle2Data(odorData);
+                    }
                     Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() Result: " + result);
                     showResult(id, result);
                 }
