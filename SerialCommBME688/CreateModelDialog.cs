@@ -1,17 +1,5 @@
 ﻿using Microsoft.ML;
-using SerialCommBME688;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace SamplingBME688Serial
 {
@@ -23,6 +11,7 @@ namespace SamplingBME688Serial
 
     public partial class CreateModelDialog : Form, ICreateModelConsole
     {
+        //  forDebugTest を true にすると、モデルを作成したときにテストデータで予測する
         private bool forDebugTest = true;
 
         private String _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
@@ -50,9 +39,12 @@ namespace SamplingBME688Serial
 
             // ----- 
             cmbModel.Items.Clear();
-            cmbModel.Items.Add("K-Means");
-            cmbModel.Items.Add("Naive Bayes");
-            cmbModel.Items.Add("SdcaMaximumEntropy");
+            cmbModel.Items.Add("K-Means");               // index: 0
+            cmbModel.Items.Add("LbfgsMaximumEntropy");   // index: 1
+            cmbModel.Items.Add("SdcaMaximumEntropy");    // index: 2
+            cmbModel.Items.Add("SdcaNonCalibrated");     // index: 3
+            //cmbModel.Items.Add("Naive Bayes");         // index: 4
+            //cmbModel.Items.Add("LightGbm");            // index: 5
             cmbModel.SelectedIndex = 0;
 
             // ----- 
@@ -243,10 +235,13 @@ namespace SamplingBME688Serial
             String? validationFileName = null;
             switch (cmbModel.SelectedIndex)
             {
-                case 1:    // Naive Bayes
-                case 2:    // One versus all
-                    validationFileName = _validationDataFile;
-                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                //validationFileName = _validationDataFile;
+                //break;
                 case 0:    // K-Means
                 default:
                     break;
@@ -310,8 +305,9 @@ namespace SamplingBME688Serial
             switch (cmbModel.SelectedIndex)
             {
                 case 1:
-                    IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
-                    TrainingMulticlassClassificationBase training1 = new TrainingMulticlassClassificationBase(ref mlContext, "NaiveBayes", ref estimator1, _sourceDataFile, this);
+                    IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy("Label", "Features");
+                    TrainingMulticlassClassificationBase training1 = new TrainingMulticlassClassificationBase(ref mlContext, "LbfgsMaximumEntropy", ref estimator1, _sourceDataFile, this);
+                    ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
                     trainingModel = training1;
                     break;
 
@@ -322,6 +318,26 @@ namespace SamplingBME688Serial
                     trainingModel = training2;
                     break;
 
+                case 3:
+                    IEstimator<ITransformer> estimator3 = mlContext.MulticlassClassification.Trainers.SdcaNonCalibrated("Label", "Features");
+                    TrainingMulticlassClassificationBase training3 = new TrainingMulticlassClassificationBase(ref mlContext, "SdcaNonCalibrated", ref estimator3, _sourceDataFile, this);
+                    ret = training3.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    trainingModel = training3;
+                    break;
+
+                case 4:
+                    IEstimator<ITransformer> estimator4 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
+                    TrainingMulticlassClassificationBase training4 = new TrainingMulticlassClassificationBase(ref mlContext, "NaiveBayes", ref estimator4, _sourceDataFile, this);
+                    trainingModel = training4;
+                    break;
+/*
+                 case 5:
+                    IEstimator<ITransformer> estimator5 = mlContext.MulticlassClassification.Trainers("Label", "Features");
+                    TrainingMulticlassClassificationBase training5 = new TrainingMulticlassClassificationBase(ref mlContext, "LightGbm", ref estimator5, _sourceDataFile, this);
+                    ret = training5.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    trainingModel = training5;
+                    break;
+*/
                 case 0:
                 default:
                     TrainingKMeansModel training0 = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);

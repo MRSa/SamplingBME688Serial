@@ -6,18 +6,15 @@ namespace SamplingBME688Serial
     class TrainingMulticlassClassificationBase : ICreatePredictionModel, IPredictionModel
     {
         private MLContext mlContext;
-        private ITransformer? trainedModel;
-        private IEstimator<ITransformer> estimator;
-
-        private PredictionEngine<OdorBothData, PredictionResult>? predictionEngine1and2;
-        private PredictionEngine<OdorOrData, PredictionResult>? predictionEngine1or2;
-        private PredictionEngine<OdorData, PredictionResult>? predictionEngineSingle1;
-        private PredictionEngine<OdorData, PredictionResult>? predictionEngineSingle2;
-
-        private ICreateModelConsole console;
         private String inputDataFileName;
         private String classificationMethod;
-        private bool doneTraining = false;
+        private IEstimator<ITransformer> estimator;
+        private ICreateModelConsole console;
+
+        private PredictionEngine<OdorBothData, PredictionResult>? predictionEngine1and2 = null;
+        private PredictionEngine<OdorOrData, PredictionResult>? predictionEngine1or2 = null;
+        private PredictionEngine<OdorData, PredictionResult>? predictionEngineSingle1 = null;
+        private PredictionEngine<OdorData, PredictionResult>? predictionEngineSingle2 = null;
 
         public TrainingMulticlassClassificationBase(ref MLContext mlContext, String classificationMethod, ref IEstimator<ITransformer> estimator, String inputDataFileName, ICreateModelConsole console)
         {
@@ -32,40 +29,37 @@ namespace SamplingBME688Serial
         {
             try
             {
-                // IEstimator<ITransformer> estimator = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features");
-
                 Debug.WriteLine(DateTime.Now + " ---------- executeTraining() START " + classificationMethod + " ----------");
-                console.appendText("executeTraining() SdcaMaximumEntropy " + " Output File: " + outputFileName + "\r\n");
-
-                IDataView dataView = mlContext.Data.LoadFromTextFile<OdorBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                console.appendText(" ----- executeTraining() " + classificationMethod + " Output File: " + outputFileName + "\r\n");
 
                 // ----- データの読み込みの設定
                 if (usePort == SensorToUse.port1and2)
                 {
+                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     trainBothOdorData(outputFileName, dataView);
                 }
                 else if (usePort == SensorToUse.port1or2)
                 {
+                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorOrData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     trainOrOdorData(outputFileName, dataView);
                 }
                 else if (usePort == SensorToUse.port1)
                 {
+                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     trainSingle1OdorData(outputFileName, dataView);
                 }
                 else if (usePort == SensorToUse.port2)
                 {
+                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     trainSingle2OdorData(outputFileName, dataView);
                 }
                 else
                 {
                     console.appendText(" ----- executeTraining() : unknown port number.\r\n");
-                    doneTraining = false;
                     return (false);
                 }
                 console.appendText(" ----- executeTraining() : done.\r\n");
                 Debug.WriteLine(DateTime.Now + " ---------- executeTraining() END  ----------");
-
-                doneTraining = true;
                 return (true);
             }
             catch (Exception ex)
@@ -74,7 +68,6 @@ namespace SamplingBME688Serial
                 Debug.WriteLine(ex.StackTrace);
                 console.appendText(DateTime.Now + " [ERROR] executeTraining() : " + ex.Message + " \r\n\r\n");
             }
-            doneTraining = false;
             return (false);
         }
 
