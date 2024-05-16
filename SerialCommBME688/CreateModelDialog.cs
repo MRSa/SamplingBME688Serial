@@ -346,85 +346,36 @@ namespace SamplingBME688Serial
                     break;
             }
 
-            // ----------
+            // ----------------------------------------
             if (forDebugTest)
             {
-                // テスト実行処理
-                testTrainingResult(ref trainingModel);
+                // ---------- テストデータで予測処理を実行 ----------
+                SensorToUse usePortType;
+                if (selSensor1and2.Checked)
+                {
+                    usePortType = SensorToUse.port1and2;
+                }
+                else if (selSensor1.Checked)
+                {
+                    usePortType = SensorToUse.port1;
+                }
+                else if (selSensor2.Checked)
+                {
+                    usePortType = SensorToUse.port2;
+                }
+                else // if (selSensor1or2.Checked)
+                {
+                    usePortType = SensorToUse.port1or2;
+                }
+                TestSamplePrediction testSamplePrediction = new TestSamplePrediction();
+                appendText(" - - - test training - - -\r\n");
+                String reply = testSamplePrediction.testPrediction(usePortType, ref trainingModel, chkDataLog.Checked); 
+                appendText(reply);
+                appendText(" - - -      done     - - -\r\n");
             }
 
             // ----- モデル作成の完了を通知 -----
             callback?.createModelFinished(ret, usePort, trainingModel, "create model done.");
-        }
-
-        private void testTrainingResult(ref IPredictionModel? predictionModel)
-        {
-            try
-            {
-                appendText(" - - - test training - - -\r\n");
-                if (predictionModel == null)
-                {
-                    Debug.WriteLine(DateTime.Now + " [ERROR] testTrainingResult() : predictionModel is null. ");
-                    return;
-                }
-                String result = "";
-                TestSampleData sampleData = new TestSampleData();
-                if (selSensor1and2.Checked)
-                {
-                    result += predictionModel.predictBothData(sampleData.getBothData1());
-                    result += " ";
-                    result += predictionModel.predictBothData(sampleData.getBothData2());
-                    result += " ";
-                    result += predictionModel.predictBothData(sampleData.getBothData3());
-                    result += " ";
-                    result += predictionModel.predictBothData(sampleData.getBothData4());
-                }
-                else if (selSensor1.Checked)
-                {
-                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data1());
-                    result += " ";
-                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data2());
-                    result += " ";
-                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data3());
-                    result += " ";
-                    result += predictionModel.predictSingle1Data(sampleData.getOdor1Data4());
-                }
-                else if (selSensor2.Checked)
-                {
-                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data1());
-                    result += " ";
-                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data2());
-                    result += " ";
-                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data3());
-                    result += " ";
-                    result += predictionModel.predictSingle2Data(sampleData.getOdor2Data4());
-                }
-                else // if (selSensor1or2.Checked)
-                {
-                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data1());
-                    result += " ";
-                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data2());
-                    result += " ";
-                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data3());
-                    result += " ";
-                    result += predictionModel.predictOrData(sampleData.getOdorOr1Data4());
-                    result += " ";
-                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data1());
-                    result += " ";
-                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data2());
-                    result += " ";
-                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data3());
-                    result += " ";
-                    result += predictionModel.predictOrData(sampleData.getOdorOr2Data4());
-                }
-                result += "\r\n";
-                appendText(result);
-                appendText(" - - - done - - -\r\n");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(DateTime.Now + " [ERROR] testTrainingResult() " + ex.Message);
-            }
         }
 
         private void btnLoadModel_Click(object sender, EventArgs e)
