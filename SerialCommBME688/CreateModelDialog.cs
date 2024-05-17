@@ -15,8 +15,6 @@ namespace SamplingBME688Serial
         private bool forDebugTest = true;
 
         private String _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
-        private String _validationDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelvalid.csv");
-
         private MLContext mlContext;
         private ICreateModelResult? callback = null;
         private IDataHolder? port1 = null;
@@ -43,7 +41,7 @@ namespace SamplingBME688Serial
             cmbModel.Items.Add("LbfgsMaximumEntropy");   // index: 1
             cmbModel.Items.Add("SdcaMaximumEntropy");    // index: 2
             cmbModel.Items.Add("SdcaNonCalibrated");     // index: 3
-            //cmbModel.Items.Add("Naive Bayes");         // index: 4
+            cmbModel.Items.Add("Naive Bayes");         // index: 4
             //cmbModel.Items.Add("LightGbm");            // index: 5
             cmbModel.SelectedIndex = 0;
 
@@ -69,7 +67,6 @@ namespace SamplingBME688Serial
 
             // ----- 一時データファイルの削除
             deleteDataSourceFile(_sourceDataFile);
-            deleteDataSourceFile(_validationDataFile);
 
             // ----- データの最小値を取得する 
             checkMinimumDataCounts();
@@ -231,22 +228,6 @@ namespace SamplingBME688Serial
             // ----- モデル作成に入る
             Debug.WriteLine(DateTime.Now + " :::: CREATE MODEL : " + _sourceDataFile + " :::::");
 
-            //  作成するモデルのタイプによって処理を変える
-            String? validationFileName = null;
-            switch (cmbModel.SelectedIndex)
-            {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                //validationFileName = _validationDataFile;
-                //break;
-                case 0:    // K-Means
-                default:
-                    break;
-            }
-
             // ----- データ増殖
             int duplicateTimes = 1;
             switch (selDuplicate.SelectedIndex)
@@ -278,7 +259,7 @@ namespace SamplingBME688Serial
             // ===== CSVファイルへの出力 ... チェックボックスの選択によって、出力内容を変更する
             bool ret = false;
             SensorToUse usePort;
-            TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, validationFileName, port1, port2, this);
+            TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, port1, port2, this);
             if (selSensor1and2.Checked)
             {
                 ret = csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
@@ -328,6 +309,7 @@ namespace SamplingBME688Serial
                 case 4:
                     IEstimator<ITransformer> estimator4 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
                     TrainingMulticlassClassificationBase training4 = new TrainingMulticlassClassificationBase(ref mlContext, "NaiveBayes", ref estimator4, _sourceDataFile, this);
+                    ret = training4.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
                     trainingModel = training4;
                     break;
 /*

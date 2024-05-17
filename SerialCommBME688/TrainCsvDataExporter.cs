@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 
 namespace SamplingBME688Serial
 {
@@ -12,15 +7,13 @@ namespace SamplingBME688Serial
     {
         private const int VALID_DATA_INDEX = 10;
         private String outputFileName;
-        private String? validationFileName;
         private ICreateModelConsole console;
         private IDataHolder? port1;
         private IDataHolder? port2;
 
-        public TrainCsvDataExporter(String outputFileName, String? validationFileName, IDataHolder? port1, IDataHolder? port2, ICreateModelConsole console)
+        public TrainCsvDataExporter(String outputFileName, IDataHolder? port1, IDataHolder? port2, ICreateModelConsole console)
         {
             this.outputFileName = outputFileName;
-            this.validationFileName = validationFileName;
             this.port1 = port1;
             this.port2 = port2;
             this.console = console;
@@ -31,14 +24,6 @@ namespace SamplingBME688Serial
             // --- CSVファイルにデータを出力する (only mode)
             try
             {
-                // ----- Validationデータを作成するかどうかの判定
-                StreamWriter? writerValid = null;
-                bool createValidationData = false;
-                if (validationFileName != null)
-                {
-                    createValidationData = true;
-                }
-
                 if ((sensorId < 1) || (sensorId > 2))
                 {
                     // 指定したセンサ番号が間違っていた場合 (1 か 2 ではなかった時)
@@ -52,12 +37,6 @@ namespace SamplingBME688Serial
                     // ----- 指定されたポートのデータがないので中止
                     console.appendText("the dataset does not exist at sensor" + sensorId + ".\r\n");
                     return (false);
-                }
-
-                int dataCount = 0;
-                if ((createValidationData)&&(validationFileName != null))
-                {
-                    writerValid = new StreamWriter(validationFileName, false, Encoding.UTF8);
                 }
 
                 // ----- データのCSVファイルへ吐き出す処理
@@ -90,24 +69,10 @@ namespace SamplingBME688Serial
                                     }
                                 }
                                 oneLineData += baseItem.Key;
-
-                                if ((dataCount % VALID_DATA_INDEX == 0)&&(writerValid != null))
-                                {
-                                    writerValid.WriteLine(oneLineData);
-                                }
-                                else
-                                {
-                                    writer.WriteLine(oneLineData);
-                                }
-                                dataCount++;
+                                writer.WriteLine(oneLineData);
                             }
                         }
                     }
-                }
-                if (writerValid != null)
-                {
-                    writerValid.Close();
-                    writerValid = null;
                 }
                 console.appendText(" Write to CSV (" + sensorId + ") : " + dataSetMap.Count + " items x " + outputDataCount + " points x " + duplicateTimes + " times = " + (dataSetMap.Count * duplicateTimes * outputDataCount) + " lines.\r\n");
             }
@@ -125,25 +90,11 @@ namespace SamplingBME688Serial
             // --- CSVファイルにデータを出力する (1 and 2 mode)
             try
             {
-                // ----- Validationデータを作成するかどうかの判定
-                StreamWriter? writerValid = null;
-                bool createValidationData = false;
-                if (validationFileName != null)
-                {
-                    createValidationData = true;
-                }
-
                 if ((port1 == null) || (port2 == null))
                 {
                     // ----- データがそろわないので中止
                     console.appendText("the dataset is not exist (1 and/or 2).\r\n");
                     return (false);
-                }
-
-                int dataCount = 0;
-                if ((createValidationData) && (validationFileName != null))
-                {
-                    writerValid = new StreamWriter(validationFileName, false, Encoding.UTF8);
                 }
 
                 // ----- データのCSVファイルへ吐き出す処理
@@ -191,24 +142,10 @@ namespace SamplingBME688Serial
                                     }
                                 }
                                 oneLineData += item1.Key;
-
-                                if ((dataCount % VALID_DATA_INDEX == 0) && (writerValid != null))
-                                {
-                                    writerValid.WriteLine(oneLineData);
-                                }
-                                else
-                                {
-                                    writer.WriteLine(oneLineData);
-                                }
-                                dataCount++;
+                                writer.WriteLine(oneLineData);
                             }
                         }
                      }
-                }
-                if (writerValid != null)
-                {
-                    writerValid.Close();
-                    writerValid = null;
                 }
                 console.appendText(" Write to CSV : " + dataSetMap1.Count + " items x " + outputDataCount + " points x " + duplicateTimes + " times = " + (dataSetMap1.Count * duplicateTimes * outputDataCount) + " lines.\r\n");
             }
@@ -226,25 +163,11 @@ namespace SamplingBME688Serial
             // --- CSVファイルにデータを出力する (1 or 2 mode)
             try
             {
-                // ----- Validationデータを作成するかどうかの判定
-                StreamWriter? writerValid = null;
-                bool createValidationData = false;
-                if (validationFileName != null)
-                {
-                    createValidationData = true;
-                }
-
                 if ((port1 == null) || (port2 == null))
                 {
                     // ----- データがそろわないので中止
                     console.appendText("the dataset is not exist (1 and/or 2).\r\n");
                     return (false);
-                }
-
-                int dataCount = 0;
-                if ((createValidationData) && (validationFileName != null))
-                {
-                    writerValid = new StreamWriter(validationFileName, false, Encoding.UTF8);
                 }
 
                 // ----- データのCSVファイルへ吐き出す処理
@@ -278,20 +201,10 @@ namespace SamplingBME688Serial
                                     }
                                 }
                                 oneLineData += item1.Key;
-
-                                if ((dataCount % VALID_DATA_INDEX == 0) && (writerValid != null))
-                                {
-                                    writerValid.WriteLine(oneLineData);
-                                }
-                                else
-                                {
-                                    writer.WriteLine(oneLineData);
-                                }
-                                dataCount++;
+                                writer.WriteLine(oneLineData);
                             }
                         }
 
-                        dataCount = 0;
                         foreach (KeyValuePair<String, List<List<GraphDataValue>>> item2 in dataSetMap2)
                         {
                             // ---- 出力カウント数が０よりも小さい場合は、全データを出力する
@@ -316,24 +229,10 @@ namespace SamplingBME688Serial
                                     }
                                 }
                                 oneLineData += item2.Key;
-
-                                if ((dataCount % VALID_DATA_INDEX == 0) && (writerValid != null))
-                                {
-                                    writerValid.WriteLine(oneLineData);
-                                }
-                                else
-                                {
-                                    writer.WriteLine(oneLineData);
-                                }
-                                dataCount++;
+                                writer.WriteLine(oneLineData);
                             }
                         }
                     }
-                }
-                if (writerValid != null)
-                {
-                    writerValid.Close();
-                    writerValid = null;
                 }
                 console.appendText(" Write to CSV : (" + dataSetMap1.Count + " + " + dataSetMap2.Count + ") = " + (dataSetMap1.Count + dataSetMap2.Count) + " items x " + outputDataCount + " points x " + duplicateTimes + " times = " + ((dataSetMap1.Count + dataSetMap2.Count) * duplicateTimes * outputDataCount) + " lines.\r\n");
             }
