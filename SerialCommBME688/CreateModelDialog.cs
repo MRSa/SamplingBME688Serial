@@ -1,5 +1,6 @@
 ﻿using Microsoft.ML;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace SamplingBME688Serial
 {
@@ -17,6 +18,7 @@ namespace SamplingBME688Serial
         private String _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
         private MLContext mlContext;
         private ICreateModelResult? callback = null;
+        private IPredictionModel? trainedModel = null;
         private IDataHolder? port1 = null;
         private IDataHolder? port2 = null;
         private List<String> categoryList = new List<String>();
@@ -47,6 +49,7 @@ namespace SamplingBME688Serial
             cmbModel.Items.Add("K-Means");               // index: 7
             cmbModel.SelectedIndex = 0;
 
+            // ----- 
             cmbBinaryModel.Enabled = false;
             cmbBinaryModel.Visible = false;
             cmbBinaryModel.Items.Clear();
@@ -64,6 +67,10 @@ namespace SamplingBME688Serial
             selDuplicate.Items.Add("x100");
             selDuplicate.Items.Add("x1000");
             selDuplicate.SelectedIndex = 0;
+
+            // ----- モデル保存ボタンを無効化する
+            btnSaveModel.Enabled = false;
+            btnSaveModel.Visible = false;
         }
 
         public void setup(ICreateModelResult callback, IDataHolder port1, IDataHolder port2)
@@ -273,27 +280,26 @@ namespace SamplingBME688Serial
             TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, port1, port2, this);
             if (selSensor1and2.Checked)
             {
-                ret = csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
                 usePort = SensorToUse.port1and2;
             }
             else if (selSensor1.Checked)
             {
-                ret = csvExporter.outputDataSourceCSVFileSingle(1, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFileSingle(1, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
                 usePort = SensorToUse.port1;
             }
             else if (selSensor2.Checked)
             {
-                ret = csvExporter.outputDataSourceCSVFileSingle(2, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFileSingle(2, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
                 usePort = SensorToUse.port2;
             }
             else // if (selSensor1or2.Checked)
             {
-                ret = csvExporter.outputDataSourceCSVFile1or2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFile1or2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
                 usePort = SensorToUse.port1or2;
             }
 
             // ----- モデルの作成
-            IPredictionModel? trainingModel = null;
             switch (cmbModel.SelectedIndex)
             {
                 case 1:
@@ -301,7 +307,7 @@ namespace SamplingBME688Serial
                     IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy("Label", "Features");
                     TrainingMultiClassification training1 = new TrainingMultiClassification(ref mlContext, "LbfgsMaximumEntropy", ref estimator1, _sourceDataFile, this);
                     ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training1;
+                    trainedModel = training1;
                     break;
 
                 case 2:
@@ -309,7 +315,7 @@ namespace SamplingBME688Serial
                     IEstimator<ITransformer> estimator2 = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features");
                     TrainingMultiClassification training2 = new TrainingMultiClassification(ref mlContext, "SdcaMaximumEntropy", ref estimator2, _sourceDataFile, this);
                     ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training2;
+                    trainedModel = training2;
                     break;
 
                 case 3:
@@ -317,7 +323,7 @@ namespace SamplingBME688Serial
                     IEstimator<ITransformer> estimator3 = mlContext.MulticlassClassification.Trainers.SdcaNonCalibrated("Label", "Features");
                     TrainingMultiClassification training3 = new TrainingMultiClassification(ref mlContext, "SdcaNonCalibrated", ref estimator3, _sourceDataFile, this);
                     ret = training3.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training3;
+                    trainedModel = training3;
                     break;
 
                 case 4:
@@ -325,7 +331,7 @@ namespace SamplingBME688Serial
                     IEstimator<ITransformer> estimator4 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
                     TrainingMultiClassification training4 = new TrainingMultiClassification(ref mlContext, "NaiveBayes", ref estimator4, _sourceDataFile, this);
                     ret = training4.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training4;
+                    trainedModel = training4;
                     break;
 
                 case 0:
@@ -333,21 +339,21 @@ namespace SamplingBME688Serial
                     IEstimator<ITransformer> estimator5 = mlContext.MulticlassClassification.Trainers.LightGbm("Label", "Features");
                     TrainingMultiClassification training5 = new TrainingMultiClassification(ref mlContext, "LightGbm", ref estimator5, _sourceDataFile, this);
                     ret = training5.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training5;
+                    trainedModel = training5;
                     break;
 
                 case 5:
                     // Pairwise coupling
                     TrainingMultiBinaryClassification training6 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.PairwiseCoupling, getBinaryClassificationMethod(), _sourceDataFile, this);
                     ret = training6.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training6;
+                    trainedModel = training6;
                     break;
 
                 case 6:
                     // One versus all
                     TrainingMultiBinaryClassification training7 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.OneVersusAll, getBinaryClassificationMethod(), _sourceDataFile, this);
                     ret = training7.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training7;
+                    trainedModel = training7;
                     break;
 
                 case 7:
@@ -355,8 +361,20 @@ namespace SamplingBME688Serial
                     // K-Means
                     TrainingKMeansModel training0 = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);
                     ret = training0.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
-                    trainingModel = training0;
+                    trainedModel = training0;
                     break;
+            }
+            if (trainedModel != null)
+            {
+                // モデルが作成された(保存ボタンを有効にする)
+                btnSaveModel.Enabled = true;
+                btnSaveModel.Visible = true;
+            }
+            else
+            {
+                // モデルは作成できなかった(保存ボタンを無効にする)
+                btnSaveModel.Enabled = false;
+                btnSaveModel.Visible = false;
             }
 
             // ----------------------------------------
@@ -382,13 +400,13 @@ namespace SamplingBME688Serial
                 }
                 TestSamplePrediction testSamplePrediction = new TestSamplePrediction();
                 appendText(" - - - test training - - -\r\n");
-                String reply = testSamplePrediction.testPrediction(usePortType, ref trainingModel, chkDataLog.Checked);
+                String reply = testSamplePrediction.testPrediction(usePortType, ref trainedModel, chkDataLog.Checked);
                 appendText(reply);
                 appendText(" - - -      done     - - -\r\n");
             }
 
             // ----- モデル作成の完了を通知 -----
-            callback?.createModelFinished(ret, usePort, trainingModel, "create model done.");
+            callback?.createModelFinished(ret, usePort, trainedModel, "create model done.");
         }
 
         private BinaryClassificationMethod getBinaryClassificationMethod()
@@ -429,6 +447,14 @@ namespace SamplingBME688Serial
 
         private void btnSaveModel_Click(object sender, EventArgs e)
         {
+            // ----- モデルボタンを押したとき... モデルを保存する
+            if (trainedModel == null)
+            {
+                // --------- モデルがないので保存しない。
+                MessageBox.Show("The model is not created yet.", "Save cancelled", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
 
         }
 

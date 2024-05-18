@@ -29,11 +29,7 @@ namespace SamplingBME688Serial
         private BinaryClassificationMethod binaryClassificationMethod;
         private IEstimator<ITransformer>? estimator = null;
         private ICreateModelConsole console;
-
-        private PredictionEngine<OdorBothData, PredictionResult>? predictionEngine1and2 = null;
-        private PredictionEngine<OdorOrData, PredictionResult>? predictionEngine1or2 = null;
-        private PredictionEngine<OdorData, PredictionResult>? predictionEngineSingle1 = null;
-        private PredictionEngine<OdorData, PredictionResult>? predictionEngineSingle2 = null;
+        private ITransformer? trainedModel = null;
 
         public TrainingMultiBinaryClassification(ref MLContext mlContext, MultiClassMethod method, BinaryClassificationMethod binaryClassification, String inputDataFileName, ICreateModelConsole console)
         {
@@ -127,7 +123,6 @@ namespace SamplingBME688Serial
                     console.appendText(DateTime.Now + " [ERROR] executeTraining() : estimator is unknown." + " \r\n\r\n");
                     return (false);
                 }
-
                 Debug.WriteLine(DateTime.Now + " ---------- executeTraining() START " + classificationMethod + " ----------");
                 console.appendText(" ----- executeTraining() " + classificationMethod + " Input File: " + inputDataFileName + "  Output File: " + outputFileName + " START -----\r\n");
 
@@ -184,12 +179,10 @@ namespace SamplingBME688Serial
                                                           "sequence15Value", "sequence16Value", "sequence17Value", "sequence18Value", "sequence19Value"))
                                                   .AppendCacheCheckpoint(mlContext);
             var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-            var trainedModel = trainingPipeline.Fit(testData.TrainSet);
-            predictionEngine1and2 = mlContext.Model.CreatePredictionEngine<OdorBothData, PredictionResult>(trainedModel);
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
             if (outputFileName != null)
             {
                 mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
-
             }
         }
 
@@ -201,12 +194,10 @@ namespace SamplingBME688Serial
                                                           "sequence5Value", "sequence6Value", "sequence7Value", "sequence8Value", "sequence9Value"))
                                                   .AppendCacheCheckpoint(mlContext);
             var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-            var trainedModel = trainingPipeline.Fit(testData.TrainSet);
-            predictionEngine1or2 = mlContext.Model.CreatePredictionEngine<OdorOrData, PredictionResult>(trainedModel);
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
             if (outputFileName != null)
             {
                 mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
-
             }
         }
 
@@ -218,12 +209,10 @@ namespace SamplingBME688Serial
                                                           "sequence5Value", "sequence6Value", "sequence7Value", "sequence8Value", "sequence9Value"))
                                                    .AppendCacheCheckpoint(mlContext);
             var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-            var trainedModel = trainingPipeline.Fit(testData.TrainSet);
-            predictionEngineSingle1 = mlContext.Model.CreatePredictionEngine<OdorData, PredictionResult>(trainedModel);
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
             if (outputFileName != null)
             {
                 mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
-
             }
         }
 
@@ -235,8 +224,7 @@ namespace SamplingBME688Serial
                                                            "sequence5Value", "sequence6Value", "sequence7Value", "sequence8Value", "sequence9Value"))
                                                    .AppendCacheCheckpoint(mlContext);
             var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-            var trainedModel = trainingPipeline.Fit(testData.TrainSet);
-            predictionEngineSingle2 = mlContext.Model.CreatePredictionEngine<OdorData, PredictionResult>(trainedModel);
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
             if (outputFileName != null)
             {
                 mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
@@ -248,6 +236,7 @@ namespace SamplingBME688Serial
             String result = "???";
             try
             {
+                var predictionEngine1and2 = mlContext.Model.CreatePredictionEngine<OdorBothData, PredictionResult>(trainedModel);
                 if (predictionEngine1and2 != null)
                 {
                     var prediction = predictionEngine1and2.Predict(targetData);
@@ -275,6 +264,7 @@ namespace SamplingBME688Serial
             String result = "???";
             try
             {
+                var predictionEngine1or2 = mlContext.Model.CreatePredictionEngine<OdorOrData, PredictionResult>(trainedModel);
                 if (predictionEngine1or2 != null)
                 {
                     var prediction = predictionEngine1or2.Predict(targetData);
@@ -302,6 +292,7 @@ namespace SamplingBME688Serial
             String result = "???";
             try
             {
+                var predictionEngineSingle1 = mlContext.Model.CreatePredictionEngine<OdorData, PredictionResult>(trainedModel);
                 if (predictionEngineSingle1 != null)
                 {
                     var prediction = predictionEngineSingle1.Predict(targetData);
@@ -329,6 +320,7 @@ namespace SamplingBME688Serial
             String result = "???";
             try
             {
+                var predictionEngineSingle2 = mlContext.Model.CreatePredictionEngine<OdorData, PredictionResult>(trainedModel);
                 if (predictionEngineSingle2 != null)
                 {
                     var prediction = predictionEngineSingle2.Predict(targetData);
@@ -349,6 +341,37 @@ namespace SamplingBME688Serial
                 console.appendText(" [ERROR] predictSingle2Data() : " + ex.Message + "\r\n");
             }
             return (result);
+        }
+
+        public bool savePredictionModel(SensorToUse sensorToUse, String outputFileName)
+        {
+            bool ret = false;
+            try
+            {
+            }
+            catch (Exception ee)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] savePredictionModel() : " + ee.Message);
+                ret = false;
+            }
+            return (ret);
+        }
+
+        public bool loadPredictionModel(SensorToUse sensorToUse, String inputFileName)
+        {
+            bool ret;
+            try
+            {
+                DataViewSchema modelSchema;
+                trainedModel = mlContext.Model.Load(inputFileName, out modelSchema);
+                ret = true;
+            }
+            catch (Exception ee)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] loadPredictionModel() : " + ee.Message);
+                ret = false;
+            }
+            return (ret);
         }
     }
 }

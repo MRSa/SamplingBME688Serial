@@ -1,7 +1,9 @@
 ﻿using Microsoft.ML;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
@@ -33,7 +35,8 @@ namespace SamplingBME688Serial
         private int numberOfClusters;
         private List<DataLabelHolder> labelHolders = new List<DataLabelHolder>();
         private bool doneTraining = false;
-        private Microsoft.ML.Data.TransformerChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>>? model = null;
+        //private Microsoft.ML.Data.TransformerChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>>? model = null;
+        private ITransformer? trainedModel = null;
 
         public TrainingKMeansModel(ref MLContext mlContext, String inputDataFileName, int nofClusters, ICreateModelConsole console)
         {
@@ -42,8 +45,6 @@ namespace SamplingBME688Serial
             this.numberOfClusters = nofClusters;
             this.console = console;
         }
-
-        // public Microsoft.ML.Data.TransformerChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>>? getModel() { return model; }
 
         public bool executeTraining(SensorToUse usePort, String? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
         {
@@ -92,14 +93,14 @@ namespace SamplingBME688Serial
                 }
 
                 // ----- 学習パイプラインを作成する
-                model = pipeline.Fit(dataView);
+                trainedModel = pipeline.Fit(dataView);
 
                 // ----- モデルを保存する
                 if (outputFileName != null)
                 {
                     using (var fileStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write, FileShare.Write))
                     {
-                        mlContext.Model.Save(model, dataView.Schema, fileStream);
+                        mlContext.Model.Save(trainedModel, dataView.Schema, fileStream);
                     }
                 }
                 doneTraining = true;
@@ -148,7 +149,7 @@ namespace SamplingBME688Serial
             uint clusterId = uint.MaxValue;
             try
             {
-                var predictor = mlContext.Model.CreatePredictionEngine<OdorBothData, ClusterPrediction>(model);
+                var predictor = mlContext.Model.CreatePredictionEngine<OdorBothData, ClusterPrediction>(trainedModel);
                 var prediction = predictor.Predict(targetData);
 
                 clusterId = prediction.PredictedClusterId;
@@ -174,7 +175,7 @@ namespace SamplingBME688Serial
             uint clusterId = uint.MaxValue;
             try
             {
-                var predictor = mlContext.Model.CreatePredictionEngine<OdorOrData, ClusterPrediction>(model);
+                var predictor = mlContext.Model.CreatePredictionEngine<OdorOrData, ClusterPrediction>(trainedModel);
                 var prediction = predictor.Predict(targetData);
 
                 clusterId = prediction.PredictedClusterId;
@@ -209,7 +210,7 @@ namespace SamplingBME688Serial
             uint clusterId = uint.MaxValue;
             try
             {
-                var predictor = mlContext.Model.CreatePredictionEngine<OdorData, ClusterPrediction>(model);
+                var predictor = mlContext.Model.CreatePredictionEngine<OdorData, ClusterPrediction>(trainedModel);
                 var prediction = predictor.Predict(targetData);
                 clusterId = prediction.PredictedClusterId;
             }
@@ -361,7 +362,7 @@ namespace SamplingBME688Serial
                         }
                         else
                         {
-                            var predictor = mlContext.Model.CreatePredictionEngine<OdorBothData, ClusterPrediction>(model);
+                            var predictor = mlContext.Model.CreatePredictionEngine<OdorBothData, ClusterPrediction>(trainedModel);
                             var prediction = predictor.Predict(targetData);
                             if (prediction != null)
                             {
@@ -454,7 +455,7 @@ namespace SamplingBME688Serial
                         }
                         else
                         {
-                            var predictor = mlContext.Model.CreatePredictionEngine<OdorOrData, ClusterPrediction>(model);
+                            var predictor = mlContext.Model.CreatePredictionEngine<OdorOrData, ClusterPrediction>(trainedModel);
                             var prediction = predictor.Predict(targetData);
                             if (prediction != null)
                             {
@@ -530,7 +531,7 @@ namespace SamplingBME688Serial
                         }
                         else
                         {
-                            var predictor = mlContext.Model.CreatePredictionEngine<OdorData, ClusterPrediction>(model);
+                            var predictor = mlContext.Model.CreatePredictionEngine<OdorData, ClusterPrediction>(trainedModel);
                             var prediction = predictor.Predict(targetData);
                             if (prediction != null)
                             {
@@ -570,6 +571,37 @@ namespace SamplingBME688Serial
                 Debug.WriteLine(DateTime.Now + " [ERROR] decideSingleDataLabel() " + ex.Message);
                 labelHolders.Clear();
             }
+        }
+
+        public bool savePredictionModel(SensorToUse sensorToUse, String outputFileName)
+        {
+            bool ret = false;
+            try
+            {
+            }
+            catch (Exception ee)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] savePredictionModel() : " + ee.Message);
+                ret = false;
+            }
+            return (ret);
+        }
+
+        public bool loadPredictionModel(SensorToUse sensorToUse, String inputFileName)
+        {
+            bool ret;
+            try
+            {
+                DataViewSchema modelSchema;
+                trainedModel = mlContext.Model.Load(inputFileName, out modelSchema);
+                ret = true;
+            }
+            catch (Exception ee)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] loadPredictionModel() : " + ee.Message);
+                ret = false;
+            }
+            return (ret);
         }
     }
 }
