@@ -41,8 +41,10 @@ namespace SamplingBME688Serial
             cmbModel.Items.Add("LbfgsMaximumEntropy");   // index: 1
             cmbModel.Items.Add("SdcaMaximumEntropy");    // index: 2
             cmbModel.Items.Add("SdcaNonCalibrated");     // index: 3
-            cmbModel.Items.Add("Naive Bayes");         // index: 4
-            //cmbModel.Items.Add("LightGbm");            // index: 5
+            cmbModel.Items.Add("Naive Bayes");           // index: 4
+            cmbModel.Items.Add("LightGbm");              // index: 5
+            cmbModel.Items.Add("PairwiseCoupling");      // index: 6
+            cmbModel.Items.Add("OneVersusAll");          // index: 7
             cmbModel.SelectedIndex = 0;
 
             // ----- 
@@ -54,6 +56,7 @@ namespace SamplingBME688Serial
             selDuplicate.Items.Add("x30");
             selDuplicate.Items.Add("x50");
             selDuplicate.Items.Add("x100");
+            selDuplicate.Items.Add("x1000");
             selDuplicate.SelectedIndex = 0;
         }
 
@@ -250,6 +253,9 @@ namespace SamplingBME688Serial
                 case 6:
                     duplicateTimes = 100;
                     break;
+                case 7:
+                    duplicateTimes = 1000;
+                    break;
                 case 0:
                 default:
                     // duplicateTimes = 1;
@@ -286,6 +292,7 @@ namespace SamplingBME688Serial
             switch (cmbModel.SelectedIndex)
             {
                 case 1:
+                    // L-BFGS
                     IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy("Label", "Features");
                     TrainingMulticlassClassificationBase training1 = new TrainingMulticlassClassificationBase(ref mlContext, "LbfgsMaximumEntropy", ref estimator1, _sourceDataFile, this);
                     ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
@@ -293,6 +300,7 @@ namespace SamplingBME688Serial
                     break;
 
                 case 2:
+                    // 確率的双対座標上昇法(1)
                     IEstimator<ITransformer> estimator2 = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features");
                     TrainingMulticlassClassificationBase training2 = new TrainingMulticlassClassificationBase(ref mlContext, "SdcaMaximumEntropy", ref estimator2, _sourceDataFile, this);
                     ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
@@ -300,6 +308,7 @@ namespace SamplingBME688Serial
                     break;
 
                 case 3:
+                    // 確率的双対座標上昇法(2)
                     IEstimator<ITransformer> estimator3 = mlContext.MulticlassClassification.Trainers.SdcaNonCalibrated("Label", "Features");
                     TrainingMulticlassClassificationBase training3 = new TrainingMulticlassClassificationBase(ref mlContext, "SdcaNonCalibrated", ref estimator3, _sourceDataFile, this);
                     ret = training3.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
@@ -307,17 +316,35 @@ namespace SamplingBME688Serial
                     break;
 
                 case 4:
+                    // Naive Bayes
                     IEstimator<ITransformer> estimator4 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
                     TrainingMulticlassClassificationBase training4 = new TrainingMulticlassClassificationBase(ref mlContext, "NaiveBayes", ref estimator4, _sourceDataFile, this);
                     ret = training4.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
                     trainingModel = training4;
                     break;
-/*
+
                  case 5:
-                    IEstimator<ITransformer> estimator5 = mlContext.MulticlassClassification.Trainers("Label", "Features");
+                    // 軽勾配ブースト マシン (LightGbm)
+                    IEstimator<ITransformer> estimator5 = mlContext.MulticlassClassification.Trainers.LightGbm("Label", "Features");
                     TrainingMulticlassClassificationBase training5 = new TrainingMulticlassClassificationBase(ref mlContext, "LightGbm", ref estimator5, _sourceDataFile, this);
                     ret = training5.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
                     trainingModel = training5;
+                    break;
+/*
+                case 6:
+                    // Pairwise coupling
+                    IEstimator<ITransformer> estimator6 = mlContext.MulticlassClassification.Trainers("Label", "Features");
+                    TrainingMulticlassClassificationBase training6 = new TrainingMulticlassClassificationBase(ref mlContext, "LightGbm", ref estimator6, _sourceDataFile, this);
+                    ret = training6.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    trainingModel = training6;
+                    break;
+
+                case 7:
+                    // One versus all
+                    IEstimator<ITransformer> estimator7 = mlContext.MulticlassClassification.Trainers("Label", "Features");
+                    TrainingMulticlassClassificationBase training7 = new TrainingMulticlassClassificationBase(ref mlContext, "LightGbm", ref estimator7, _sourceDataFile, this);
+                    ret = training7.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    trainingModel = training7;
                     break;
 */
                 case 0:
