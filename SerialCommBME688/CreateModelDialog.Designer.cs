@@ -54,6 +54,7 @@
             txtDataCount = new TextBox();
             lblDataCount = new Label();
             txtResult = new TextBox();
+            cmbBinaryModel = new ComboBox();
             grpInformation.SuspendLayout();
             grpSensor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)rangeFromPercent).BeginInit();
@@ -194,7 +195,7 @@
             cmbModel.FormattingEnabled = true;
             cmbModel.Location = new Point(103, 110);
             cmbModel.Name = "cmbModel";
-            cmbModel.Size = new Size(233, 33);
+            cmbModel.Size = new Size(250, 33);
             cmbModel.TabIndex = 14;
             cmbModel.SelectedIndexChanged += cmbModel_SelectedIndexChanged;
             // 
@@ -338,11 +339,23 @@
             txtResult.Size = new Size(437, 31);
             txtResult.TabIndex = 27;
             // 
+            // cmbBinaryModel
+            // 
+            cmbBinaryModel.Enabled = false;
+            cmbBinaryModel.FormattingEnabled = true;
+            cmbBinaryModel.Location = new Point(381, 110);
+            cmbBinaryModel.Name = "cmbBinaryModel";
+            cmbBinaryModel.Size = new Size(300, 33);
+            cmbBinaryModel.TabIndex = 28;
+            cmbBinaryModel.Visible = false;
+            cmbBinaryModel.SelectedIndexChanged += cmbBinaryModel_SelectedIndexChanged;
+            // 
             // CreateModelDialog
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(968, 604);
+            Controls.Add(cmbBinaryModel);
             Controls.Add(txtResult);
             Controls.Add(grpData);
             Controls.Add(btnSelectCategory);
@@ -397,5 +410,6 @@
         private Label lblDataCount;
         private TextBox txtResult;
         private CheckBox chkDataLog;
+        private ComboBox cmbBinaryModel;
     }
 }
