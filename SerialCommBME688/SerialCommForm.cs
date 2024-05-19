@@ -875,7 +875,7 @@ namespace SerialCommBME688
                     showResult(2, "");
                     Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() ID: " + receivedData.sensorId + " (Wrong ID)");
                 }
-                if ((predictionModel != null)&&(odorData != null))
+                if ((predictionModel != null) && (odorData != null))
                 {
                     // ----- 解析(データの予測)を行う
                     String result = "";
@@ -897,6 +897,20 @@ namespace SerialCommBME688
                 // ---- 解析時にエラーが発生した...終了する
                 Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() " + ex.Message);
                 showResult(id, "[ERROR]");
+            }
+        }
+
+        private void btnLoadData_Click(object sender, EventArgs e)
+        {
+            // ---------- Database から データをロードする処理
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                // ---- エラーが発生した...終了する
+                Debug.WriteLine(DateTime.Now + "  btnLoadData_Click() " + ex.Message);
             }
         }
     }

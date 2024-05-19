@@ -55,6 +55,7 @@
             lblFrom = new Label();
             chkCombineSensor = new CheckBox();
             grpEntryDatabase = new GroupBox();
+            btnLoadData = new Button();
             btnDbStatus = new Button();
             chkDbEntrySingle = new CheckBox();
             urlDatabaseToEntry = new TextBox();
@@ -140,7 +141,7 @@
             txtConsole.Name = "txtConsole";
             txtConsole.ReadOnly = true;
             txtConsole.ScrollBars = ScrollBars.Vertical;
-            txtConsole.Size = new Size(1141, 75);
+            txtConsole.Size = new Size(1141, 0);
             txtConsole.TabIndex = 4;
             // 
             // btnClear
@@ -432,6 +433,7 @@
             // grpEntryDatabase
             // 
             grpEntryDatabase.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            grpEntryDatabase.Controls.Add(btnLoadData);
             grpEntryDatabase.Controls.Add(btnDbStatus);
             grpEntryDatabase.Controls.Add(chkDbEntrySingle);
             grpEntryDatabase.Controls.Add(urlDatabaseToEntry);
@@ -443,15 +445,28 @@
             grpEntryDatabase.Size = new Size(1159, 97);
             grpEntryDatabase.TabIndex = 18;
             grpEntryDatabase.TabStop = false;
-            grpEntryDatabase.Text = "Entry Database";
+            grpEntryDatabase.Text = "Database";
+            // 
+            // btnLoadData
+            // 
+            btnLoadData.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLoadData.Enabled = false;
+            btnLoadData.Location = new Point(929, 36);
+            btnLoadData.Margin = new Padding(4, 5, 4, 5);
+            btnLoadData.Name = "btnLoadData";
+            btnLoadData.Size = new Size(101, 38);
+            btnLoadData.TabIndex = 22;
+            btnLoadData.Text = "Load data";
+            btnLoadData.UseVisualStyleBackColor = true;
+            btnLoadData.Click += btnLoadData_Click;
             // 
             // btnDbStatus
             // 
             btnDbStatus.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnDbStatus.Location = new Point(1046, 37);
+            btnDbStatus.Location = new Point(1042, 36);
             btnDbStatus.Margin = new Padding(4, 5, 4, 5);
             btnDbStatus.Name = "btnDbStatus";
-            btnDbStatus.Size = new Size(101, 38);
+            btnDbStatus.Size = new Size(109, 38);
             btnDbStatus.TabIndex = 6;
             btnDbStatus.Text = "Status";
             btnDbStatus.UseVisualStyleBackColor = true;
@@ -463,7 +478,7 @@
             chkDbEntrySingle.AutoSize = true;
             chkDbEntrySingle.Checked = true;
             chkDbEntrySingle.CheckState = CheckState.Checked;
-            chkDbEntrySingle.Location = new Point(892, 42);
+            chkDbEntrySingle.Location = new Point(776, 40);
             chkDbEntrySingle.Margin = new Padding(4, 5, 4, 5);
             chkDbEntrySingle.Name = "chkDbEntrySingle";
             chkDbEntrySingle.Size = new Size(145, 29);
@@ -477,7 +492,7 @@
             urlDatabaseToEntry.Location = new Point(110, 38);
             urlDatabaseToEntry.Margin = new Padding(4, 5, 4, 5);
             urlDatabaseToEntry.Name = "urlDatabaseToEntry";
-            urlDatabaseToEntry.Size = new Size(767, 31);
+            urlDatabaseToEntry.Size = new Size(656, 31);
             urlDatabaseToEntry.TabIndex = 1;
             urlDatabaseToEntry.Text = "http://localhost:3010/";
             // 
@@ -702,5 +717,6 @@
         private TextBox fldResult1;
         private CheckBox chkAnalysis;
         private CheckBox chkAnLog;
+        private Button btnLoadData;
     }
 }
