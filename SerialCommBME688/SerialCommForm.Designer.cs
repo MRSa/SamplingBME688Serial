@@ -86,10 +86,9 @@
             // 
             // btnConnect
             // 
-            btnConnect.Location = new Point(109, 33);
-            btnConnect.Margin = new Padding(4, 5, 4, 5);
+            btnConnect.Location = new Point(76, 20);
             btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(107, 38);
+            btnConnect.Size = new Size(75, 23);
             btnConnect.TabIndex = 0;
             btnConnect.Text = "Connect";
             btnConnect.UseVisualStyleBackColor = true;
@@ -97,10 +96,9 @@
             // 
             // txtPort
             // 
-            txtPort.Location = new Point(9, 35);
-            txtPort.Margin = new Padding(4, 5, 4, 5);
+            txtPort.Location = new Point(6, 21);
             txtPort.Name = "txtPort";
-            txtPort.Size = new Size(90, 31);
+            txtPort.Size = new Size(64, 23);
             txtPort.TabIndex = 2;
             txtPort.Text = "COM5";
             txtPort.TextAlign = HorizontalAlignment.Center;
@@ -110,11 +108,9 @@
             grpPort.Controls.Add(btnStop);
             grpPort.Controls.Add(btnConnect);
             grpPort.Controls.Add(txtPort);
-            grpPort.Location = new Point(333, 20);
-            grpPort.Margin = new Padding(4, 5, 4, 5);
+            grpPort.Location = new Point(233, 12);
             grpPort.Name = "grpPort";
-            grpPort.Padding = new Padding(4, 5, 4, 5);
-            grpPort.Size = new Size(343, 93);
+            grpPort.Size = new Size(240, 56);
             grpPort.TabIndex = 3;
             grpPort.TabStop = false;
             grpPort.Text = "Sensor1";
@@ -122,10 +118,9 @@
             // btnStop
             // 
             btnStop.Enabled = false;
-            btnStop.Location = new Point(224, 33);
-            btnStop.Margin = new Padding(4, 5, 4, 5);
+            btnStop.Location = new Point(157, 20);
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(107, 38);
+            btnStop.Size = new Size(75, 23);
             btnStop.TabIndex = 3;
             btnStop.Text = "Stop";
             btnStop.UseVisualStyleBackColor = true;
@@ -135,22 +130,20 @@
             // 
             txtConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             txtConsole.HideSelection = false;
-            txtConsole.Location = new Point(8, 34);
-            txtConsole.Margin = new Padding(4, 5, 4, 5);
+            txtConsole.Location = new Point(6, 20);
             txtConsole.Multiline = true;
             txtConsole.Name = "txtConsole";
             txtConsole.ReadOnly = true;
             txtConsole.ScrollBars = ScrollBars.Vertical;
-            txtConsole.Size = new Size(1141, 0);
+            txtConsole.Size = new Size(800, 2);
             txtConsole.TabIndex = 4;
             // 
             // btnClear
             // 
             btnClear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnClear.Location = new Point(1059, 55);
-            btnClear.Margin = new Padding(4, 5, 4, 5);
+            btnClear.Location = new Point(741, 33);
             btnClear.Name = "btnClear";
-            btnClear.Size = new Size(113, 38);
+            btnClear.Size = new Size(79, 23);
             btnClear.TabIndex = 5;
             btnClear.Text = "Clear";
             btnClear.UseVisualStyleBackColor = true;
@@ -159,30 +152,26 @@
             // grpDataCategory
             // 
             grpDataCategory.Controls.Add(txtDataCategory);
-            grpDataCategory.Location = new Point(17, 20);
-            grpDataCategory.Margin = new Padding(4, 5, 4, 5);
+            grpDataCategory.Location = new Point(12, 12);
             grpDataCategory.Name = "grpDataCategory";
-            grpDataCategory.Padding = new Padding(4, 5, 4, 5);
-            grpDataCategory.Size = new Size(307, 93);
+            grpDataCategory.Size = new Size(215, 56);
             grpDataCategory.TabIndex = 6;
             grpDataCategory.TabStop = false;
             grpDataCategory.Text = "Data Category";
             // 
             // txtDataCategory
             // 
-            txtDataCategory.Location = new Point(9, 33);
-            txtDataCategory.Margin = new Padding(4, 5, 4, 5);
+            txtDataCategory.Location = new Point(6, 20);
             txtDataCategory.Name = "txtDataCategory";
-            txtDataCategory.Size = new Size(288, 31);
+            txtDataCategory.Size = new Size(203, 23);
             txtDataCategory.TabIndex = 0;
             // 
             // btnExport
             // 
             btnExport.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnExport.Location = new Point(999, 496);
-            btnExport.Margin = new Padding(4, 5, 4, 5);
+            btnExport.Location = new Point(699, 298);
             btnExport.Name = "btnExport";
-            btnExport.Size = new Size(176, 37);
+            btnExport.Size = new Size(123, 22);
             btnExport.TabIndex = 7;
             btnExport.Text = "Export CSV";
             btnExport.UseVisualStyleBackColor = true;
@@ -192,11 +181,9 @@
             // 
             grpData.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             grpData.Controls.Add(dataGridView1);
-            grpData.Location = new Point(16, 539);
-            grpData.Margin = new Padding(4, 5, 4, 5);
+            grpData.Location = new Point(11, 323);
             grpData.Name = "grpData";
-            grpData.Padding = new Padding(4, 5, 4, 5);
-            grpData.Size = new Size(975, 380);
+            grpData.Size = new Size(682, 228);
             grpData.TabIndex = 8;
             grpData.TabStop = false;
             grpData.Text = "Collected Data";
@@ -208,23 +195,21 @@
             dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(4, 29);
-            dataGridView1.Margin = new Padding(4, 5, 4, 5);
+            dataGridView1.Location = new Point(3, 19);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 62;
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(967, 346);
+            dataGridView1.Size = new Size(676, 206);
             dataGridView1.TabIndex = 0;
             // 
             // chkExportOnlyGasRegistanceLogarithm
             // 
             chkExportOnlyGasRegistanceLogarithm.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             chkExportOnlyGasRegistanceLogarithm.AutoSize = true;
-            chkExportOnlyGasRegistanceLogarithm.Location = new Point(6, 35);
-            chkExportOnlyGasRegistanceLogarithm.Margin = new Padding(4, 5, 4, 5);
+            chkExportOnlyGasRegistanceLogarithm.Location = new Point(9, 19);
             chkExportOnlyGasRegistanceLogarithm.Name = "chkExportOnlyGasRegistanceLogarithm";
-            chkExportOnlyGasRegistanceLogarithm.Size = new Size(169, 29);
+            chkExportOnlyGasRegistanceLogarithm.Size = new Size(114, 19);
             chkExportOnlyGasRegistanceLogarithm.TabIndex = 9;
             chkExportOnlyGasRegistanceLogarithm.Text = "Only Gas R.(Log)";
             chkExportOnlyGasRegistanceLogarithm.UseVisualStyleBackColor = true;
@@ -233,10 +218,9 @@
             // btnReset
             // 
             btnReset.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnReset.Location = new Point(1000, 882);
-            btnReset.Margin = new Padding(4, 5, 4, 5);
+            btnReset.Location = new Point(700, 529);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(176, 37);
+            btnReset.Size = new Size(123, 22);
             btnReset.TabIndex = 10;
             btnReset.Text = "Reset";
             btnReset.UseVisualStyleBackColor = true;
@@ -245,10 +229,9 @@
             // btnShowGraph
             // 
             btnShowGraph.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnShowGraph.Location = new Point(999, 787);
-            btnShowGraph.Margin = new Padding(4, 5, 4, 5);
+            btnShowGraph.Location = new Point(699, 472);
             btnShowGraph.Name = "btnShowGraph";
-            btnShowGraph.Size = new Size(176, 38);
+            btnShowGraph.Size = new Size(123, 23);
             btnShowGraph.TabIndex = 11;
             btnShowGraph.Text = "Show Graph";
             btnShowGraph.UseVisualStyleBackColor = true;
@@ -257,12 +240,11 @@
             // numDuplicate
             // 
             numDuplicate.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            numDuplicate.Location = new Point(92, 192);
-            numDuplicate.Margin = new Padding(4, 5, 4, 5);
+            numDuplicate.Location = new Point(66, 114);
             numDuplicate.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numDuplicate.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numDuplicate.Name = "numDuplicate";
-            numDuplicate.Size = new Size(80, 31);
+            numDuplicate.Size = new Size(56, 23);
             numDuplicate.TabIndex = 12;
             numDuplicate.TextAlign = HorizontalAlignment.Center;
             numDuplicate.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -271,10 +253,9 @@
             // 
             lblDuplicate.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblDuplicate.AutoSize = true;
-            lblDuplicate.Location = new Point(8, 194);
-            lblDuplicate.Margin = new Padding(4, 0, 4, 0);
+            lblDuplicate.Location = new Point(6, 116);
             lblDuplicate.Name = "lblDuplicate";
-            lblDuplicate.Size = new Size(86, 25);
+            lblDuplicate.Size = new Size(57, 15);
             lblDuplicate.TabIndex = 13;
             lblDuplicate.Text = "Duplicate";
             lblDuplicate.TextAlign = ContentAlignment.MiddleRight;
@@ -283,13 +264,12 @@
             // 
             txtConsole_2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             txtConsole_2.HideSelection = false;
-            txtConsole_2.Location = new Point(8, 119);
-            txtConsole_2.Margin = new Padding(4, 5, 4, 5);
+            txtConsole_2.Location = new Point(6, 22);
             txtConsole_2.Multiline = true;
             txtConsole_2.Name = "txtConsole_2";
             txtConsole_2.ReadOnly = true;
             txtConsole_2.ScrollBars = ScrollBars.Vertical;
-            txtConsole_2.Size = new Size(1141, 75);
+            txtConsole_2.Size = new Size(800, 96);
             txtConsole_2.TabIndex = 14;
             // 
             // grpPort_2
@@ -297,11 +277,9 @@
             grpPort_2.Controls.Add(btnStop_2);
             grpPort_2.Controls.Add(btnConnect_2);
             grpPort_2.Controls.Add(txtPort_2);
-            grpPort_2.Location = new Point(684, 20);
-            grpPort_2.Margin = new Padding(4, 5, 4, 5);
+            grpPort_2.Location = new Point(479, 12);
             grpPort_2.Name = "grpPort_2";
-            grpPort_2.Padding = new Padding(4, 5, 4, 5);
-            grpPort_2.Size = new Size(343, 93);
+            grpPort_2.Size = new Size(240, 56);
             grpPort_2.TabIndex = 15;
             grpPort_2.TabStop = false;
             grpPort_2.Text = "Sensor2";
@@ -309,10 +287,9 @@
             // btnStop_2
             // 
             btnStop_2.Enabled = false;
-            btnStop_2.Location = new Point(224, 33);
-            btnStop_2.Margin = new Padding(4, 5, 4, 5);
+            btnStop_2.Location = new Point(157, 20);
             btnStop_2.Name = "btnStop_2";
-            btnStop_2.Size = new Size(107, 38);
+            btnStop_2.Size = new Size(75, 23);
             btnStop_2.TabIndex = 3;
             btnStop_2.Text = "Stop";
             btnStop_2.UseVisualStyleBackColor = true;
@@ -320,10 +297,9 @@
             // 
             // btnConnect_2
             // 
-            btnConnect_2.Location = new Point(109, 33);
-            btnConnect_2.Margin = new Padding(4, 5, 4, 5);
+            btnConnect_2.Location = new Point(76, 20);
             btnConnect_2.Name = "btnConnect_2";
-            btnConnect_2.Size = new Size(107, 38);
+            btnConnect_2.Size = new Size(75, 23);
             btnConnect_2.TabIndex = 0;
             btnConnect_2.Text = "Connect";
             btnConnect_2.UseVisualStyleBackColor = true;
@@ -331,10 +307,9 @@
             // 
             // txtPort_2
             // 
-            txtPort_2.Location = new Point(9, 35);
-            txtPort_2.Margin = new Padding(4, 5, 4, 5);
+            txtPort_2.Location = new Point(6, 21);
             txtPort_2.Name = "txtPort_2";
-            txtPort_2.Size = new Size(90, 31);
+            txtPort_2.Size = new Size(64, 23);
             txtPort_2.TabIndex = 2;
             txtPort_2.Text = "COM6";
             txtPort_2.TextAlign = HorizontalAlignment.Center;
@@ -344,11 +319,9 @@
             grpLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             grpLogConsole.Controls.Add(txtConsole_2);
             grpLogConsole.Controls.Add(txtConsole);
-            grpLogConsole.Location = new Point(21, 230);
-            grpLogConsole.Margin = new Padding(4, 5, 4, 5);
+            grpLogConsole.Location = new Point(15, 138);
             grpLogConsole.Name = "grpLogConsole";
-            grpLogConsole.Padding = new Padding(4, 5, 4, 5);
-            grpLogConsole.Size = new Size(1159, 209);
+            grpLogConsole.Size = new Size(811, 125);
             grpLogConsole.TabIndex = 16;
             grpLogConsole.TabStop = false;
             grpLogConsole.Text = "Sampling Status";
@@ -364,11 +337,9 @@
             grpExportOption.Controls.Add(numDuplicate);
             grpExportOption.Controls.Add(lblDuplicate);
             grpExportOption.Controls.Add(chkExportOnlyGasRegistanceLogarithm);
-            grpExportOption.Location = new Point(996, 539);
-            grpExportOption.Margin = new Padding(4, 5, 4, 5);
+            grpExportOption.Location = new Point(697, 323);
             grpExportOption.Name = "grpExportOption";
-            grpExportOption.Padding = new Padding(4, 5, 4, 5);
-            grpExportOption.Size = new Size(184, 238);
+            grpExportOption.Size = new Size(129, 143);
             grpExportOption.TabIndex = 17;
             grpExportOption.TabStop = false;
             grpExportOption.Text = "Export Option";
@@ -376,10 +347,9 @@
             // importToPercent
             // 
             importToPercent.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            importToPercent.Location = new Point(95, 151);
-            importToPercent.Margin = new Padding(4, 5, 4, 5);
+            importToPercent.Location = new Point(66, 91);
             importToPercent.Name = "importToPercent";
-            importToPercent.Size = new Size(80, 31);
+            importToPercent.Size = new Size(56, 23);
             importToPercent.TabIndex = 24;
             importToPercent.TextAlign = HorizontalAlignment.Center;
             importToPercent.Value = new decimal(new int[] { 100, 0, 0, 0 });
@@ -388,10 +358,9 @@
             // 
             label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(8, 153);
-            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Location = new Point(6, 93);
             label1.Name = "label1";
-            label1.Size = new Size(60, 25);
+            label1.Size = new Size(40, 15);
             label1.TabIndex = 23;
             label1.Text = "To (%)";
             label1.TextAlign = ContentAlignment.MiddleRight;
@@ -399,10 +368,9 @@
             // importFromPercent
             // 
             importFromPercent.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            importFromPercent.Location = new Point(95, 113);
-            importFromPercent.Margin = new Padding(4, 5, 4, 5);
+            importFromPercent.Location = new Point(66, 68);
             importFromPercent.Name = "importFromPercent";
-            importFromPercent.Size = new Size(80, 31);
+            importFromPercent.Size = new Size(56, 23);
             importFromPercent.TabIndex = 22;
             importFromPercent.TextAlign = HorizontalAlignment.Center;
             // 
@@ -410,10 +378,9 @@
             // 
             lblFrom.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblFrom.AutoSize = true;
-            lblFrom.Location = new Point(8, 115);
-            lblFrom.Margin = new Padding(4, 0, 4, 0);
+            lblFrom.Location = new Point(6, 70);
             lblFrom.Name = "lblFrom";
-            lblFrom.Size = new Size(83, 25);
+            lblFrom.Size = new Size(54, 15);
             lblFrom.TabIndex = 21;
             lblFrom.Text = "From (%)";
             lblFrom.TextAlign = ContentAlignment.MiddleRight;
@@ -422,10 +389,9 @@
             // 
             chkCombineSensor.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             chkCombineSensor.AutoSize = true;
-            chkCombineSensor.Location = new Point(5, 74);
-            chkCombineSensor.Margin = new Padding(4, 5, 4, 5);
+            chkCombineSensor.Location = new Point(10, 42);
             chkCombineSensor.Name = "chkCombineSensor";
-            chkCombineSensor.Size = new Size(167, 29);
+            chkCombineSensor.Size = new Size(110, 19);
             chkCombineSensor.TabIndex = 14;
             chkCombineSensor.Text = "Combine sensor";
             chkCombineSensor.UseVisualStyleBackColor = true;
@@ -438,11 +404,9 @@
             grpEntryDatabase.Controls.Add(chkDbEntrySingle);
             grpEntryDatabase.Controls.Add(urlDatabaseToEntry);
             grpEntryDatabase.Controls.Add(chkEntryDatabase);
-            grpEntryDatabase.Location = new Point(17, 123);
-            grpEntryDatabase.Margin = new Padding(4, 5, 4, 5);
+            grpEntryDatabase.Location = new Point(12, 74);
             grpEntryDatabase.Name = "grpEntryDatabase";
-            grpEntryDatabase.Padding = new Padding(4, 5, 4, 5);
-            grpEntryDatabase.Size = new Size(1159, 97);
+            grpEntryDatabase.Size = new Size(811, 58);
             grpEntryDatabase.TabIndex = 18;
             grpEntryDatabase.TabStop = false;
             grpEntryDatabase.Text = "Database";
@@ -451,10 +415,9 @@
             // 
             btnLoadData.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadData.Enabled = false;
-            btnLoadData.Location = new Point(929, 36);
-            btnLoadData.Margin = new Padding(4, 5, 4, 5);
+            btnLoadData.Location = new Point(650, 22);
             btnLoadData.Name = "btnLoadData";
-            btnLoadData.Size = new Size(101, 38);
+            btnLoadData.Size = new Size(71, 23);
             btnLoadData.TabIndex = 22;
             btnLoadData.Text = "Load data";
             btnLoadData.UseVisualStyleBackColor = true;
@@ -463,10 +426,9 @@
             // btnDbStatus
             // 
             btnDbStatus.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnDbStatus.Location = new Point(1042, 36);
-            btnDbStatus.Margin = new Padding(4, 5, 4, 5);
+            btnDbStatus.Location = new Point(729, 22);
             btnDbStatus.Name = "btnDbStatus";
-            btnDbStatus.Size = new Size(109, 38);
+            btnDbStatus.Size = new Size(76, 23);
             btnDbStatus.TabIndex = 6;
             btnDbStatus.Text = "Status";
             btnDbStatus.UseVisualStyleBackColor = true;
@@ -478,10 +440,9 @@
             chkDbEntrySingle.AutoSize = true;
             chkDbEntrySingle.Checked = true;
             chkDbEntrySingle.CheckState = CheckState.Checked;
-            chkDbEntrySingle.Location = new Point(776, 40);
-            chkDbEntrySingle.Margin = new Padding(4, 5, 4, 5);
+            chkDbEntrySingle.Location = new Point(548, 24);
             chkDbEntrySingle.Name = "chkDbEntrySingle";
-            chkDbEntrySingle.Size = new Size(145, 29);
+            chkDbEntrySingle.Size = new Size(97, 19);
             chkDbEntrySingle.TabIndex = 2;
             chkDbEntrySingle.Text = "Entry All Data";
             chkDbEntrySingle.UseVisualStyleBackColor = true;
@@ -489,10 +450,9 @@
             // urlDatabaseToEntry
             // 
             urlDatabaseToEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            urlDatabaseToEntry.Location = new Point(110, 38);
-            urlDatabaseToEntry.Margin = new Padding(4, 5, 4, 5);
+            urlDatabaseToEntry.Location = new Point(77, 23);
             urlDatabaseToEntry.Name = "urlDatabaseToEntry";
-            urlDatabaseToEntry.Size = new Size(656, 31);
+            urlDatabaseToEntry.Size = new Size(460, 23);
             urlDatabaseToEntry.TabIndex = 1;
             urlDatabaseToEntry.Text = "http://localhost:3010/";
             // 
@@ -500,10 +460,9 @@
             // 
             chkEntryDatabase.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             chkEntryDatabase.AutoSize = true;
-            chkEntryDatabase.Location = new Point(9, 42);
-            chkEntryDatabase.Margin = new Padding(4, 5, 4, 5);
+            chkEntryDatabase.Location = new Point(6, 25);
             chkEntryDatabase.Name = "chkEntryDatabase";
-            chkEntryDatabase.Size = new Size(103, 29);
+            chkEntryDatabase.Size = new Size(68, 19);
             chkEntryDatabase.TabIndex = 1;
             chkEntryDatabase.Text = "     URL :";
             chkEntryDatabase.TextAlign = ContentAlignment.MiddleRight;
@@ -512,10 +471,9 @@
             // btnImport
             // 
             btnImport.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnImport.Location = new Point(999, 449);
-            btnImport.Margin = new Padding(4, 5, 4, 5);
+            btnImport.Location = new Point(699, 269);
             btnImport.Name = "btnImport";
-            btnImport.Size = new Size(176, 37);
+            btnImport.Size = new Size(123, 22);
             btnImport.TabIndex = 19;
             btnImport.Text = "Import CSV";
             btnImport.UseVisualStyleBackColor = true;
@@ -524,10 +482,9 @@
             // btnCreateModel
             // 
             btnCreateModel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCreateModel.Location = new Point(1000, 835);
-            btnCreateModel.Margin = new Padding(4, 5, 4, 5);
+            btnCreateModel.Location = new Point(700, 501);
             btnCreateModel.Name = "btnCreateModel";
-            btnCreateModel.Size = new Size(176, 37);
+            btnCreateModel.Size = new Size(123, 22);
             btnCreateModel.TabIndex = 20;
             btnCreateModel.Text = "Create Model";
             btnCreateModel.UseVisualStyleBackColor = true;
@@ -537,10 +494,9 @@
             // 
             chkAnalyze.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chkAnalyze.AutoSize = true;
-            chkAnalyze.Location = new Point(1041, 14);
-            chkAnalyze.Margin = new Padding(4, 5, 4, 5);
+            chkAnalyze.Location = new Point(733, 8);
             chkAnalyze.Name = "chkAnalyze";
-            chkAnalyze.Size = new Size(139, 29);
+            chkAnalyze.Size = new Size(93, 19);
             chkAnalyze.TabIndex = 15;
             chkAnalyze.Text = "Analyze data";
             chkAnalyze.UseVisualStyleBackColor = true;
@@ -556,9 +512,11 @@
             grpAnalysis.Controls.Add(fldResult2);
             grpAnalysis.Controls.Add(fldResult1);
             grpAnalysis.Enabled = false;
-            grpAnalysis.Location = new Point(17, 449);
+            grpAnalysis.Location = new Point(12, 269);
+            grpAnalysis.Margin = new Padding(2);
             grpAnalysis.Name = "grpAnalysis";
-            grpAnalysis.Size = new Size(972, 82);
+            grpAnalysis.Padding = new Padding(2);
+            grpAnalysis.Size = new Size(680, 49);
             grpAnalysis.TabIndex = 21;
             grpAnalysis.TabStop = false;
             grpAnalysis.Text = "Prediction";
@@ -566,9 +524,10 @@
             // chkAnLog
             // 
             chkAnLog.AutoSize = true;
-            chkAnLog.Location = new Point(891, 38);
+            chkAnLog.Location = new Point(624, 23);
+            chkAnLog.Margin = new Padding(2);
             chkAnLog.Name = "chkAnLog";
-            chkAnLog.Size = new Size(68, 29);
+            chkAnLog.Size = new Size(46, 19);
             chkAnLog.TabIndex = 5;
             chkAnLog.Text = "Log";
             chkAnLog.UseVisualStyleBackColor = true;
@@ -576,9 +535,10 @@
             // chkAnalysis
             // 
             chkAnalysis.AutoSize = true;
-            chkAnalysis.Location = new Point(12, 38);
+            chkAnalysis.Location = new Point(8, 23);
+            chkAnalysis.Margin = new Padding(2);
             chkAnalysis.Name = "chkAnalysis";
-            chkAnalysis.Size = new Size(99, 29);
+            chkAnalysis.Size = new Size(67, 19);
             chkAnalysis.TabIndex = 4;
             chkAnalysis.Text = "Analyze";
             chkAnalysis.UseVisualStyleBackColor = true;
@@ -587,9 +547,10 @@
             // lblResult1
             // 
             lblResult1.AutoSize = true;
-            lblResult1.Location = new Point(154, 39);
+            lblResult1.Location = new Point(108, 23);
+            lblResult1.Margin = new Padding(2, 0, 2, 0);
             lblResult1.Name = "lblResult1";
-            lblResult1.Size = new Size(31, 25);
+            lblResult1.Size = new Size(19, 15);
             lblResult1.TabIndex = 3;
             lblResult1.Text = "1: ";
             lblResult1.Visible = false;
@@ -597,9 +558,10 @@
             // lblResult2
             // 
             lblResult2.AutoSize = true;
-            lblResult2.Location = new Point(513, 39);
+            lblResult2.Location = new Point(359, 23);
+            lblResult2.Margin = new Padding(2, 0, 2, 0);
             lblResult2.Name = "lblResult2";
-            lblResult2.Size = new Size(31, 25);
+            lblResult2.Size = new Size(19, 15);
             lblResult2.TabIndex = 2;
             lblResult2.Text = "2: ";
             lblResult2.Visible = false;
@@ -607,28 +569,30 @@
             // fldResult2
             // 
             fldResult2.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            fldResult2.Location = new Point(550, 30);
+            fldResult2.Location = new Point(385, 18);
+            fldResult2.Margin = new Padding(2);
             fldResult2.MaxLength = 128;
             fldResult2.Name = "fldResult2";
             fldResult2.ReadOnly = true;
-            fldResult2.Size = new Size(320, 39);
+            fldResult2.Size = new Size(225, 29);
             fldResult2.TabIndex = 1;
             // 
             // fldResult1
             // 
             fldResult1.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            fldResult1.Location = new Point(191, 30);
+            fldResult1.Location = new Point(134, 18);
+            fldResult1.Margin = new Padding(2);
             fldResult1.MaxLength = 128;
             fldResult1.Name = "fldResult1";
             fldResult1.ReadOnly = true;
-            fldResult1.Size = new Size(300, 39);
+            fldResult1.Size = new Size(211, 29);
             fldResult1.TabIndex = 0;
             // 
             // SerialCommForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1193, 944);
+            ClientSize = new Size(835, 566);
             Controls.Add(chkAnalyze);
             Controls.Add(grpAnalysis);
             Controls.Add(btnCreateModel);
@@ -644,7 +608,6 @@
             Controls.Add(btnClear);
             Controls.Add(grpPort);
             Controls.Add(grpLogConsole);
-            Margin = new Padding(4, 5, 4, 5);
             Name = "SerialCommForm";
             Text = "BME688 Sampling";
             FormClosing += SerialCommForm_FormClosing;
