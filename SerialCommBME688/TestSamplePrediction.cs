@@ -30,9 +30,6 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-
-
-
         private String testTrainingResultLog(SensorToUse usePort, ref IPredictionModel predictionModel)
         {
             String result = "";

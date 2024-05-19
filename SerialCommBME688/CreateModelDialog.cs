@@ -15,7 +15,7 @@ namespace SamplingBME688Serial
         //  forDebugTest を true にすると、モデルを作成したときにテストデータで予測する
         private bool forDebugTest = true;
 
-        private String _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
+        private string _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
         private MLContext mlContext;
         private ICreateModelResult? callback = null;
         private IPredictionModel? trainedModel = null;
@@ -229,7 +229,7 @@ namespace SamplingBME688Serial
 
         private void btnCreateModel_Click(object sender, EventArgs e)
         {
-            String message = "Create Model, READY?";
+            string message = "Create Model, READY?";
 
             // ----- モデルの作成を開始するか、確認する
             DialogResult result = MessageBox.Show(message, "Create Model", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -381,32 +381,38 @@ namespace SamplingBME688Serial
             if (forDebugTest)
             {
                 // ---------- テストデータで予測処理を実行 ----------
-                SensorToUse usePortType;
-                if (selSensor1and2.Checked)
-                {
-                    usePortType = SensorToUse.port1and2;
-                }
-                else if (selSensor1.Checked)
-                {
-                    usePortType = SensorToUse.port1;
-                }
-                else if (selSensor2.Checked)
-                {
-                    usePortType = SensorToUse.port2;
-                }
-                else // if (selSensor1or2.Checked)
-                {
-                    usePortType = SensorToUse.port1or2;
-                }
+                SensorToUse usePortType = getPortType();
                 TestSamplePrediction testSamplePrediction = new TestSamplePrediction();
                 appendText(" - - - test training - - -\r\n");
-                String reply = testSamplePrediction.testPrediction(usePortType, ref trainedModel, chkDataLog.Checked);
+                string reply = testSamplePrediction.testPrediction(usePortType, ref trainedModel, chkDataLog.Checked);
                 appendText(reply);
                 appendText(" - - -      done     - - -\r\n");
             }
 
             // ----- モデル作成の完了を通知 -----
             callback?.createModelFinished(ret, usePort, trainedModel, "create model done.");
+        }
+
+        private SensorToUse getPortType()
+        {
+            SensorToUse usePortType;
+            if (selSensor1and2.Checked)
+            {
+                usePortType = SensorToUse.port1and2;
+            }
+            else if (selSensor1.Checked)
+            {
+                usePortType = SensorToUse.port1;
+            }
+            else if (selSensor2.Checked)
+            {
+                usePortType = SensorToUse.port2;
+            }
+            else // if (selSensor1or2.Checked)
+            {
+                usePortType = SensorToUse.port1or2;
+            }
+            return (usePortType);
         }
 
         private BinaryClassificationMethod getBinaryClassificationMethod()
@@ -442,20 +448,44 @@ namespace SamplingBME688Serial
 
         private void btnLoadModel_Click(object sender, EventArgs e)
         {
-
+            DataViewSchema modelSchema;
         }
 
         private void btnSaveModel_Click(object sender, EventArgs e)
         {
-            // ----- モデルボタンを押したとき... モデルを保存する
+            // ----- モデル保存ボタンを押したとき... モデルを保存する
             if (trainedModel == null)
             {
                 // --------- モデルがないので保存しない。
-                MessageBox.Show("The model is not created yet.", "Save cancelled", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("The prediction model is not created yet.", "Save cancelled", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            // ----- 保存ダイアログを表示する
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "zip files (*.zip)|*.zip|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 2;
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.CheckPathExists = true;
+            saveFileDialog.OverwritePrompt = true;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = saveFileDialog.FileName;
 
+                // ----- モデルを保存し、結果をダイアログで表示する
+                if (trainedModel.savePredictionModel(fileName))
+                {
+                    string informationToShow = "Model saved : " + fileName;
+                    MessageBox.Show("Model saved : " + fileName, "Save Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtResult.Text = informationToShow;
+                }
+                else
+                {
+                    string warningToShow = "[ERROR] The file did not saved : " + fileName;
+                    MessageBox.Show(warningToShow, "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtResult.Text = warningToShow;
+                }
+            }
         }
 
         private void btnSelectCategory_Click(object sender, EventArgs e)

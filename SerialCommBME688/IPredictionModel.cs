@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SamplingBME688Serial
 {
     public interface IPredictionModel
     {
-        bool savePredictionModel(SensorToUse sensorToUse, String outputFileName);
+        bool savePredictionModel(String outputFileName);
 
         String predictBothData(OdorBothData targetData);
         String predictOrData(OdorOrData targetData);

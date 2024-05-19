@@ -30,6 +30,7 @@ namespace SamplingBME688Serial
         private IEstimator<ITransformer>? estimator = null;
         private ICreateModelConsole console;
         private ITransformer? trainedModel = null;
+        private IDataView? dataView = null;
 
         public TrainingMultiBinaryClassification(ref MLContext mlContext, MultiClassMethod method, BinaryClassificationMethod binaryClassification, String inputDataFileName, ICreateModelConsole console)
         {
@@ -129,31 +130,32 @@ namespace SamplingBME688Serial
                 // ----- データの読み込みの設定
                 if (usePort == SensorToUse.port1and2)
                 {
-                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                    dataView = mlContext.Data.LoadFromTextFile<OdorBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainBothOdorData(outputFileName, splitData);
                 }
                 else if (usePort == SensorToUse.port1or2)
                 {
-                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorOrData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                    dataView = mlContext.Data.LoadFromTextFile<OdorOrData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainOrOdorData(outputFileName, splitData);
                 }
                 else if (usePort == SensorToUse.port1)
                 {
-                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                    dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainSingle1OdorData(outputFileName, splitData);
                 }
                 else if (usePort == SensorToUse.port2)
                 {
-                    IDataView dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                    dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainSingle2OdorData(outputFileName, splitData);
                 }
                 else
                 {
                     console.appendText(" ----- executeTraining() : unknown port number.\r\n");
+                    dataView = null;
                     return (false);
                 }
                 console.appendText(" ----- executeTraining() : done.\r\n");
@@ -343,11 +345,21 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public bool savePredictionModel(SensorToUse sensorToUse, String outputFileName)
+        public bool savePredictionModel(String outputFileName)
         {
             bool ret = false;
             try
             {
+                if ((trainedModel != null) && (dataView != null))
+                {
+                    DataViewSchema modelSchema = dataView.Schema;
+                    mlContext.Model.Save(trainedModel, modelSchema, outputFileName);
+                    ret = true;
+                }
+                else
+                {
+                    Debug.WriteLine(DateTime.Now + " [ERROR] savePredictionModel() : The model does not exist.");
+                }
             }
             catch (Exception ee)
             {
@@ -357,21 +369,5 @@ namespace SamplingBME688Serial
             return (ret);
         }
 
-        public bool loadPredictionModel(SensorToUse sensorToUse, String inputFileName)
-        {
-            bool ret;
-            try
-            {
-                DataViewSchema modelSchema;
-                trainedModel = mlContext.Model.Load(inputFileName, out modelSchema);
-                ret = true;
-            }
-            catch (Exception ee)
-            {
-                Debug.WriteLine(DateTime.Now + " [ERROR] loadPredictionModel() : " + ee.Message);
-                ret = false;
-            }
-            return (ret);
-        }
     }
 }

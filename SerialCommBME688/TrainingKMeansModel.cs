@@ -37,6 +37,8 @@ namespace SamplingBME688Serial
         private bool doneTraining = false;
         //private Microsoft.ML.Data.TransformerChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>>? model = null;
         private ITransformer? trainedModel = null;
+        private IDataView? dataView = null;
+
 
         public TrainingKMeansModel(ref MLContext mlContext, String inputDataFileName, int nofClusters, ICreateModelConsole console)
         {
@@ -48,7 +50,6 @@ namespace SamplingBME688Serial
 
         public bool executeTraining(SensorToUse usePort, String? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
         {
-            IDataView dataView;
             Microsoft.ML.Data.EstimatorChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>> pipeline;
             try
             {
@@ -573,32 +574,25 @@ namespace SamplingBME688Serial
             }
         }
 
-        public bool savePredictionModel(SensorToUse sensorToUse, String outputFileName)
+        public bool savePredictionModel(String outputFileName)
         {
             bool ret = false;
             try
             {
+                if ((trainedModel != null)&&(dataView != null))
+                {
+                    DataViewSchema modelSchema = dataView.Schema;
+                    mlContext.Model.Save(trainedModel, modelSchema, outputFileName);
+                    ret = true;
+                }
+                else
+                {
+                    Debug.WriteLine(DateTime.Now + " [ERROR] savePredictionModel() : The model does not exist.");
+                }
             }
             catch (Exception ee)
             {
                 Debug.WriteLine(DateTime.Now + " [ERROR] savePredictionModel() : " + ee.Message);
-                ret = false;
-            }
-            return (ret);
-        }
-
-        public bool loadPredictionModel(SensorToUse sensorToUse, String inputFileName)
-        {
-            bool ret;
-            try
-            {
-                DataViewSchema modelSchema;
-                trainedModel = mlContext.Model.Load(inputFileName, out modelSchema);
-                ret = true;
-            }
-            catch (Exception ee)
-            {
-                Debug.WriteLine(DateTime.Now + " [ERROR] loadPredictionModel() : " + ee.Message);
                 ret = false;
             }
             return (ret);
