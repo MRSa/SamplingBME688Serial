@@ -55,6 +55,7 @@
             lblDataCount = new Label();
             txtResult = new TextBox();
             cmbBinaryModel = new ComboBox();
+            btnClearMessage = new Button();
             grpInformation.SuspendLayout();
             grpSensor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)rangeFromPercent).BeginInit();
@@ -64,19 +65,17 @@
             // 
             // btnLoadModel
             // 
-            btnLoadModel.Location = new Point(18, 320);
+            btnLoadModel.Location = new Point(18, 283);
             btnLoadModel.Name = "btnLoadModel";
             btnLoadModel.Size = new Size(150, 34);
             btnLoadModel.TabIndex = 10;
             btnLoadModel.Text = "Load Model";
             btnLoadModel.UseVisualStyleBackColor = true;
-            btnLoadModel.Visible = false;
             btnLoadModel.Click += btnLoadModel_Click;
             // 
             // btnSaveModel
             // 
-            btnSaveModel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSaveModel.Location = new Point(791, 320);
+            btnSaveModel.Location = new Point(18, 323);
             btnSaveModel.Name = "btnSaveModel";
             btnSaveModel.Size = new Size(150, 34);
             btnSaveModel.TabIndex = 11;
@@ -87,8 +86,9 @@
             // 
             // btnCreateModel
             // 
+            btnCreateModel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCreateModel.Font = new Font("Yu Gothic UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCreateModel.Location = new Point(18, 280);
+            btnCreateModel.Location = new Point(806, 283);
             btnCreateModel.Name = "btnCreateModel";
             btnCreateModel.Size = new Size(150, 34);
             btnCreateModel.TabIndex = 12;
@@ -333,10 +333,10 @@
             // 
             txtResult.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtResult.Font = new Font("Yu Gothic UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            txtResult.Location = new Point(174, 283);
+            txtResult.Location = new Point(193, 285);
             txtResult.Name = "txtResult";
             txtResult.ReadOnly = true;
-            txtResult.Size = new Size(782, 31);
+            txtResult.Size = new Size(607, 31);
             txtResult.TabIndex = 27;
             // 
             // cmbBinaryModel
@@ -350,11 +350,23 @@
             cmbBinaryModel.Visible = false;
             cmbBinaryModel.SelectedIndexChanged += cmbBinaryModel_SelectedIndexChanged;
             // 
+            // btnClearMessage
+            // 
+            btnClearMessage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClearMessage.Location = new Point(806, 323);
+            btnClearMessage.Name = "btnClearMessage";
+            btnClearMessage.Size = new Size(150, 34);
+            btnClearMessage.TabIndex = 29;
+            btnClearMessage.Text = "Clear Message";
+            btnClearMessage.UseVisualStyleBackColor = true;
+            btnClearMessage.Click += btnClearMessage_Click;
+            // 
             // CreateModelDialog
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(968, 634);
+            Controls.Add(btnClearMessage);
             Controls.Add(cmbBinaryModel);
             Controls.Add(txtResult);
             Controls.Add(grpData);
@@ -411,5 +423,6 @@
         private TextBox txtResult;
         private CheckBox chkDataLog;
         private ComboBox cmbBinaryModel;
+        private Button btnClearMessage;
     }
 }

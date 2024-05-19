@@ -1,7 +1,5 @@
 ﻿using Microsoft.ML;
-using System.Data;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace SamplingBME688Serial
 {
@@ -29,7 +27,8 @@ namespace SamplingBME688Serial
             try
             {
                 Debug.WriteLine(DateTime.Now + " ---------- executeTraining() START " + classificationMethod + " ----------");
-                console.appendText(" ----- executeTraining() " + classificationMethod + " Input File: " + inputDataFileName + "  Output File: " + outputFileName + " START -----\r\n");
+                console.appendText("\r\n ---------- executeTraining() START [" + classificationMethod + "] ----------\r\n");
+                console.appendText("   Input File: " + inputDataFileName + "\r\n   Output File: " + outputFileName + " \r\n\r\n");
 
                 // ----- データの読み込みの設定
                 if (usePort == SensorToUse.port1and2)
@@ -37,32 +36,53 @@ namespace SamplingBME688Serial
                     dataView = mlContext.Data.LoadFromTextFile<OdorBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainBothOdorData(outputFileName, splitData);
+                    if (trainedModel != null)
+                    {
+                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                    }
                 }
                 else if (usePort == SensorToUse.port1or2)
                 {
                     dataView = mlContext.Data.LoadFromTextFile<OdorOrData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainOrOdorData(outputFileName, splitData);
+                    if (trainedModel != null)
+                    {
+                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                    }
                 }
                 else if (usePort == SensorToUse.port1)
                 {
                     dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainSingle1OdorData(outputFileName, splitData);
+                    if (trainedModel != null)
+                    {
+                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                    }
                 }
                 else if (usePort == SensorToUse.port2)
                 {
                     dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
                     DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
                     trainSingle2OdorData(outputFileName, splitData);
+                    if (trainedModel != null)
+                    {
+                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                    }
                 }
                 else
                 {
                     dataView = null;
-                    console.appendText(" ----- executeTraining() : unknown port number.\r\n");
+                    console.appendText(" ----- executeTraining() : unknown port number. ----- \r\n");
                     return (false);
                 }
-                console.appendText(" ----- executeTraining() : done.\r\n");
+
+                console.appendText(" ----- executeTraining() : done. ----- \r\n");
                 Debug.WriteLine(DateTime.Now + " ---------- executeTraining() END  ----------");
                 return (true);
             }
@@ -73,6 +93,17 @@ namespace SamplingBME688Serial
                 console.appendText(DateTime.Now + " [ERROR] executeTraining() : " + ex.Message + " \r\n\r\n");
             }
             return (false);
+        }
+
+        private void showTestMetrics(double microAccuracy, double macroAccuracy, double logLoss, double logLossReduction)
+        {
+            // ------ モデルの検証結果を画面表示
+            //   (参考： https://learn.microsoft.com/en-us/dotnet/machine-learning/tutorials/github-issue-classification )
+            console.appendText(" ---------- evaluation result [" + classificationMethod + "] ----------\r\n");
+            console.appendText($"   MicroAccuracy   : {microAccuracy:0.###}\r\n");     //  マイクロ精度: 1に近づける
+            console.appendText($"   MacroAccuracy   : {macroAccuracy:0.###}\r\n");     //  マクロ精度:   1に近づける
+            console.appendText($"   LogLoss         : {logLoss:#.###}\r\n");           //  対数損失:     0に近づける
+            console.appendText($"   LogLossReduction: {logLossReduction:#.###}\r\n");  //  対数損失還元: 範囲は [-inf, 1.00] で、1.00に近づける
         }
 
         private void trainBothOdorData(String? outputFileName, DataOperationsCatalog.TrainTestData testData)
@@ -271,6 +302,11 @@ namespace SamplingBME688Serial
                 ret = false;
             }
             return (ret);
+        }
+
+        public string getMethodName()
+        {
+            return (classificationMethod);
         }
     }
 }

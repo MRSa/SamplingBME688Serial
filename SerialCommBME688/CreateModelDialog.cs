@@ -1,6 +1,6 @@
 ﻿using Microsoft.ML;
 using System.Diagnostics;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 
 namespace SamplingBME688Serial
 {
@@ -12,8 +12,8 @@ namespace SamplingBME688Serial
 
     public partial class CreateModelDialog : Form, ICreateModelConsole
     {
-        //  forDebugTest を true にすると、モデルを作成したときにテストデータで予測する
-        private bool forDebugTest = true;
+        // ----- forDebugTest を true にすると、モデルを作成したときにテストデータで予測する
+        private bool forDebugTest = false;
 
         private string _sourceDataFile = Path.Combine(System.IO.Path.GetTempPath(), "modelsrc.csv");
         private MLContext mlContext;
@@ -31,9 +31,10 @@ namespace SamplingBME688Serial
         private int port2CategoryCount = 0;
         private int categoryCount = 0;
 
-        public CreateModelDialog(ref MLContext mlContext)
+        public CreateModelDialog(ref MLContext mlContext, bool forDebug = false)
         {
             this.mlContext = mlContext;
+            this.forDebugTest = forDebug;
 
             InitializeComponent();
 
@@ -369,24 +370,18 @@ namespace SamplingBME688Serial
                 // モデルが作成された(保存ボタンを有効にする)
                 btnSaveModel.Enabled = true;
                 btnSaveModel.Visible = true;
+
+                // ----- 作成したモデルをチェックする
+                checkTheTrainedModel();
+
+                txtResult.Text = " Created : " + trainedModel.getMethodName();
             }
             else
             {
                 // モデルは作成できなかった(保存ボタンを無効にする)
                 btnSaveModel.Enabled = false;
                 btnSaveModel.Visible = false;
-            }
-
-            // ----------------------------------------
-            if (forDebugTest)
-            {
-                // ---------- テストデータで予測処理を実行 ----------
-                SensorToUse usePortType = getPortType();
-                TestSamplePrediction testSamplePrediction = new TestSamplePrediction();
-                appendText(" - - - test training - - -\r\n");
-                string reply = testSamplePrediction.testPrediction(usePortType, ref trainedModel, chkDataLog.Checked);
-                appendText(reply);
-                appendText(" - - -      done     - - -\r\n");
+                txtResult.Text = "";
             }
 
             // ----- モデル作成の完了を通知 -----
@@ -414,6 +409,22 @@ namespace SamplingBME688Serial
             }
             return (usePortType);
         }
+
+        private void checkTheTrainedModel()
+        {
+            // ----------------------------------------
+            if (forDebugTest)
+            {
+                // ---------- テストデータで予測処理を実行 ----------
+                SensorToUse usePortType = getPortType();
+                TestSamplePrediction testSamplePrediction = new TestSamplePrediction();
+                appendText(" - - - test training - - -\r\n");
+                string reply = testSamplePrediction.testPrediction(usePortType, ref trainedModel, chkDataLog.Checked);
+                appendText(reply);
+                appendText(" - - -      done     - - -\r\n");
+            }
+        }
+
 
         private BinaryClassificationMethod getBinaryClassificationMethod()
         {
@@ -448,7 +459,41 @@ namespace SamplingBME688Serial
 
         private void btnLoadModel_Click(object sender, EventArgs e)
         {
-            DataViewSchema modelSchema;
+            try
+            {
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.Filter = "zip files (*.zip)|*.zip|All files (*.*)|*.*";
+                    openFileDialog.FilterIndex = 0;
+                    openFileDialog.RestoreDirectory = true;
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string fileName = openFileDialog.FileName;
+                        appendText(" ---- Load pre-trained Model " + fileName + "----\r\n");
+                        TrainingPreTrainedMultiClassification model = new TrainingPreTrainedMultiClassification(ref mlContext, this);
+                        model.loadPreTrainedModel(fileName);
+                        trainedModel = model;
+
+                        // ----- 作成したモデルをチェックする
+                        checkTheTrainedModel();
+
+                        // モデルをロードしたときには、モデルは保存できない(保存ボタンを無効にする)
+                        btnSaveModel.Enabled = false;
+                        btnSaveModel.Visible = false;
+
+                        // ----- モデル作成の完了を通知 -----
+                        callback?.createModelFinished(true, getPortType(), trainedModel, "load pre-trained model done.");
+                        txtResult.Text = " Load Model : " + fileName;
+                        appendText(" ---- Load pre-trained Model : DONE. ----\r\n");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                trainedModel = null;
+                Debug.WriteLine(DateTime.Now + " [Error] Load Pre-Trained Model : " + ex.Message);
+                txtResult.Text = "[Error] Load pre-trained Model: " + ex.Message;
+            }
         }
 
         private void btnSaveModel_Click(object sender, EventArgs e)
@@ -464,7 +509,7 @@ namespace SamplingBME688Serial
             // ----- 保存ダイアログを表示する
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "zip files (*.zip)|*.zip|All files (*.*)|*.*";
-            saveFileDialog.FilterIndex = 2;
+            saveFileDialog.FilterIndex = 0;
             saveFileDialog.RestoreDirectory = true;
             saveFileDialog.CheckPathExists = true;
             saveFileDialog.OverwritePrompt = true;
@@ -496,7 +541,7 @@ namespace SamplingBME688Serial
         private void cmbModel_SelectedIndexChanged(object sender, EventArgs e)
         {
             // モデルの選択を変更した時...
-            if ((cmbModel.SelectedIndex == 5)|| (cmbModel.SelectedIndex == 6))
+            if ((cmbModel.SelectedIndex == 5) || (cmbModel.SelectedIndex == 6))
             {
                 // ----- 二項分類を選択できるようにする
                 cmbBinaryModel.Enabled = true;
@@ -545,6 +590,12 @@ namespace SamplingBME688Serial
         private void cmbBinaryModel_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnClearMessage_Click(object sender, EventArgs e)
+        {
+            // ----- 表示エリアの内容をクリアする
+            txtMessage.Text = "";
         }
     }
 }

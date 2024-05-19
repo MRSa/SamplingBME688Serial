@@ -1,21 +1,12 @@
 using Microsoft.ML;
 using SamplingBME688Serial;
-using System;
-using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
-using System.IO.Ports;
-using System.Security.Policy;
 using System.Text;
-using System.Text.Json;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SerialCommBME688
 {
     public partial class SerialCommForm : Form, IDataImportCallback, ICreateModelResult, IReceivedOdorDataForAnalysis
     {
-        private bool isTestDebug = false;
         private GridDataSourceProvider dataSourceProvider;
         private SerialReceiver myReceiver;
         private SerialReceiver myReceiver_2;
@@ -635,39 +626,6 @@ namespace SerialCommBME688
             updateAnalysisMode();
         }
 
-        private void executePredictionTest()
-        {
-            // --------- テスト用データで予測実行
-            fldResult1.Text = "DEBUG TEST";
-            String message = "";
-            TestSampleData testData = new TestSampleData();
-            if (predictionModel != null)
-            {
-                // ----- 予測の実行
-                switch (predictModelType)
-                {
-                    case SensorToUse.port1and2:
-                        String result1 = predictionModel.predictBothData(testData.getBothData1()); // Ristretto
-                        String result2 = predictionModel.predictBothData(testData.getBothData2()); // GreenTea
-                        String result3 = predictionModel.predictBothData(testData.getBothData3()); // Ristretto
-                        String result4 = predictionModel.predictBothData(testData.getBothData4()); // Guatemala
-                        message = result1 + " " + result2 + " " + result3 + " " + result4;
-                        break;
-                    case SensorToUse.port1or2:
-                        break;
-                    case SensorToUse.port1:
-                        break;
-                    case SensorToUse.port2:
-                        break;
-                    case SensorToUse.None:
-                    default:
-                        break;
-                }
-            }
-            // ----- 予測結果の表示
-            fldResult2.Text = message;
-        }
-
         private void chkAnalysis_CheckedChanged(object sender, EventArgs e)
         {
             // ----- 解析の開始 / 終了が切り替えられたとき
@@ -677,14 +635,6 @@ namespace SerialCommBME688
                 String message2 = "";
                 if (chkAnalysis.Checked)
                 {
-                    if (isTestDebug)
-                    {
-                        // ----------- テストの実行処理
-                        executePredictionTest();
-                        chkAnalysis.Checked = false;
-                        return;
-                    }
-
                     // ----- 解析の開始
                     message1 = "START";
                     switch (predictModelType)
@@ -768,7 +718,6 @@ namespace SerialCommBME688
                 Debug.WriteLine(DateTime.Now + " showResult() : " + e.Message + "  --- " + itemData);
             }
         }
-
 
         public void receivedOdorDataForAnalysis(OdorOrData receivedData)
         {

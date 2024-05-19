@@ -26,7 +26,8 @@ namespace SerialCommBME688
 
         public SerialReceiverForAnalysis(int sensorId, IReceivedOdorDataForAnalysis notify)
         {
-            this.receivedData.sensorId = sensorId;
+            receivedData.sensorId = sensorId;
+            this.sensorId = sensorId;
             this.notify = notify;
         }
 

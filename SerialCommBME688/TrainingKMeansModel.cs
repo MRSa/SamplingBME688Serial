@@ -597,5 +597,10 @@ namespace SamplingBME688Serial
             }
             return (ret);
         }
+
+        public string getMethodName()
+        {
+            return ("K-Means");
+        }
     }
 }
