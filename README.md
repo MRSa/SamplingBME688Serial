@@ -2,7 +2,15 @@
 
 ## リポジトリ
 
-https://github.com/MRSa/SamplingBME688Serial
+[https://github.com/MRSa/SamplingBME688Serial](https://github.com/MRSa/SamplingBME688Serial)
+
+## 概要
+
+BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme688/) と [ATOM Lite](https://docs.m5stack.com/en/core/atom_lite)を最大２つWindows PCに接続し、Windowsアプリケーションで「におい」を学習し、学習結果を使って、どの「匂い」かを当てる（ことができるかもしれない）ようにしたシステムを提供します。
+
+「匂い」の学習には、.NET用の機械学習フレームワーク([ML.NET](https://dotnet.microsoft.com/en-us/apps/machinelearning-ai/ml-dotnet))が提供する、[他クラス分類のトレーナー](https://learn.microsoft.com/ja-jp/dotnet/machine-learning/resources/tasks#multiclass-classification)を使用でき、各トレーナーによる判定の違いをお試しいただけるようになっています。
+
+現在では、Windowsアプリケーション単独で匂いの学習と判定まで実施できるようになっていますが、それができるようになる前までは、pythonのモデルを使用して匂いの判定をしていました。このリポジトリには、その名残のpythonスクリプトがあります。
 
 ## 全体像
 
