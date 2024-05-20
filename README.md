@@ -14,7 +14,7 @@ BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/en
 
 ## 全体像
 
-![Overview](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/Overview3.png?raw=true)
+![Overview](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview00.png?raw=true)
 
 - Atom LiteにGrove(I2C)経由で接続したBME688から、シリアルポートにデータを出力するスケッチ (AtomLite/sketch_BME688_SAMPLING.ino)
 - シリアルポート経由でつないだAtom Liteから、BME688のデータを受信してCSVファイルまたはデータベースへ出力するWindows(C#)アプリ (SerialCommBME688/ 以下)
