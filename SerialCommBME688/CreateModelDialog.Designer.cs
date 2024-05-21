@@ -65,9 +65,10 @@
             // 
             // btnLoadModel
             // 
-            btnLoadModel.Location = new Point(18, 283);
+            btnLoadModel.Location = new Point(13, 170);
+            btnLoadModel.Margin = new Padding(2, 2, 2, 2);
             btnLoadModel.Name = "btnLoadModel";
-            btnLoadModel.Size = new Size(150, 34);
+            btnLoadModel.Size = new Size(105, 25);
             btnLoadModel.TabIndex = 10;
             btnLoadModel.Text = "Load Model";
             btnLoadModel.UseVisualStyleBackColor = true;
@@ -75,9 +76,10 @@
             // 
             // btnSaveModel
             // 
-            btnSaveModel.Location = new Point(18, 323);
+            btnSaveModel.Location = new Point(13, 199);
+            btnSaveModel.Margin = new Padding(2, 2, 2, 2);
             btnSaveModel.Name = "btnSaveModel";
-            btnSaveModel.Size = new Size(150, 34);
+            btnSaveModel.Size = new Size(105, 25);
             btnSaveModel.TabIndex = 11;
             btnSaveModel.Text = "Save Model";
             btnSaveModel.UseVisualStyleBackColor = true;
@@ -88,9 +90,10 @@
             // 
             btnCreateModel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCreateModel.Font = new Font("Yu Gothic UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCreateModel.Location = new Point(806, 283);
+            btnCreateModel.Location = new Point(565, 170);
+            btnCreateModel.Margin = new Padding(2, 2, 2, 2);
             btnCreateModel.Name = "btnCreateModel";
-            btnCreateModel.Size = new Size(150, 34);
+            btnCreateModel.Size = new Size(105, 25);
             btnCreateModel.TabIndex = 12;
             btnCreateModel.Text = "Create Model";
             btnCreateModel.UseVisualStyleBackColor = true;
@@ -100,9 +103,11 @@
             // 
             grpInformation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             grpInformation.Controls.Add(txtMessage);
-            grpInformation.Location = new Point(12, 360);
+            grpInformation.Location = new Point(8, 228);
+            grpInformation.Margin = new Padding(2, 2, 2, 2);
             grpInformation.Name = "grpInformation";
-            grpInformation.Size = new Size(944, 262);
+            grpInformation.Padding = new Padding(2, 2, 2, 2);
+            grpInformation.Size = new Size(661, 145);
             grpInformation.TabIndex = 3;
             grpInformation.TabStop = false;
             grpInformation.Text = "Message";
@@ -110,12 +115,13 @@
             // txtMessage
             // 
             txtMessage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            txtMessage.Location = new Point(16, 30);
+            txtMessage.Location = new Point(11, 18);
+            txtMessage.Margin = new Padding(2, 2, 2, 2);
             txtMessage.Multiline = true;
             txtMessage.Name = "txtMessage";
             txtMessage.ReadOnly = true;
             txtMessage.ScrollBars = ScrollBars.Both;
-            txtMessage.Size = new Size(913, 226);
+            txtMessage.Size = new Size(640, 125);
             txtMessage.TabIndex = 0;
             // 
             // grpSensor
@@ -125,9 +131,11 @@
             grpSensor.Controls.Add(selSensor1and2);
             grpSensor.Controls.Add(selSensor1or2);
             grpSensor.Controls.Add(selSensor1);
-            grpSensor.Location = new Point(12, 12);
+            grpSensor.Location = new Point(8, 7);
+            grpSensor.Margin = new Padding(2, 2, 2, 2);
             grpSensor.Name = "grpSensor";
-            grpSensor.Size = new Size(944, 75);
+            grpSensor.Padding = new Padding(2, 2, 2, 2);
+            grpSensor.Size = new Size(661, 45);
             grpSensor.TabIndex = 4;
             grpSensor.TabStop = false;
             grpSensor.Text = "Sensors to create";
@@ -136,9 +144,10 @@
             // 
             selSensor2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             selSensor2.AutoSize = true;
-            selSensor2.Location = new Point(275, 30);
+            selSensor2.Location = new Point(192, 18);
+            selSensor2.Margin = new Padding(2, 2, 2, 2);
             selSensor2.Name = "selSensor2";
-            selSensor2.Size = new Size(89, 29);
+            selSensor2.Size = new Size(59, 19);
             selSensor2.TabIndex = 2;
             selSensor2.TabStop = true;
             selSensor2.Text = "2 Only";
@@ -149,9 +158,10 @@
             selSensor1and2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             selSensor1and2.AutoSize = true;
             selSensor1and2.Checked = true;
-            selSensor1and2.Location = new Point(16, 30);
+            selSensor1and2.Location = new Point(11, 18);
+            selSensor1and2.Margin = new Padding(2, 2, 2, 2);
             selSensor1and2.Name = "selSensor1and2";
-            selSensor1and2.Size = new Size(97, 29);
+            selSensor1and2.Size = new Size(63, 19);
             selSensor1and2.TabIndex = 0;
             selSensor1and2.TabStop = true;
             selSensor1and2.Text = "1 and 2";
@@ -161,9 +171,10 @@
             // 
             selSensor1or2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             selSensor1or2.AutoSize = true;
-            selSensor1or2.Location = new Point(393, 30);
+            selSensor1or2.Location = new Point(275, 18);
+            selSensor1or2.Margin = new Padding(2, 2, 2, 2);
             selSensor1or2.Name = "selSensor1or2";
-            selSensor1or2.Size = new Size(168, 29);
+            selSensor1or2.Size = new Size(110, 19);
             selSensor1or2.TabIndex = 3;
             selSensor1or2.TabStop = true;
             selSensor1or2.Text = "1 or 2 (Separate)";
@@ -173,9 +184,10 @@
             // 
             selSensor1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             selSensor1.AutoSize = true;
-            selSensor1.Location = new Point(152, 30);
+            selSensor1.Location = new Point(106, 18);
+            selSensor1.Margin = new Padding(2, 2, 2, 2);
             selSensor1.Name = "selSensor1";
-            selSensor1.Size = new Size(89, 29);
+            selSensor1.Size = new Size(59, 19);
             selSensor1.TabIndex = 1;
             selSensor1.TabStop = true;
             selSensor1.Text = "1 Only";
@@ -184,45 +196,50 @@
             // lblModel
             // 
             lblModel.AutoSize = true;
-            lblModel.Location = new Point(12, 113);
+            lblModel.Location = new Point(8, 66);
+            lblModel.Margin = new Padding(2, 0, 2, 0);
             lblModel.Name = "lblModel";
-            lblModel.Size = new Size(63, 25);
+            lblModel.Size = new Size(41, 15);
             lblModel.TabIndex = 13;
             lblModel.Text = "Model";
             // 
             // cmbModel
             // 
             cmbModel.FormattingEnabled = true;
-            cmbModel.Location = new Point(103, 110);
+            cmbModel.Location = new Point(72, 63);
+            cmbModel.Margin = new Padding(2, 2, 2, 2);
             cmbModel.Name = "cmbModel";
-            cmbModel.Size = new Size(250, 33);
+            cmbModel.Size = new Size(176, 23);
             cmbModel.TabIndex = 14;
             cmbModel.SelectedIndexChanged += cmbModel_SelectedIndexChanged;
             // 
             // lblCategory
             // 
             lblCategory.AutoSize = true;
-            lblCategory.Location = new Point(12, 153);
+            lblCategory.Location = new Point(8, 93);
+            lblCategory.Margin = new Padding(2, 0, 2, 0);
             lblCategory.Name = "lblCategory";
-            lblCategory.Size = new Size(84, 25);
+            lblCategory.Size = new Size(54, 15);
             lblCategory.TabIndex = 15;
             lblCategory.Text = "Category";
             // 
             // txtCategory
             // 
             txtCategory.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtCategory.Location = new Point(103, 150);
+            txtCategory.Location = new Point(72, 90);
+            txtCategory.Margin = new Padding(2, 2, 2, 2);
             txtCategory.Name = "txtCategory";
             txtCategory.ReadOnly = true;
-            txtCategory.Size = new Size(735, 31);
+            txtCategory.Size = new Size(516, 23);
             txtCategory.TabIndex = 16;
             // 
             // btnSelectCategory
             // 
             btnSelectCategory.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSelectCategory.Location = new Point(844, 147);
+            btnSelectCategory.Location = new Point(591, 88);
+            btnSelectCategory.Margin = new Padding(2, 2, 2, 2);
             btnSelectCategory.Name = "btnSelectCategory";
-            btnSelectCategory.Size = new Size(112, 34);
+            btnSelectCategory.Size = new Size(78, 25);
             btnSelectCategory.TabIndex = 17;
             btnSelectCategory.Text = "Select...";
             btnSelectCategory.UseVisualStyleBackColor = true;
@@ -232,25 +249,28 @@
             // lblFrom
             // 
             lblFrom.AutoSize = true;
-            lblFrom.Location = new Point(6, 32);
+            lblFrom.Location = new Point(4, 19);
+            lblFrom.Margin = new Padding(2, 0, 2, 0);
             lblFrom.Name = "lblFrom";
-            lblFrom.Size = new Size(83, 25);
+            lblFrom.Size = new Size(54, 15);
             lblFrom.TabIndex = 19;
             lblFrom.Text = "From (%)";
             // 
             // rangeFromPercent
             // 
-            rangeFromPercent.Location = new Point(91, 30);
+            rangeFromPercent.Location = new Point(64, 18);
+            rangeFromPercent.Margin = new Padding(2, 2, 2, 2);
             rangeFromPercent.Name = "rangeFromPercent";
-            rangeFromPercent.Size = new Size(75, 31);
+            rangeFromPercent.Size = new Size(52, 23);
             rangeFromPercent.TabIndex = 20;
             rangeFromPercent.ValueChanged += rangeFromPercent_ValueChanged;
             // 
             // rangeToPercent
             // 
-            rangeToPercent.Location = new Point(247, 30);
+            rangeToPercent.Location = new Point(173, 18);
+            rangeToPercent.Margin = new Padding(2, 2, 2, 2);
             rangeToPercent.Name = "rangeToPercent";
-            rangeToPercent.Size = new Size(75, 31);
+            rangeToPercent.Size = new Size(52, 23);
             rangeToPercent.TabIndex = 21;
             rangeToPercent.Value = new decimal(new int[] { 100, 0, 0, 0 });
             rangeToPercent.ValueChanged += rangeToPercent_ValueChanged;
@@ -258,27 +278,30 @@
             // lblTo
             // 
             lblTo.AutoSize = true;
-            lblTo.Location = new Point(181, 32);
+            lblTo.Location = new Point(127, 19);
+            lblTo.Margin = new Padding(2, 0, 2, 0);
             lblTo.Name = "lblTo";
-            lblTo.Size = new Size(60, 25);
+            lblTo.Size = new Size(40, 15);
             lblTo.TabIndex = 22;
             lblTo.Text = "To (%)";
             // 
             // lblDuplicate
             // 
             lblDuplicate.AutoSize = true;
-            lblDuplicate.Location = new Point(340, 32);
+            lblDuplicate.Location = new Point(238, 19);
+            lblDuplicate.Margin = new Padding(2, 0, 2, 0);
             lblDuplicate.Name = "lblDuplicate";
-            lblDuplicate.Size = new Size(86, 25);
+            lblDuplicate.Size = new Size(57, 15);
             lblDuplicate.TabIndex = 23;
             lblDuplicate.Text = "Duplicate";
             // 
             // selDuplicate
             // 
             selDuplicate.FormattingEnabled = true;
-            selDuplicate.Location = new Point(432, 29);
+            selDuplicate.Location = new Point(302, 17);
+            selDuplicate.Margin = new Padding(2, 2, 2, 2);
             selDuplicate.Name = "selDuplicate";
-            selDuplicate.Size = new Size(109, 33);
+            selDuplicate.Size = new Size(78, 23);
             selDuplicate.TabIndex = 24;
             selDuplicate.SelectedIndexChanged += selDuplicate_SelectedIndexChanged;
             // 
@@ -294,9 +317,11 @@
             grpData.Controls.Add(rangeFromPercent);
             grpData.Controls.Add(rangeToPercent);
             grpData.Controls.Add(lblTo);
-            grpData.Location = new Point(12, 197);
+            grpData.Location = new Point(8, 118);
+            grpData.Margin = new Padding(2, 2, 2, 2);
             grpData.Name = "grpData";
-            grpData.Size = new Size(944, 75);
+            grpData.Padding = new Padding(2, 2, 2, 2);
+            grpData.Size = new Size(661, 45);
             grpData.TabIndex = 25;
             grpData.TabStop = false;
             grpData.Text = "Data";
@@ -304,9 +329,10 @@
             // chkDataLog
             // 
             chkDataLog.AutoSize = true;
-            chkDataLog.Location = new Point(852, 31);
+            chkDataLog.Location = new Point(596, 19);
+            chkDataLog.Margin = new Padding(2, 2, 2, 2);
             chkDataLog.Name = "chkDataLog";
-            chkDataLog.Size = new Size(68, 29);
+            chkDataLog.Size = new Size(46, 19);
             chkDataLog.TabIndex = 27;
             chkDataLog.Text = "Log";
             chkDataLog.UseVisualStyleBackColor = true;
@@ -314,18 +340,20 @@
             // 
             // txtDataCount
             // 
-            txtDataCount.Location = new Point(646, 29);
+            txtDataCount.Location = new Point(452, 17);
+            txtDataCount.Margin = new Padding(2, 2, 2, 2);
             txtDataCount.Name = "txtDataCount";
             txtDataCount.ReadOnly = true;
-            txtDataCount.Size = new Size(180, 31);
+            txtDataCount.Size = new Size(127, 23);
             txtDataCount.TabIndex = 26;
             // 
             // lblDataCount
             // 
             lblDataCount.AutoSize = true;
-            lblDataCount.Location = new Point(574, 32);
+            lblDataCount.Location = new Point(402, 19);
+            lblDataCount.Margin = new Padding(2, 0, 2, 0);
             lblDataCount.Name = "lblDataCount";
-            lblDataCount.Size = new Size(74, 25);
+            lblDataCount.Size = new Size(48, 15);
             lblDataCount.TabIndex = 25;
             lblDataCount.Text = "Count : ";
             // 
@@ -333,19 +361,21 @@
             // 
             txtResult.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtResult.Font = new Font("Yu Gothic UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            txtResult.Location = new Point(193, 285);
+            txtResult.Location = new Point(135, 171);
+            txtResult.Margin = new Padding(2, 2, 2, 2);
             txtResult.Name = "txtResult";
             txtResult.ReadOnly = true;
-            txtResult.Size = new Size(607, 31);
+            txtResult.Size = new Size(426, 23);
             txtResult.TabIndex = 27;
             // 
             // cmbBinaryModel
             // 
             cmbBinaryModel.Enabled = false;
             cmbBinaryModel.FormattingEnabled = true;
-            cmbBinaryModel.Location = new Point(381, 110);
+            cmbBinaryModel.Location = new Point(267, 63);
+            cmbBinaryModel.Margin = new Padding(2, 2, 2, 2);
             cmbBinaryModel.Name = "cmbBinaryModel";
-            cmbBinaryModel.Size = new Size(300, 33);
+            cmbBinaryModel.Size = new Size(211, 23);
             cmbBinaryModel.TabIndex = 28;
             cmbBinaryModel.Visible = false;
             cmbBinaryModel.SelectedIndexChanged += cmbBinaryModel_SelectedIndexChanged;
@@ -353,9 +383,10 @@
             // btnClearMessage
             // 
             btnClearMessage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnClearMessage.Location = new Point(806, 323);
+            btnClearMessage.Location = new Point(565, 199);
+            btnClearMessage.Margin = new Padding(2, 2, 2, 2);
             btnClearMessage.Name = "btnClearMessage";
-            btnClearMessage.Size = new Size(150, 34);
+            btnClearMessage.Size = new Size(105, 25);
             btnClearMessage.TabIndex = 29;
             btnClearMessage.Text = "Clear Message";
             btnClearMessage.UseVisualStyleBackColor = true;
@@ -363,9 +394,9 @@
             // 
             // CreateModelDialog
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(968, 634);
+            ClientSize = new Size(678, 380);
             Controls.Add(btnClearMessage);
             Controls.Add(cmbBinaryModel);
             Controls.Add(txtResult);
@@ -380,6 +411,7 @@
             Controls.Add(btnCreateModel);
             Controls.Add(btnSaveModel);
             Controls.Add(btnLoadModel);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "CreateModelDialog";
             Text = "Create Model";
             grpInformation.ResumeLayout(false);

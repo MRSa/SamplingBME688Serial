@@ -14,11 +14,11 @@ namespace SamplingBME688Serial
         private TrackBar bar1;
         private TrackBar bar3;
         private TrackBar bar2;
-        private Label label1Value;
-        private Label label2Value;
-        private Label label3Value;
         private CheckBox chkRangeZoom;
         private CheckBox chkLogRData;
+        private CheckBox chk3Visible;
+        private CheckBox chk2Visible;
+        private CheckBox chk1Visible;
         private List<String> labelList = new List<String>();
 
 
@@ -48,11 +48,11 @@ namespace SamplingBME688Serial
             bar1 = new TrackBar();
             bar3 = new TrackBar();
             bar2 = new TrackBar();
-            label1Value = new Label();
-            label2Value = new Label();
-            label3Value = new Label();
             chkRangeZoom = new CheckBox();
             chkLogRData = new CheckBox();
+            chk3Visible = new CheckBox();
+            chk2Visible = new CheckBox();
+            chk1Visible = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)bar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bar3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bar2).BeginInit();
@@ -62,7 +62,7 @@ namespace SamplingBME688Serial
             // 
             btnNext.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnNext.DialogResult = DialogResult.Cancel;
-            btnNext.Location = new Point(113, 524);
+            btnNext.Location = new Point(113, 517);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(35, 30);
             btnNext.TabIndex = 3;
@@ -73,7 +73,7 @@ namespace SamplingBME688Serial
             // 
             btnPrev.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnPrev.DialogResult = DialogResult.Cancel;
-            btnPrev.Location = new Point(12, 524);
+            btnPrev.Location = new Point(12, 517);
             btnPrev.Name = "btnPrev";
             btnPrev.Size = new Size(35, 30);
             btnPrev.TabIndex = 1;
@@ -83,7 +83,7 @@ namespace SamplingBME688Serial
             // fldIndex
             // 
             fldIndex.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            fldIndex.Location = new Point(53, 529);
+            fldIndex.Location = new Point(53, 522);
             fldIndex.Name = "fldIndex";
             fldIndex.ReadOnly = true;
             fldIndex.Size = new Size(54, 23);
@@ -94,8 +94,8 @@ namespace SamplingBME688Serial
             // 
             lblSelectedIndex.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblSelectedIndex.AutoSize = true;
-            lblSelectedIndex.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            lblSelectedIndex.Location = new Point(12, 506);
+            lblSelectedIndex.ImageAlign = ContentAlignment.TopLeft;
+            lblSelectedIndex.Location = new Point(12, 499);
             lblSelectedIndex.Name = "lblSelectedIndex";
             lblSelectedIndex.Size = new Size(28, 15);
             lblSelectedIndex.TabIndex = 4;
@@ -104,7 +104,7 @@ namespace SamplingBME688Serial
             // bar1
             // 
             bar1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            bar1.Location = new Point(198, 509);
+            bar1.Location = new Point(254, 499);
             bar1.Maximum = 99;
             bar1.Name = "bar1";
             bar1.Size = new Size(150, 45);
@@ -114,7 +114,7 @@ namespace SamplingBME688Serial
             // bar3
             // 
             bar3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            bar3.Location = new Point(622, 504);
+            bar3.Location = new Point(738, 499);
             bar3.Maximum = 99;
             bar3.Name = "bar3";
             bar3.Size = new Size(150, 45);
@@ -125,7 +125,7 @@ namespace SamplingBME688Serial
             // bar2
             // 
             bar2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            bar2.Location = new Point(407, 509);
+            bar2.Location = new Point(499, 499);
             bar2.Maximum = 99;
             bar2.Name = "bar2";
             bar2.Size = new Size(150, 45);
@@ -133,44 +133,11 @@ namespace SamplingBME688Serial
             bar2.Value = 49;
             bar2.Scroll += bar2_Scroll;
             // 
-            // label1Value
-            // 
-            label1Value.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            label1Value.AutoSize = true;
-            label1Value.Location = new Point(154, 509);
-            label1Value.Name = "label1Value";
-            label1Value.Size = new Size(38, 15);
-            label1Value.TabIndex = 8;
-            label1Value.Text = "label1";
-            label1Value.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label2Value
-            // 
-            label2Value.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            label2Value.AutoSize = true;
-            label2Value.Location = new Point(363, 509);
-            label2Value.Name = "label2Value";
-            label2Value.Size = new Size(38, 15);
-            label2Value.TabIndex = 9;
-            label2Value.Text = "label2";
-            label2Value.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label3Value
-            // 
-            label3Value.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            label3Value.AutoSize = true;
-            label3Value.Location = new Point(578, 509);
-            label3Value.Name = "label3Value";
-            label3Value.Size = new Size(38, 15);
-            label3Value.TabIndex = 10;
-            label3Value.Text = "label3";
-            label3Value.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // chkRangeZoom
             // 
             chkRangeZoom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             chkRangeZoom.AutoSize = true;
-            chkRangeZoom.Location = new Point(791, 531);
+            chkRangeZoom.Location = new Point(905, 535);
             chkRangeZoom.Name = "chkRangeZoom";
             chkRangeZoom.Size = new Size(57, 19);
             chkRangeZoom.TabIndex = 11;
@@ -182,7 +149,7 @@ namespace SamplingBME688Serial
             // 
             chkLogRData.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             chkLogRData.AutoSize = true;
-            chkLogRData.Location = new Point(791, 506);
+            chkLogRData.Location = new Point(905, 504);
             chkLogRData.Name = "chkLogRData";
             chkLogRData.Size = new Size(46, 19);
             chkLogRData.TabIndex = 12;
@@ -190,15 +157,57 @@ namespace SamplingBME688Serial
             chkLogRData.UseVisualStyleBackColor = true;
             chkLogRData.CheckedChanged += chkLogRData_CheckedChanged;
             // 
+            // chk3Visible
+            // 
+            chk3Visible.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            chk3Visible.AutoSize = true;
+            chk3Visible.Checked = true;
+            chk3Visible.CheckState = CheckState.Checked;
+            chk3Visible.Location = new Point(675, 504);
+            chk3Visible.Name = "chk3Visible";
+            chk3Visible.Size = new Size(57, 19);
+            chk3Visible.TabIndex = 13;
+            chk3Visible.Text = "label3";
+            chk3Visible.UseVisualStyleBackColor = true;
+            chk3Visible.CheckedChanged += chk3Visible_CheckedChanged;
+            // 
+            // chk2Visible
+            // 
+            chk2Visible.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            chk2Visible.AutoSize = true;
+            chk2Visible.Checked = true;
+            chk2Visible.CheckState = CheckState.Checked;
+            chk2Visible.Location = new Point(437, 504);
+            chk2Visible.Name = "chk2Visible";
+            chk2Visible.Size = new Size(57, 19);
+            chk2Visible.TabIndex = 14;
+            chk2Visible.Text = "label2";
+            chk2Visible.UseVisualStyleBackColor = true;
+            chk2Visible.CheckedChanged += chk2Visible_CheckedChanged;
+            // 
+            // chk1Visible
+            // 
+            chk1Visible.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            chk1Visible.AutoSize = true;
+            chk1Visible.Checked = true;
+            chk1Visible.CheckState = CheckState.Checked;
+            chk1Visible.Location = new Point(191, 504);
+            chk1Visible.Name = "chk1Visible";
+            chk1Visible.Size = new Size(57, 19);
+            chk1Visible.TabIndex = 15;
+            chk1Visible.Text = "label1";
+            chk1Visible.UseVisualStyleBackColor = true;
+            chk1Visible.CheckedChanged += chk1Visible_CheckedChanged;
+            // 
             // DataDetailDialog
             // 
             AutoScaleBaseSize = new Size(6, 16);
-            ClientSize = new Size(884, 561);
+            ClientSize = new Size(974, 561);
+            Controls.Add(chk1Visible);
+            Controls.Add(chk2Visible);
+            Controls.Add(chk3Visible);
             Controls.Add(chkLogRData);
             Controls.Add(chkRangeZoom);
-            Controls.Add(label3Value);
-            Controls.Add(label2Value);
-            Controls.Add(label1Value);
             Controls.Add(bar2);
             Controls.Add(bar3);
             Controls.Add(bar1);
@@ -283,9 +292,9 @@ namespace SamplingBME688Serial
             }
             lblSelectedIndex.Text = labelList[0];
 
-            label1Value.Text = bar1.Value + "%";
-            label2Value.Text = bar2.Value + "%";
-            label3Value.Text = bar3.Value + "%";
+            chk1Visible.Text = bar1.Value + "%";
+            chk2Visible.Text = bar2.Value + "%";
+            chk3Visible.Text = bar3.Value + "%";
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
@@ -314,19 +323,19 @@ namespace SamplingBME688Serial
 
         private void bar1_Scroll(object sender, EventArgs e)
         {
-            label1Value.Text = bar1.Value + "%";
+            chk1Visible.Text = bar1.Value + "%";
             this.Invalidate();
         }
 
         private void bar2_Scroll(object sender, EventArgs e)
         {
-            label2Value.Text = bar2.Value + "%";
+            chk2Visible.Text = bar2.Value + "%";
             this.Invalidate();
         }
 
         private void bar3_Scroll(object sender, EventArgs e)
         {
-            label3Value.Text = bar3.Value + "%";
+            chk3Visible.Text = bar3.Value + "%";
             this.Invalidate();
         }
 
@@ -346,6 +355,21 @@ namespace SamplingBME688Serial
         private void chkRangeZoom_CheckedChanged(object sender, EventArgs e)
         {
             selectGraphData();
+        }
+
+        private void chk1Visible_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chk2Visible_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chk3Visible_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
