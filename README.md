@@ -14,17 +14,17 @@ BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/en
 
 ## 全体像
 
-このリポジトリは
+このリポジトリには、以下が格納されています。
 
 ![Overview](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview00.png?raw=true)
 
 - Atom LiteにGrove(I2C)経由で接続したBME688から、シリアルポートにデータを出力するスケッチ (AtomLite/sketch_BME688_SAMPLING.ino)
 - シリアルポート経由でつないだAtom Liteから、BME688のデータを受信してCSVファイルまたはデータベースへ出力するWindows(C#)アプリ (SerialCommBME688/ 以下)
   - ML.NET を使用して、多クラス分類を行うようトレーニングしたモデルを作り、そのモデルを使って、匂いの判別をできるようにする
-  - [ML.NET での機械学習のタスク](https://learn.microsoft.com/ja-jp/dotnet/machine-learning/resources/tasks#multiclass-classification)で紹介されている、多クラス分類のトレーナーが選べる
+  - 匂いの判別には、[ML.NET での機械学習のタスク](https://learn.microsoft.com/ja-jp/dotnet/machine-learning/resources/tasks#multiclass-classification)で紹介されている、多クラス分類のトレーナーが選べる
 - Windows(C#)アプリから送られてきたJSONデータをPostgreSQLに格納するコンテナ群(docker-database/ 以下)
 
-以前は、pythonスクリプトで匂いの学習と予測をを行っていました。
+上記のほか、pythonスクリプトで匂いの学習と予測を行うスクリプトがあります。（現在は Windows(C#)アプリ自体に機械学習を行う機能を搭載したため、利用していません。）
 
 ### 以前のPythonスクリプトについて
 
@@ -34,13 +34,23 @@ BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/en
 
 ## BME688-Atom Lite
 
+BME688とAtom LiteをI2Cで接続し、それをWindows PCにつないで、センサーのデータをWindows Appに送ります。
+
 ![Atom Lite](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/AtomLite.png?raw=true)
 
 BME688 と Atom Lite についての詳細は [こちら](Atom_lite.md) を参照してください。
 
 ## Windows App
 
+Atom Liteから送られてきたBME688の匂いデータについて、機械学習を行い、学習したデータを使ってどの匂いか判定させるアプリです。
+
 ![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview0.png?raw=true)
+
+以下の３ステップで匂いを判別します。
+
+1. 匂いを記憶させる (区別したい匂いの種類分、すべて記憶させます)
+2. 匂いを判別できるよう、学習させる
+3. 学習したモデルを使って、匂いを判別する
 
 Windows Appの詳細は [こちら](Windows_app.md) を参照してください。
 
