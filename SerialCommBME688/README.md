@@ -1,5 +1,13 @@
 
-# Windows App
+# Windows アプリケーション
+
+Atom Liteから送られてきたBME688の匂いデータについて、機械学習を行い、学習したデータを使ってどの匂いか判定させるアプリです。
+
+以下の３ステップで匂いを判別します。
+
+1. 匂いを記憶させる (区別したい匂いの種類分、すべて記憶させます)
+2. 匂いを判別できるよう、学習させる
+3. 学習したモデルを使って、匂いを判別する
 
 ![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview0.png?raw=true)
 

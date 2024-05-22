@@ -30,7 +30,7 @@ BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/en
 
 以前の pythonスクリプトについては、以下のページを参照してください。
 
-- [以前のPythonスクリプト](Python_predict.md)
+- [以前のPythonスクリプト](python/README.md)
 
 ## BME688-Atom Lite
 
@@ -38,9 +38,9 @@ BME688とAtom LiteをI2Cで接続し、それをWindows PCにつないで、セ�
 
 ![Atom Lite](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/AtomLite.png?raw=true)
 
-BME688 と Atom Lite についての詳細は [こちら](Atom_lite.md) を参照してください。
+BME688 と Atom Lite についての詳細は [こちら](AtomLite/README.md) を参照してください。
 
-## Windows App
+## Windows アプリケーション
 
 Atom Liteから送られてきたBME688の匂いデータについて、機械学習を行い、学習したデータを使ってどの匂いか判定させるアプリです。
 
@@ -52,6 +52,13 @@ Atom Liteから送られてきたBME688の匂いデータについて、機械�
 2. 匂いを判別できるよう、学習させる
 3. 学習したモデルを使って、匂いを判別する
 
-Windows Appの詳細は [こちら](Windows_app.md) を参照してください。
+Windows アプリケーションの詳細は [こちら](SerialCommBME688/README.md) を参照してください。
+
+## Database on Docker
+
+においデータをあとで活用するために、WSL (Windows Subsystem for Linux)上で動くDockerのデータベース(PostgreSQL)に登録することができます。
+ただし、まだ登録したデータを読み込むことはできません。。
+
+Docker databaseの詳細は [こちら](docker-database/README.md) を参照してください。
 
 以上
