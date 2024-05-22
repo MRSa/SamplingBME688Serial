@@ -172,26 +172,34 @@ namespace SamplingBME688Serial
                     String categoryName = key ?? "";
                     List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
 
-                    int startCount =  (int) (targetDataSet.Count * line1Position);  // 先頭データの場所
-                    int middleCount = (int) (targetDataSet.Count * line2Position);  // 真ん中データの場所
-                    int finishCount = (int) (targetDataSet.Count * line3Position);  // 末尾データの場所
                     int lineStroke = (strongLineIndex == strongIndex) ? 5 : 0;
 
                     // 先頭データ
-                    List<GraphDataValue> startDataset = targetDataSet[startCount];
-                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP), lineStroke), categoryName + " (" + sensorIdStr + ")", startDataset);
+                    if (line1Position >= 0.0f)
+                    {
+                        int startCount = (int)(targetDataSet.Count * line1Position);  // 先頭データの場所
+                        List<GraphDataValue> startDataset = targetDataSet[startCount];
+                        drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP), lineStroke), categoryName + " (" + sensorIdStr + ")", startDataset);
+                    }
 
                     // 真ん中データ
-                    List<GraphDataValue> middleDataset = targetDataSet[middleCount];
-                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE), lineStroke), "", middleDataset);
+                    if (line2Position >= 0.0f)
+                    {
+                        int middleCount = (int)(targetDataSet.Count * line2Position);  // 真ん中データの場所
+                        List<GraphDataValue> middleDataset = targetDataSet[middleCount];
+                        drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE), lineStroke), "", middleDataset);
+                    }
 
                     // 末尾データ
-                    List<GraphDataValue> finishDataset = targetDataSet[finishCount];
-                    drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM), lineStroke), "", finishDataset);
-
+                    if (line3Position >= 0.0f)
+                    {
+                        int finishCount = (int)(targetDataSet.Count * line3Position);  // 末尾データの場所
+                        List<GraphDataValue> finishDataset = targetDataSet[finishCount];
+                        drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM), lineStroke), "", finishDataset);
+                    }
                     if (isDebug)
                     {
-                        Debug.WriteLine($"{rowData.Cells[0].Value}[Sensor{rowData.Cells[1].Value}] ({startCount} / {middleCount} / {finishCount})");
+                        Debug.WriteLine($"{rowData.Cells[0].Value}[Sensor{rowData.Cells[1].Value}] ({(int)(targetDataSet.Count * line1Position)} / {(int)(targetDataSet.Count * line2Position)} / {(int)(targetDataSet.Count * line3Position)})");
                     }
                     strongIndex++;
                 }

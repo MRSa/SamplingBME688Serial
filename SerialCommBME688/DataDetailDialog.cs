@@ -137,6 +137,8 @@ namespace SamplingBME688Serial
             // 
             chkRangeZoom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             chkRangeZoom.AutoSize = true;
+            chkRangeZoom.Checked = true;
+            chkRangeZoom.CheckState = CheckState.Checked;
             chkRangeZoom.Location = new Point(905, 535);
             chkRangeZoom.Name = "chkRangeZoom";
             chkRangeZoom.Size = new Size(57, 19);
@@ -267,7 +269,12 @@ namespace SamplingBME688Serial
             graphDrawer.drawUsage(g, drawArea);
 
             // グラフの描画
-            graphDrawer.drawGraph(g, drawArea, currentIndexNumber, bar1.Value / 100.0f, bar2.Value / 100.0f, bar3.Value / 100.0f);
+            float position1 = chk1Visible.Checked ? bar1.Value / 100.0f : -1.0f;
+            float position2 = chk2Visible.Checked ? bar2.Value / 100.0f : -1.0f;
+            float position3 = chk3Visible.Checked ? bar3.Value / 100.0f : -1.0f;
+
+
+            graphDrawer.drawGraph(g, drawArea, currentIndexNumber, position1, position2, position3);
         }
 
         public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<GraphDataValue>>> dataSet1, Dictionary<String, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
@@ -284,10 +291,10 @@ namespace SamplingBME688Serial
             foreach (KeyValuePair<int, DataGridViewRow> pair in selectedData)
             {
                 DataGridViewRow rowData = pair.Value;
-                String sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
-                int sensorId = int.Parse(sensorIdStr);
-                String? key = rowData.Cells[0].Value.ToString();
-                String categoryName = key ?? "";
+                string sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
+                //int sensorId = int.Parse(sensorIdStr);
+                string? key = rowData.Cells[0].Value.ToString();
+                string categoryName = key ?? "";
                 labelList.Add(categoryName + "(" + sensorIdStr + ")");
             }
             lblSelectedIndex.Text = labelList[0];
@@ -359,17 +366,17 @@ namespace SamplingBME688Serial
 
         private void chk1Visible_CheckedChanged(object sender, EventArgs e)
         {
-
+            this.Invalidate();
         }
 
         private void chk2Visible_CheckedChanged(object sender, EventArgs e)
         {
-
+            this.Invalidate();
         }
 
         private void chk3Visible_CheckedChanged(object sender, EventArgs e)
         {
-
+            this.Invalidate();
         }
     }
 }
