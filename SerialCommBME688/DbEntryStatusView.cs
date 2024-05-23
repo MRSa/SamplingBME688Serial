@@ -20,7 +20,7 @@ namespace SamplingBME688Serial
             this.parentForm = parent;
         }
 
-        public void showDbEntryStatus(String listUrl)
+        public void showDbEntryStatus(string listUrl)
         {
             try
             {
@@ -49,13 +49,13 @@ namespace SamplingBME688Serial
             }
         }
 
-        private async void getSensorDataList(String listUrl)
+        private async void getSensorDataList(string listUrl)
         {
             //  センサの登録情報を取得して、表示用に加工する（DataTableに入れる）
             try
             {
                 var result = await new HttpClient().GetAsync(listUrl, HttpCompletionOption.ResponseHeadersRead);
-                String response = await result.Content.ReadAsStringAsync();
+                string response = await result.Content.ReadAsStringAsync();
 
                 // 応答に合わせてデータを設定する
                 sensorDataList = new DataTable();
@@ -100,7 +100,7 @@ namespace SamplingBME688Serial
 
         private class SensorData
         {
-            public String? category { get; set; }
+            public string? category { get; set; }
             public int sensor_id { get; set; }
             public int count { get; set; }
         }

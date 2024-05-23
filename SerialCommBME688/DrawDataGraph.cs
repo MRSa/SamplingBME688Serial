@@ -13,14 +13,14 @@ namespace SamplingBME688Serial
     internal class DrawDataGraph
     {
         private Dictionary<int, DataGridViewRow>? selectedData;
-        private Dictionary<String, List<List<GraphDataValue>>> dataSet1;
-        private Dictionary<String, List<List<GraphDataValue>>> dataSet2;
+        private Dictionary<string, List<List<GraphDataValue>>> dataSet1;
+        private Dictionary<string, List<List<GraphDataValue>>> dataSet2;
         private GraphDataValue lowerLimit;
         private GraphDataValue upperLimit;
         private GraphDataValue lowerLimitZoom;
         private GraphDataValue upperLimitZoom;
 
-        private const String fontName = "Yu Gothic UI";
+        private const string fontName = "Yu Gothic UI";
         private const int fontSize = 10;
         private const int POSITION_TOP = -1;
         private const int POSITION_MIDDLE = 0;
@@ -49,7 +49,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<GraphDataValue>>> dataSet1, Dictionary<String, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
+        public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
         {
             this.selectedData = selectedData;
             this.dataSet1 = dataSet1;
@@ -66,10 +66,10 @@ namespace SamplingBME688Serial
                 {
                     int index = pair.Key;
                     DataGridViewRow rowData = pair.Value;
-                    String sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
+                    string sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
                     int sensorId = int.Parse(sensorIdStr);
-                    String? key = rowData.Cells[0].Value.ToString();
-                    String categoryName = key ?? "";
+                    string? key = rowData.Cells[0].Value.ToString();
+                    string categoryName = key ?? "";
                     List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
                     Debug.WriteLine($"{index}:{rowData.Cells[0].Value}[{rowData.Cells[1].Value}]{rowData.Cells[2].Value}  {targetDataSet.Count}");
                 }
@@ -166,10 +166,10 @@ namespace SamplingBME688Serial
                 {
                     int index = pair.Key;
                     DataGridViewRow rowData = pair.Value;
-                    String sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
+                    string sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
                     int sensorId = int.Parse(sensorIdStr);
-                    String? key = rowData.Cells[0].Value.ToString();
-                    String categoryName = key ?? "";
+                    string? key = rowData.Cells[0].Value.ToString();
+                    string categoryName = key ?? "";
                     List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
 
                     int lineStroke = (strongLineIndex == strongIndex) ? 5 : 0;
@@ -251,7 +251,7 @@ namespace SamplingBME688Serial
             return (retColor);
         }
 
-        private void drawLines(Graphics g, RectangleF drawArea, Pen pen, String label, List<GraphDataValue> dataset)
+        private void drawLines(Graphics g, RectangleF drawArea, Pen pen, string label, List<GraphDataValue> dataset)
         {
             // Debug.WriteLine(" ");
 

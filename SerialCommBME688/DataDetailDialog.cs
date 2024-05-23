@@ -19,7 +19,7 @@ namespace SamplingBME688Serial
         private CheckBox chk3Visible;
         private CheckBox chk2Visible;
         private CheckBox chk1Visible;
-        private List<String> labelList = new List<String>();
+        private List<string> labelList = new List<string>();
 
 
         public DataDetailDialog()
@@ -277,7 +277,7 @@ namespace SamplingBME688Serial
             graphDrawer.drawGraph(g, drawArea, currentIndexNumber, position1, position2, position3);
         }
 
-        public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<String, List<List<GraphDataValue>>> dataSet1, Dictionary<String, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
+        public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
         {
             // 描画クラスに描画するデータを送り込む
             graphDrawer.setDataToDraw(ref selectedData, dataSet1, dataSet2, lowerLimit, upperLimit, lowerLimitZoom, upperLimitZoom);

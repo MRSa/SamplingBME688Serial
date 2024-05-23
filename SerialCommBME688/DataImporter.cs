@@ -13,7 +13,7 @@ namespace SamplingBME688Serial
 {
     internal class DataImporter
     {
-        private String fileName;
+        private string fileName;
         private SerialReceiver receiver1;
         private SerialReceiver receiver2;
         private IDataImportCallback callback;
@@ -41,18 +41,18 @@ namespace SamplingBME688Serial
                     {
                         try
                         {
-                            String[] values = csvParser.ReadFields();
+                            string[] values = csvParser.ReadFields();
                             if ((readLines > 0) && (values != null))
                             {
-                                int sensorId = parseIntFromString(values[0]);
-                                String categoryName = values[1];
-                                int gas_index = parseIntFromString(values[2]);
-                                double temperature = parseDoubleFromString(values[3]);
-                                double humidity = parseDoubleFromString(values[4]);
-                                double pressure = parseDoubleFromString(values[5]);
-                                double gas_registance = parseDoubleFromString(values[6]);
-                                double gas_registance_log = parseDoubleFromString(values[7]);
-                                double gas_registance_diff = parseDoubleFromString(values[8]);
+                                int sensorId = parseIntFromstring(values[0]);
+                                string categoryName = values[1];
+                                int gas_index = parseIntFromstring(values[2]);
+                                double temperature = parseDoubleFromstring(values[3]);
+                                double humidity = parseDoubleFromstring(values[4]);
+                                double pressure = parseDoubleFromstring(values[5]);
+                                double gas_registance = parseDoubleFromstring(values[6]);
+                                double gas_registance_log = parseDoubleFromstring(values[7]);
+                                double gas_registance_diff = parseDoubleFromstring(values[8]);
 
                                 if (sensorId == 1)
                                 {
@@ -85,7 +85,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        private double parseDoubleFromString(String data)
+        private double parseDoubleFromstring(string data)
         {
             double value = 0.0d;
             try
@@ -99,7 +99,7 @@ namespace SamplingBME688Serial
             return (value);
         }
 
-        private int parseIntFromString(String data)
+        private int parseIntFromstring(string data)
         {
             int value = 0;
             try

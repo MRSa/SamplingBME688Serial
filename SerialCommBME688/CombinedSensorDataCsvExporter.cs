@@ -15,8 +15,8 @@ namespace SamplingBME688Serial
         private bool sensor1Received;
         private bool sensor2Received;
         private int dataIndexCount;
-        private Dictionary<String, List<List<double>>> dataSet1;
-        private Dictionary<String, List<List<double>>> dataSet2;
+        private Dictionary<string, List<List<double>>> dataSet1;
+        private Dictionary<string, List<List<double>>> dataSet2;
 
         public CombinedSensorDataCsvExporter(SerialReceiver sensor1, SerialReceiver sensor2)
         {
@@ -44,12 +44,12 @@ namespace SamplingBME688Serial
                 // combine mode なので、dataSetMap1 の itemを優先させる。
 
                 // ----- ヘッダ部分の出力 -----
-                List<String> categoryList = new List<String>();
+                List<string> categoryList = new List<string>();
                 writer.Write("; index, ");
 
                 if (sensor1Received)
                 {
-                    foreach (KeyValuePair<String, List<List<double>>> item in dataSet1)
+                    foreach (KeyValuePair<string, List<List<double>>> item in dataSet1)
                     {
                         try
                         {
@@ -69,7 +69,7 @@ namespace SamplingBME688Serial
                 else
                 {
                     // センサ２のみ受信していた場合...
-                    foreach (KeyValuePair<String, List<List<double>>> item in dataSet2)
+                    foreach (KeyValuePair<string, List<List<double>>> item in dataSet2)
                     {
                         writer.Write(item.Key + ", ");
                         categoryList.Add(item.Key);
@@ -91,7 +91,7 @@ namespace SamplingBME688Serial
                             for (int dataIndex = 0; dataIndex < dataIndexCount; dataIndex++)
                             {
                                 writer.Write(dataIndex + ", ");
-                                foreach (String category in categoryList)
+                                foreach (string category in categoryList)
                                 {
                                     double dataValue = dataSet1[category].ElementAt(dataSetIndex).ElementAt(dataIndex);
                                     writer.Write(dataValue + ", ");
@@ -105,7 +105,7 @@ namespace SamplingBME688Serial
                             for (int dataIndex = 0; dataIndex < dataIndexCount; dataIndex++)
                             {
                                 writer.Write((dataIndex + indexOffset) + ", ");
-                                foreach (String category in categoryList)
+                                foreach (string category in categoryList)
                                 {
                                     double dataValue = dataSet2[category].ElementAt(dataSetIndex).ElementAt(dataIndex);
                                     writer.Write(dataValue + ", ");

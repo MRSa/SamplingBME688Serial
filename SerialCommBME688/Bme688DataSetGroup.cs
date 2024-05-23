@@ -12,11 +12,11 @@ namespace SerialCommBME688
     {
         private int nofIndex;
 
-        public String dataGroupName { get; private set; }
+        public string dataGroupName { get; private set; }
         private List<Bme688DataSet> collectedDataSet = new List<Bme688DataSet>();
         private Bme688DataSet? currentDataSet = null;
 
-        public Bme688DataSetGroup(String groupName, int number_of_index)
+        public Bme688DataSetGroup(string groupName, int number_of_index)
         {
             this.dataGroupName = groupName;
             this.nofIndex = number_of_index;

@@ -10,7 +10,7 @@ namespace SamplingBME688Serial
     public class PredictionResult
     {
         [ColumnName("PredictedLabel")]
-        public String? dataLabel;
+        public string? dataLabel;
 
         [ColumnName("Score")]
         public float[]? Distances;

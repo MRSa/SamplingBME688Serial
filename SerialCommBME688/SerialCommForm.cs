@@ -36,9 +36,9 @@ namespace SerialCommBME688
         {
             try
             {
-                String category = txtDataCategory.Text;
+                string category = txtDataCategory.Text;
                 txtConsole.Text = "--- START RECEIVE [" + txtPort.Text + "] " + DateTime.Now + " (" + txtDataCategory.Text + ") ---\r\n";
-                String sendUrl = "";
+                string sendUrl = "";
                 if (chkEntryDatabase.Checked)
                 {
                     sendUrl = urlDatabaseToEntry.Text + "sensor/entry";
@@ -247,14 +247,14 @@ namespace SerialCommBME688
                 writer.AutoFlush = true;
 
                 // ----- ヘッダ部分の出力 -----
-                List<String> categoryList1 = myReceiver.getCollectedCategoryList();
-                List<String> categoryList2 = myReceiver_2.getCollectedCategoryList();
-                List<String> categories = new List<String>();
+                List<string> categoryList1 = myReceiver.getCollectedCategoryList();
+                List<string> categoryList2 = myReceiver_2.getCollectedCategoryList();
+                List<string> categories = new List<string>();
                 writer.Write("; index, ");
 
                 if (myReceiver.isDataReceived())
                 {
-                    foreach (String item in categoryList1)
+                    foreach (string item in categoryList1)
                     {
                         try
                         {
@@ -274,7 +274,7 @@ namespace SerialCommBME688
                 else
                 {
                     // センサ１のデータがない場合は、センサ２のみ利用する。
-                    foreach (String item in categoryList2)
+                    foreach (string item in categoryList2)
                     {
                         writer.Write(item + ", ");
                         categories.Add(item);
@@ -428,8 +428,8 @@ namespace SerialCommBME688
         {
             try
             {
-                String category = txtDataCategory.Text;
-                String sendUrl = "";
+                string category = txtDataCategory.Text;
+                string sendUrl = "";
                 if (chkEntryDatabase.Checked)
                 {
                     sendUrl = urlDatabaseToEntry.Text + "sensor/entry";
@@ -531,7 +531,7 @@ namespace SerialCommBME688
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
 
-                    String filePath = openFileDialog1.FileName;
+                    string filePath = openFileDialog1.FileName;
                     myStream = openFileDialog1.OpenFile();
 
                     try
@@ -565,7 +565,7 @@ namespace SerialCommBME688
             }
         }
 
-        public void dataImportFinished(bool isSuccess, String message)
+        public void dataImportFinished(bool isSuccess, string message)
         {
             myReceiver.stopReceive();
             myReceiver_2.stopReceive();
@@ -592,7 +592,7 @@ namespace SerialCommBME688
 
         public void dataImportProgress(int lineNumber, int totalLines)
         {
-            String message = " Read " + lineNumber + " lines.";
+            string message = " Read " + lineNumber + " lines.";
             if (totalLines > 0)
             {
 
@@ -610,7 +610,7 @@ namespace SerialCommBME688
             createModelDialog.ShowDialog();
         }
 
-        public void createModelFinished(bool isSuccess, SensorToUse modelType, IPredictionModel? predictionModel, String message)
+        public void createModelFinished(bool isSuccess, SensorToUse modelType, IPredictionModel? predictionModel, string message)
         {
             Debug.WriteLine(DateTime.Now + "  ===== createModelFinished() " + isSuccess + " " + modelType + " " + message);
             if (isSuccess)
@@ -631,8 +631,8 @@ namespace SerialCommBME688
             // ----- 解析の開始 / 終了が切り替えられたとき
             try
             {
-                String message1 = "";
-                String message2 = "";
+                string message1 = "";
+                string message2 = "";
                 if (chkAnalysis.Checked)
                 {
                     // ----- 解析の開始
@@ -694,7 +694,7 @@ namespace SerialCommBME688
             }
         }
 
-        private void showResult(int area, String itemData)
+        private void showResult(int area, string itemData)
         {
             System.Windows.Forms.TextBox field = (area == 1) ? fldResult1 : fldResult2;
             try
@@ -788,7 +788,7 @@ namespace SerialCommBME688
                 // ----- 解析を行う
                 Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() analysis Both");
                 OdorBothData testData = new OdorBothData(analysisData01, analysisData02);
-                String result = predictionModel.predictBothData(testData);
+                string result = predictionModel.predictBothData(testData);
                 Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() Result: " + result);
 
                 // ----- 解析結果を表示する
@@ -831,7 +831,7 @@ namespace SerialCommBME688
                 {
                     // ----- 解析(データの予測)を行う
                     Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() START");
-                    String result = predictionModel.predictOrData(receivedData);
+                    string result = predictionModel.predictOrData(receivedData);
                     Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() Result: " + result);
                     showResult(id, result);
                 }
@@ -878,7 +878,7 @@ namespace SerialCommBME688
                 if ((predictionModel != null) && (odorData != null))
                 {
                     // ----- 解析(データの予測)を行う
-                    String result = "";
+                    string result = "";
                     Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() START");
                     if (id == 1)
                     {

@@ -23,8 +23,8 @@ namespace SamplingBME688Serial
     class TrainingMultiBinaryClassification : ICreatePredictionModel, IPredictionModel
     {
         private MLContext mlContext;
-        private String inputDataFileName;
-        private String classificationMethod;
+        private string inputDataFileName;
+        private string classificationMethod;
         private MultiClassMethod multiClassMethod;
         private BinaryClassificationMethod binaryClassificationMethod;
         private IEstimator<ITransformer>? estimator = null;
@@ -32,7 +32,7 @@ namespace SamplingBME688Serial
         private ITransformer? trainedModel = null;
         private IDataView? dataView = null;
 
-        public TrainingMultiBinaryClassification(ref MLContext mlContext, MultiClassMethod method, BinaryClassificationMethod binaryClassification, String inputDataFileName, ICreateModelConsole console)
+        public TrainingMultiBinaryClassification(ref MLContext mlContext, MultiClassMethod method, BinaryClassificationMethod binaryClassification, string inputDataFileName, ICreateModelConsole console)
         {
             this.mlContext = mlContext;
             this.inputDataFileName = inputDataFileName;
@@ -42,10 +42,10 @@ namespace SamplingBME688Serial
             classificationMethod = prepareClassificationMethod();
         }
 
-        private String prepareClassificationMethod()
+        private string prepareClassificationMethod()
         {
             // --- 分類のクラスを準備する
-            String methodName = multiClassMethod.ToString() + "[" + binaryClassificationMethod.ToString() + "]";
+            string methodName = multiClassMethod.ToString() + "[" + binaryClassificationMethod.ToString() + "]";
             try
             {
                 if (multiClassMethod == MultiClassMethod.OneVersusAll)
@@ -114,7 +114,7 @@ namespace SamplingBME688Serial
             return (methodName);
         }
 
-        public bool executeTraining(SensorToUse usePort, String? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
+        public bool executeTraining(SensorToUse usePort, string? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace SamplingBME688Serial
             console.appendText($"   LogLossReduction: {logLossReduction:#.###}\r\n");  //  対数損失還元: 範囲は [-inf, 1.00] で、1.00に近づける
         }
 
-        private void trainBothOdorData(String? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        private void trainBothOdorData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
         {
             IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
                                                   .Append(mlContext.Transforms.Concatenate("Features",
@@ -220,7 +220,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        private void trainOrOdorData(String? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        private void trainOrOdorData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
         {
             IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
                                                   .Append(mlContext.Transforms.Concatenate("Features", "sensorId",
@@ -235,7 +235,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        private void trainSingle1OdorData(String? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        private void trainSingle1OdorData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
         {
             IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
                                                    .Append(mlContext.Transforms.Concatenate("Features",
@@ -250,7 +250,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        private void trainSingle2OdorData(String? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        private void trainSingle2OdorData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
         {
             IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
                                                    .Append(mlContext.Transforms.Concatenate("Features",
@@ -265,9 +265,9 @@ namespace SamplingBME688Serial
             }
         }
 
-        public String predictBothData(OdorBothData targetData)
+        public string predictBothData(OdorBothData targetData)
         {
-            String result = "???";
+            string result = "???";
             try
             {
                 var predictionEngine1and2 = mlContext.Model.CreatePredictionEngine<OdorBothData, PredictionResult>(trainedModel);
@@ -293,9 +293,9 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public String predictOrData(OdorOrData targetData)
+        public string predictOrData(OdorOrData targetData)
         {
-            String result = "???";
+            string result = "???";
             try
             {
                 var predictionEngine1or2 = mlContext.Model.CreatePredictionEngine<OdorOrData, PredictionResult>(trainedModel);
@@ -321,9 +321,9 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public String predictSingle1Data(OdorData targetData)
+        public string predictSingle1Data(OdorData targetData)
         {
-            String result = "???";
+            string result = "???";
             try
             {
                 var predictionEngineSingle1 = mlContext.Model.CreatePredictionEngine<OdorData, PredictionResult>(trainedModel);
@@ -349,9 +349,9 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public String predictSingle2Data(OdorData targetData)
+        public string predictSingle2Data(OdorData targetData)
         {
-            String result = "???";
+            string result = "???";
             try
             {
                 var predictionEngineSingle2 = mlContext.Model.CreatePredictionEngine<OdorData, PredictionResult>(trainedModel);
@@ -377,7 +377,119 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public bool savePredictionModel(String outputFileName)
+        public string predictBothData(SmellBothData targetData)
+        {
+            string result = "???";
+            try
+            {
+                var predictionEngine1and2 = mlContext.Model.CreatePredictionEngine<SmellBothData, PredictionResult>(trainedModel);
+                if (predictionEngine1and2 != null)
+                {
+                    var prediction = predictionEngine1and2.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+                else
+                {
+                    console.appendText(" [ERROR] predictBothData(smell) : " + " predictionEngine1and2 is null. " + "\r\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+                Debug.WriteLine(DateTime.Now + " [ERROR] predictBothData(smell) : " + result);
+                console.appendText(" [ERROR] predictBothData(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
+        public string predictOrData(SmellOrData targetData)
+        {
+            string result = "???";
+            try
+            {
+                var predictionEngine1or2 = mlContext.Model.CreatePredictionEngine<SmellOrData, PredictionResult>(trainedModel);
+                if (predictionEngine1or2 != null)
+                {
+                    var prediction = predictionEngine1or2.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+                else
+                {
+                    console.appendText(" [ERROR] predictOrData(smell) : " + " predictionEngine1or2 is null. " + "\r\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+                Debug.WriteLine(DateTime.Now + " [ERROR] predictOrData(smell) : " + result);
+                console.appendText(" [ERROR] predictOrData(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
+        public string predictSingle1Data(SmellData targetData)
+        {
+            string result = "???";
+            try
+            {
+                var predictionEngineSingle1 = mlContext.Model.CreatePredictionEngine<SmellData, PredictionResult>(trainedModel);
+                if (predictionEngineSingle1 != null)
+                {
+                    var prediction = predictionEngineSingle1.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+                else
+                {
+                    console.appendText(" [ERROR] predictSingle1Data(smell) : " + " predictionEngineSingle1 is null. " + "\r\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+                Debug.WriteLine(DateTime.Now + " [ERROR] predictSingle1Data(smell) : " + result);
+                console.appendText(" [ERROR] predictSingle1Data(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
+        public string predictSingle2Data(SmellData targetData)
+        {
+            string result = "???";
+            try
+            {
+                var predictionEngineSingle2 = mlContext.Model.CreatePredictionEngine<SmellData, PredictionResult>(trainedModel);
+                if (predictionEngineSingle2 != null)
+                {
+                    var prediction = predictionEngineSingle2.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+                else
+                {
+                    console.appendText(" [ERROR] predictSingle2Data(smell) : " + " predictionEngineSingle2 is null. " + "\r\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+                Debug.WriteLine(DateTime.Now + " [ERROR] predictSingle2Data(smell) : " + result);
+                console.appendText(" [ERROR] predictSingle2Data(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
+        public bool savePredictionModel(string outputFileName)
         {
             bool ret = false;
             try

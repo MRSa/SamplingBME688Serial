@@ -6,12 +6,12 @@ namespace SamplingBME688Serial
     class TrainCsvDataExporter
     {
         private const int VALID_DATA_INDEX = 10;
-        private String outputFileName;
+        private string outputFileName;
         private ICreateModelConsole console;
         private IDataHolder? port1;
         private IDataHolder? port2;
 
-        public TrainCsvDataExporter(String outputFileName, IDataHolder? port1, IDataHolder? port2, ICreateModelConsole console)
+        public TrainCsvDataExporter(string outputFileName, IDataHolder? port1, IDataHolder? port2, ICreateModelConsole console)
         {
             this.outputFileName = outputFileName;
             this.port1 = port1;
@@ -40,19 +40,19 @@ namespace SamplingBME688Serial
                 }
 
                 // ----- データのCSVファイルへ吐き出す処理
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap = port.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap = port.getGasRegDataSet();
                 using (StreamWriter writer = new StreamWriter(outputFileName, false, Encoding.UTF8))
                 {
                     for (int index = 0; index < duplicateTimes; index++)
                     {
-                        foreach (KeyValuePair<String, List<List<GraphDataValue>>> baseItem in dataSetMap)
+                        foreach (KeyValuePair<string, List<List<GraphDataValue>>> baseItem in dataSetMap)
                         {
                             // ---- 出力カウント数が０よりも小さい場合は、全データを出力する
                             if (outputDataCount < 0)
                             {
                                 outputDataCount = baseItem.Value.Count;
                             }
-                            String oneLineData;
+                            string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
                                 oneLineData = "";
@@ -98,13 +98,13 @@ namespace SamplingBME688Serial
                 }
 
                 // ----- データのCSVファイルへ吐き出す処理
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
                 using (StreamWriter writer = new StreamWriter(outputFileName, false, Encoding.UTF8))
                 {
                     for (int index = 0; index < duplicateTimes; index++)
                     {
-                        foreach (KeyValuePair<String, List<List<GraphDataValue>>> item1 in dataSetMap1)
+                        foreach (KeyValuePair<string, List<List<GraphDataValue>>> item1 in dataSetMap1)
                         {
                             List<List<GraphDataValue>> item2 = dataSetMap2[item1.Key];
                             if (outputDataCount < 0)
@@ -112,7 +112,7 @@ namespace SamplingBME688Serial
                                 // ---- 出力カウント数が０よりも小さい場合は、全データを出力する
                                 outputDataCount = Math.Min(item1.Value.Count, item2.Count);
                             }
-                            String oneLineData;
+                            string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
                                 oneLineData = "";
@@ -171,20 +171,20 @@ namespace SamplingBME688Serial
                 }
 
                 // ----- データのCSVファイルへ吐き出す処理
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
                 using (StreamWriter writer = new StreamWriter(outputFileName, false, Encoding.UTF8))
                 {
                     for (int index = 0; index < duplicateTimes; index++)
                     {
-                        foreach (KeyValuePair<String, List<List<GraphDataValue>>> item1 in dataSetMap1)
+                        foreach (KeyValuePair<string, List<List<GraphDataValue>>> item1 in dataSetMap1)
                         {
                             // ---- 出力カウント数が０よりも小さい場合は、全データを出力する
                             if (outputDataCount < 0)
                             {
                                 outputDataCount = item1.Value.Count;
                             }
-                            String oneLineData;
+                            string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
                                 oneLineData = "1,";
@@ -205,14 +205,14 @@ namespace SamplingBME688Serial
                             }
                         }
 
-                        foreach (KeyValuePair<String, List<List<GraphDataValue>>> item2 in dataSetMap2)
+                        foreach (KeyValuePair<string, List<List<GraphDataValue>>> item2 in dataSetMap2)
                         {
                             // ---- 出力カウント数が０よりも小さい場合は、全データを出力する
                             if (outputDataCount < 0)
                             {
                                 outputDataCount = item2.Value.Count;
                             }
-                            String oneLineData;
+                            string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
                                 oneLineData = "2,";

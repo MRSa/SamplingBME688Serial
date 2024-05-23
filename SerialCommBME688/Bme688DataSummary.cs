@@ -9,7 +9,7 @@ namespace SamplingBME688Serial
     public class Bme688DataSummary
     {
         // BME688の受信データをサマライズしたデータを格納するクラス
-        public String category { get; private set; }
+        public string category { get; private set; }
         public int sensorId { get; private set; }
         public int sampleCount { get; private set; }
         public int validCount { get; private set; }
@@ -24,7 +24,7 @@ namespace SamplingBME688Serial
         public double gas_registance_log_max { get; private set; }
         public double gas_registance_log_min { get; private set; }
 
-        public Bme688DataSummary(String category,
+        public Bme688DataSummary(string category,
                                  int sensorId,
                                  int sampleCount,
                                  int validCount,

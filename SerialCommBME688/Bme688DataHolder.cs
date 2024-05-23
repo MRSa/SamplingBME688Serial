@@ -19,7 +19,7 @@ namespace SerialCommBME688
         private IMessageCallback callback;
         private IDataReceiveNotify notify;
         private PostJsonData sendData;
-        private Dictionary<String, Bme688DataSetGroup> dataSetMap = new Dictionary<String, Bme688DataSetGroup>();
+        private Dictionary<string, Bme688DataSetGroup> dataSetMap = new Dictionary<string, Bme688DataSetGroup>();
 
         Bme688DataSetGroup? targetDataSet = null;
 
@@ -31,8 +31,8 @@ namespace SerialCommBME688
             this.sendData = new PostJsonData(sensorId, NUMBER_OF_INDEX, this);
         }
 
-        public String entryData(String category,
-                               String sendUrl,
+        public string entryData(string category,
+                               string sendUrl,
                                bool isSingleEntry,
                                int gas_index, 
                                int meas_index,
@@ -47,7 +47,7 @@ namespace SerialCommBME688
                                double gas_registance_diff
                                )
         {
-            String result = "";
+            string result = "";
             try
             {
                 if (sendUrl.Length > 0)
@@ -155,9 +155,9 @@ namespace SerialCommBME688
             return (result);
         }
 
-        public String finishReceivedData()
+        public string finishReceivedData()
         {
-            String result = "";
+            string result = "";
             try
             {
                 if (targetDataSet != null)
@@ -181,7 +181,7 @@ namespace SerialCommBME688
 
                 // 受信停止時、とりあえずカテゴリごとの有効データ数を画面表示する
                 result = "\r\n----- " + DateTime.Now + "\r\n";
-                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+                foreach (KeyValuePair<string, Bme688DataSetGroup> item in dataSetMap)
                 {
                     result = result + item.Key + "/" + item.Value.dataGroupName + " ";
 
@@ -217,10 +217,10 @@ namespace SerialCommBME688
         {
             try
             {
-                Dictionary<String, Bme688DataSetGroup> datamap = dataSetMap;
-                foreach (KeyValuePair<String, Bme688DataSetGroup> item in datamap)
+                Dictionary<string, Bme688DataSetGroup> datamap = dataSetMap;
+                foreach (KeyValuePair<string, Bme688DataSetGroup> item in datamap)
                 {
-                    String category = item.Key;
+                    string category = item.Key;
                     List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
                     int sampleCount = dataSet.Count;
                     int validCount = 0;
@@ -321,9 +321,9 @@ namespace SerialCommBME688
                     writer.WriteLine("; sensorId, category, index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff");
                 }
 
-                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+                foreach (KeyValuePair<string, Bme688DataSetGroup> item in dataSetMap)
                 {
-                    String category = item.Key;
+                    string category = item.Key;
                     List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
 
                     // ----- 出力データの位置を決める
@@ -362,7 +362,7 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvDataOnlyGasRegistance(StreamWriter writer, List<String> categoryList, int validCount, int numOfDuplicate)
+        public void exportCsvDataOnlyGasRegistance(StreamWriter writer, List<string> categoryList, int validCount, int numOfDuplicate)
         {
             // センサデータ（対数のみ）をCSV形式で出力する（ヘッダ部分は呼び出し側で出力する）
             try
@@ -370,7 +370,7 @@ namespace SerialCommBME688
                 int duplicateCount = (numOfDuplicate <= 0) ? 1 : numOfDuplicate;
                 Debug.WriteLine("exportCsvDataOnlyGasRegistance() : start  " + " duplicate: " + duplicateCount + " valid: " + validCount);
 
-                Dictionary<String, List<List<double>>> dataSet = getGasRegLogDataSet();
+                Dictionary<string, List<List<double>>> dataSet = getGasRegLogDataSet();
                 for (int duplicate = 0; duplicate < duplicateCount; duplicate++)
                 {
                     for (int dataSetIndex = 0; dataSetIndex < validCount; dataSetIndex++)
@@ -378,7 +378,7 @@ namespace SerialCommBME688
                         for (int dataIndex = 0; dataIndex < NUMBER_OF_INDEX; dataIndex++)
                         {
                             writer.Write(dataIndex + ", ");
-                            foreach (String category in categoryList)
+                            foreach (string category in categoryList)
                             {
                                 double dataValue = dataSet[category].ElementAt(dataSetIndex).ElementAt(dataIndex);
                                 writer.Write(dataValue + ", ");
@@ -411,15 +411,15 @@ namespace SerialCommBME688
             dataSetMap.Clear();
         }
 
-        public Dictionary<String, List<List<double>>> getGasRegLogDataSet()
+        public Dictionary<string, List<List<double>>> getGasRegLogDataSet()
         {
             // GasRegistanceの対数値を（カテゴリごとに詰めて）応答する
-            Dictionary<String, List<List<double>>> data = new Dictionary<String, List<List<double>>>();
+            Dictionary<string, List<List<double>>> data = new Dictionary<string, List<List<double>>>();
             try
             {
-                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+                foreach (KeyValuePair<string, Bme688DataSetGroup> item in dataSetMap)
                 {
-                    String category = item.Key;
+                    string category = item.Key;
                     List <List<double>> outputData = new List<List<double>>();
                     List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
                     foreach (Bme688DataSet collectedData in dataSet)
@@ -453,15 +453,15 @@ namespace SerialCommBME688
             return (data);
         }
 
-        public Dictionary<String, List<List<GraphDataValue>>> getGasRegDataSet()
+        public Dictionary<string, List<List<GraphDataValue>>> getGasRegDataSet()
         {
             // GasRegistanceの値を（カテゴリごとに詰めて）応答する
-            Dictionary<String, List<List<GraphDataValue>>> data = new Dictionary<String, List<List<GraphDataValue>>>();
+            Dictionary<string, List<List<GraphDataValue>>> data = new Dictionary<string, List<List<GraphDataValue>>>();
             try
             {
-                foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+                foreach (KeyValuePair<string, Bme688DataSetGroup> item in dataSetMap)
                 {
-                    String category = item.Key;
+                    string category = item.Key;
                     List<List<GraphDataValue>> outputData = new List<List<GraphDataValue>>();
                     List<Bme688DataSet> dataSet = item.Value.getCollectedDataSet();
                     foreach (Bme688DataSet collectedData in dataSet)
@@ -497,10 +497,10 @@ namespace SerialCommBME688
 
 
 
-        public List<String> getCollectedCategoryList()
+        public List<string> getCollectedCategoryList()
         {
-            List<String> categoryList = new List<String>();
-            foreach (KeyValuePair<String, Bme688DataSetGroup> item in dataSetMap)
+            List<string> categoryList = new List<string>();
+            foreach (KeyValuePair<string, Bme688DataSetGroup> item in dataSetMap)
             {
                 categoryList.Add(item.Key);
             }

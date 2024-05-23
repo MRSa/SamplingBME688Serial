@@ -2,7 +2,7 @@
 
 namespace SamplingBME688Serial
 {
-    public class OdorOrData
+    public class SmellOrData
     {
         [LoadColumn(0)]
         public float sensorId;
@@ -40,7 +40,7 @@ namespace SamplingBME688Serial
         [LoadColumn(11)]
         public string? dataLabel;
 
-        public OdorOrData(OdorOrData data)
+        public SmellOrData(SmellOrData data)
         {
             this.sensorId = data.sensorId;
             this.sequence0Value = data.sequence0Value;
@@ -56,6 +56,6 @@ namespace SamplingBME688Serial
             this.dataLabel = data.dataLabel;
         }
 
-        public OdorOrData() { }
+        public SmellOrData() { }
     }
 }

@@ -18,7 +18,7 @@ namespace SamplingBME688Serial
     {
         private int minimumValidCount = -1;
         private DataTable dataSource = new DataTable("dataSummary");
-        private Dictionary<String, Bme688DataSummary> dataSummaryMap = new Dictionary<String, Bme688DataSummary>();
+        private Dictionary<string, Bme688DataSummary> dataSummaryMap = new Dictionary<string, Bme688DataSummary>();
 
         public DataTable getGridDataSource()
         {
@@ -53,10 +53,10 @@ namespace SamplingBME688Serial
             dataSource.Clear();
             try
             {
-                String key = dataSummary.category + "-" + dataSummary.sensorId;
+                string key = dataSummary.category + "-" + dataSummary.sensorId;
                 dataSummaryMap[key] = dataSummary;
 
-                foreach (KeyValuePair<String, Bme688DataSummary> item in dataSummaryMap)
+                foreach (KeyValuePair<string, Bme688DataSummary> item in dataSummaryMap)
                 {
                     Bme688DataSummary dataSummaryItem = item.Value;
 

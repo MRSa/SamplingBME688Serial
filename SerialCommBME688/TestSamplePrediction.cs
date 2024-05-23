@@ -4,9 +4,9 @@ namespace SamplingBME688Serial
 {
     internal class TestSamplePrediction
     {
-        public String testPrediction(SensorToUse usePort, ref IPredictionModel? predictionModel, bool isLogData)
+        public string testPrediction(SensorToUse usePort, ref IPredictionModel? predictionModel, bool isLogData)
         {
-            String result = "";
+            string result = "";
             try
             {
                 if (predictionModel == null)
@@ -30,9 +30,9 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        private String testTrainingResultLog(SensorToUse usePort, ref IPredictionModel predictionModel)
+        private string testTrainingResultLog(SensorToUse usePort, ref IPredictionModel predictionModel)
         {
-            String result = "";
+            string result = "";
             try
             {
                  TestSampleData sampleData = new TestSampleData();
@@ -103,9 +103,9 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        private String testTrainingResult(SensorToUse usePort, ref IPredictionModel predictionModel)
+        private string testTrainingResult(SensorToUse usePort, ref IPredictionModel predictionModel)
         {
-            String result = "";
+            string result = "";
             try
             {
                 TestSampleData sampleData = new TestSampleData();

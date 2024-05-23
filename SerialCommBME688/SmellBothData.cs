@@ -5,7 +5,7 @@ using System;
 
 namespace SamplingBME688Serial
 {
-    public class OdorBothData
+    public class SmellBothData
     {
         [LoadColumn(0)]
         public float sequence0Value;
@@ -70,7 +70,7 @@ namespace SamplingBME688Serial
         [LoadColumn(20)]
         public string? dataLabel;
 
-        public OdorBothData(OdorBothData data)
+        public SmellBothData(SmellBothData data)
         {
             this.sequence0Value = data.sequence0Value;
             this.sequence1Value = data.sequence1Value;
@@ -95,7 +95,7 @@ namespace SamplingBME688Serial
             this.dataLabel = data.dataLabel;
         }
 
-        public OdorBothData(OdorOrData data1, OdorOrData data2)
+        public SmellBothData(SmellOrData data1, SmellOrData data2)
         {
             this.sequence0Value = data1.sequence0Value;
             this.sequence1Value = data1.sequence1Value;
@@ -120,6 +120,6 @@ namespace SamplingBME688Serial
             this.dataLabel = data1.dataLabel;
         }
 
-        public OdorBothData() { }
+        public SmellBothData() { }
     }
 }

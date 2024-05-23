@@ -1,15 +1,5 @@
 ﻿using Microsoft.ML;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SamplingBME688Serial
 {
@@ -17,9 +7,9 @@ namespace SamplingBME688Serial
     internal class DataLabelHolder
     {
         public uint clusterNo { get; private set; }
-        public String clusterName { get; private set; }
+        public string clusterName { get; private set; }
 
-        public DataLabelHolder(uint clusterNo, String clusterName)
+        public DataLabelHolder(uint clusterNo, string clusterName)
         {
             this.clusterNo = clusterNo;
             this.clusterName = clusterName;
@@ -30,25 +20,23 @@ namespace SamplingBME688Serial
     {
         private MLContext mlContext;
         private ICreateModelConsole console;
-        private String inputDataFileName;
-        private String featuresColumnName = "Features";
+        private string inputDataFileName;
+        private string featuresColumnName = "Features";
         private int numberOfClusters;
         private List<DataLabelHolder> labelHolders = new List<DataLabelHolder>();
         private bool doneTraining = false;
-        //private Microsoft.ML.Data.TransformerChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>>? model = null;
         private ITransformer? trainedModel = null;
         private IDataView? dataView = null;
 
-
-        public TrainingKMeansModel(ref MLContext mlContext, String inputDataFileName, int nofClusters, ICreateModelConsole console)
+        public TrainingKMeansModel(ref MLContext mlContext, string inputDataFileName, int numberOfClusters, ICreateModelConsole console)
         {
             this.mlContext = mlContext;
             this.inputDataFileName = inputDataFileName;
-            this.numberOfClusters = nofClusters;
+            this.numberOfClusters = numberOfClusters;
             this.console = console;
         }
 
-        public bool executeTraining(SensorToUse usePort, String? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
+        public bool executeTraining(SensorToUse usePort, string? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
         {
             Microsoft.ML.Data.EstimatorChain<Microsoft.ML.Data.ClusteringPredictionTransformer<Microsoft.ML.Trainers.KMeansModelParameters>> pipeline;
             try
@@ -145,7 +133,7 @@ namespace SamplingBME688Serial
             return (false);
         }
 
-        public String predictBothData(OdorBothData targetData)
+        public string predictBothData(OdorBothData targetData)
         {
             uint clusterId = uint.MaxValue;
             try
@@ -171,7 +159,7 @@ namespace SamplingBME688Serial
             return (clusterId.ToString());
         }
 
-        public String predictOrData(OdorOrData targetData)
+        public string predictOrData(OdorOrData targetData)
         {
             uint clusterId = uint.MaxValue;
             try
@@ -197,16 +185,16 @@ namespace SamplingBME688Serial
             return (clusterId.ToString());
         }
 
-        public String predictSingle1Data(OdorData targetData)
+        public string predictSingle1Data(OdorData targetData)
         {
             return (predictSingleData(targetData));
         }
-        public String predictSingle2Data(OdorData targetData)
+        public string predictSingle2Data(OdorData targetData)
         {
             return (predictSingleData(targetData));
         }
 
-        private String predictSingleData(OdorData targetData)
+        private string predictSingleData(OdorData targetData)
         {
             uint clusterId = uint.MaxValue;
             try
@@ -218,6 +206,92 @@ namespace SamplingBME688Serial
             catch (Exception ex)
             {
                 Debug.WriteLine(DateTime.Now + " [ERROR] predictSingleData() " + ex.Message);
+            }
+
+            // データラベルを探す..
+            foreach (DataLabelHolder label in labelHolders)
+            {
+                if (label.clusterNo == clusterId)
+                {
+                    return (label.clusterName);
+                }
+            }
+            return (clusterId.ToString());
+        }
+
+        public string predictBothData(SmellBothData targetData)
+        {
+            uint clusterId = uint.MaxValue;
+            try
+            {
+                var predictor = mlContext.Model.CreatePredictionEngine<SmellBothData, ClusterPrediction>(trainedModel);
+                var prediction = predictor.Predict(targetData);
+
+                clusterId = prediction.PredictedClusterId;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] predictBothData(smell) " + ex.Message);
+            }
+
+            // ---- データラベルを探す..
+            foreach (DataLabelHolder label in labelHolders)
+            {
+                if (label.clusterNo == clusterId)
+                {
+                    return (label.clusterName);
+                }
+            }
+            return (clusterId.ToString());
+        }
+
+        public string predictOrData(SmellOrData targetData)
+        {
+            uint clusterId = uint.MaxValue;
+            try
+            {
+                var predictor = mlContext.Model.CreatePredictionEngine<SmellOrData, ClusterPrediction>(trainedModel);
+                var prediction = predictor.Predict(targetData);
+
+                clusterId = prediction.PredictedClusterId;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] predictOrData(smell) " + ex.Message);
+            }
+
+            // データラベルを探す..
+            foreach (DataLabelHolder label in labelHolders)
+            {
+                if (label.clusterNo == clusterId)
+                {
+                    return (label.clusterName);
+                }
+            }
+            return (clusterId.ToString());
+        }
+
+        public string predictSingle1Data(SmellData targetData)
+        {
+            return (predictSingleData(targetData));
+        }
+        public string predictSingle2Data(SmellData targetData)
+        {
+            return (predictSingleData(targetData));
+        }
+
+        private string predictSingleData(SmellData targetData)
+        {
+            uint clusterId = uint.MaxValue;
+            try
+            {
+                var predictor = mlContext.Model.CreatePredictionEngine<SmellData, ClusterPrediction>(trainedModel);
+                var prediction = predictor.Predict(targetData);
+                clusterId = prediction.PredictedClusterId;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] predictSingleData(smell) " + ex.Message);
             }
 
             // データラベルを探す..
@@ -334,10 +408,10 @@ namespace SamplingBME688Serial
             try
             {
                 // ----- クラスタ番号から、サンプルデータのデータラベルを決定する
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
 
-                foreach (KeyValuePair<String, List<List<GraphDataValue>>> item1 in dataSetMap1)
+                foreach (KeyValuePair<string, List<List<GraphDataValue>>> item1 in dataSetMap1)
                 {
                     // --------- ラベルデータの初期化
                     uint[] clusterLabel = new uint[dataSetMap1.Count + 1];
@@ -350,7 +424,6 @@ namespace SamplingBME688Serial
                     List<List<GraphDataValue>> item2data = dataSetMap2[item1.Key];
 
                     int limit = Math.Min(item1data.Count, item2data.Count);
-                    //for (int index = 0; index < limit; index += 2)
                     for (int index = 0; index < limit; index ++)
                     {
                         List<GraphDataValue> sample1data = item1data[index];
@@ -418,8 +491,8 @@ namespace SamplingBME688Serial
             try
             {
                 // ----- クラスタ番号から、サンプルデータのデータラベルを決定する
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap1 = port1.getGasRegDataSet();
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap2 = port2.getGasRegDataSet();
 
                 int nofLabels = dataSetMap1.Count + dataSetMap2.Count;
                 decideOrLabels(1, nofLabels, ref dataSetMap1, isLogData);
@@ -432,11 +505,11 @@ namespace SamplingBME688Serial
             }
         }
 
-        private void decideOrLabels(int portNumber, int nofLabels, ref Dictionary<String, List<List<GraphDataValue>>> dataSetMap, bool isLogData)
+        private void decideOrLabels(int portNumber, int nofLabels, ref Dictionary<string, List<List<GraphDataValue>>> dataSetMap, bool isLogData)
         {
             try
             {
-                foreach (KeyValuePair<String, List<List<GraphDataValue>>> item in dataSetMap)
+                foreach (KeyValuePair<string, List<List<GraphDataValue>>> item in dataSetMap)
                 {
                     // --------- ラベルデータの初期化
                     uint[] clusterLabel = new uint[nofLabels + 1];
@@ -510,8 +583,8 @@ namespace SamplingBME688Serial
             try
             {
                 // ----- クラスタ番号から、サンプルデータのデータラベルを決定する
-                Dictionary<String, List<List<GraphDataValue>>> dataSetMap = port.getGasRegDataSet();
-                foreach (KeyValuePair<String, List<List<GraphDataValue>>> item in dataSetMap)
+                Dictionary<string, List<List<GraphDataValue>>> dataSetMap = port.getGasRegDataSet();
+                foreach (KeyValuePair<string, List<List<GraphDataValue>>> item in dataSetMap)
                 {
                     // --------- ラベルデータの初期化
                     uint[] clusterLabel = new uint[dataSetMap.Count + 1];
@@ -574,7 +647,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        public bool savePredictionModel(String outputFileName)
+        public bool savePredictionModel(string outputFileName)
         {
             bool ret = false;
             try

@@ -19,8 +19,8 @@ namespace SerialCommBME688
         private System.IO.Ports.SerialPort mySerialPort = new System.IO.Ports.SerialPort(new System.ComponentModel.Container());
         private SerialDataParser dataParser;
         private bool _continue = true;
-        private String dataCategory = "";
-        private String sendUrl = "";
+        private string dataCategory = "";
+        private string sendUrl = "";
         private bool isDbEntrySingle = false;
 
         public SerialReceiver(int sensorId, IDataReceiveNotify notify)
@@ -34,7 +34,7 @@ namespace SerialCommBME688
             return (dataParser.getDataHolder());
         }
 
-        public bool startReceive(String comPort, String aDataCategory, String aUrl, bool isDbEntrySingle, TextBox aOutputArea)
+        public bool startReceive(string comPort, string aDataCategory, string aUrl, bool isDbEntrySingle, TextBox aOutputArea)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace SerialCommBME688
                 Console.WriteLine(e.StackTrace);
                 if (aOutputArea != null)
                 {
-                    String message = "=== Open ERROR (" + comPort + ") === : " + DateTime.Now + "\r\n";
+                    string message = "=== Open ERROR (" + comPort + ") === : " + DateTime.Now + "\r\n";
                     message = message + " " + e.Message + "\r\n" + e.StackTrace;
 
                     aOutputArea.Text = message;
@@ -117,7 +117,7 @@ namespace SerialCommBME688
             Debug.WriteLine("  ----- FINISH ReadSerial() ----- : " + DateTime.Now);
         }
 
-        public void importSingleData(String categoryName, int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
+        public void importSingleData(string categoryName, int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
         {
             dataParser.importSingleData(categoryName, gas_index, temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
 
@@ -145,7 +145,7 @@ namespace SerialCommBME688
         }
 */
 
-        public void startExportCsvOnlyGasRegistance(StreamWriter writer, List<String> categoryList, int validCount, int numOfDuplicate)
+        public void startExportCsvOnlyGasRegistance(StreamWriter writer, List<string> categoryList, int validCount, int numOfDuplicate)
         {
             try
             {
@@ -196,18 +196,18 @@ namespace SerialCommBME688
             dataParser.reset();
         }
 
-        public Dictionary<String, List<List<double>>> getGasRegLogDataSet()
+        public Dictionary<string, List<List<double>>> getGasRegLogDataSet()
         {
             return (dataParser.getGasRegLogDataSet());
         }
 
-        public Dictionary<String, List<List<GraphDataValue>>> getGasRegDataSet()
+        public Dictionary<string, List<List<GraphDataValue>>> getGasRegDataSet()
         {
             return (dataParser.getGasRegDataSet());
         }
 
 
-        public List<String> getCollectedCategoryList()
+        public List<string> getCollectedCategoryList()
         {
             return (dataParser.getCollectedCategoryList());
 

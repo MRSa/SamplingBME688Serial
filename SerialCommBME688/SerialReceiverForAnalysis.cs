@@ -31,7 +31,7 @@ namespace SerialCommBME688
             this.notify = notify;
         }
 
-        public bool startReceive(String comPort, bool isTagetDataLog, TextBox aOutputArea)
+        public bool startReceive(string comPort, bool isTagetDataLog, TextBox aOutputArea)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace SerialCommBME688
                 Console.WriteLine(e.StackTrace);
                 if (aOutputArea != null)
                 {
-                    String message = "=== Open ERROR (" + comPort + ") [" + sensorId + "] === : " + DateTime.Now + "\r\n";
+                    string message = "=== Open ERROR (" + comPort + ") [" + sensorId + "] === : " + DateTime.Now + "\r\n";
                     message = message + " " + e.Message + "\r\n" + e.StackTrace;
                     aOutputArea.Text = message;
                 }
@@ -100,13 +100,13 @@ namespace SerialCommBME688
             Debug.WriteLine("  ----- FINISH ReadSerial(" + mySerialPort.PortName + ") ----- : " + DateTime.Now);
         }
 
-        private void parseReceivedData(String data)
+        private void parseReceivedData(string data)
         {
             //  データを受信したとき...
             try
             {
                 // 受信データをカンマで切り出し
-                String[] dataValues = data.Split(',');
+                string[] dataValues = data.Split(',');
                 if (dataValues.Length != NUMBER_OF_ITEMS)
                 {
                     // データの長さが期待したものではなかった。何もせず抜ける。
@@ -200,7 +200,7 @@ namespace SerialCommBME688
             }
         }
 
-        private void appendText(String itemData)
+        private void appendText(string itemData)
         {
             try
             {

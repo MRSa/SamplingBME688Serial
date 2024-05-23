@@ -15,7 +15,7 @@ namespace SamplingBME688Serial
             this.console = console;
         }
 
-        public bool loadPreTrainedModel(String inputFileName)
+        public bool loadPreTrainedModel(string inputFileName)
         {
             bool ret = false;
             try
@@ -34,7 +34,7 @@ namespace SamplingBME688Serial
             return (ret);
         }
 
-        public bool savePredictionModel(String outputFileName)
+        public bool savePredictionModel(string outputFileName)
         {
             // ----- ロードしたモデルの場合は、保存ができません
             // MessageBox.Show("The pre-trained model can not be saved.", "Save cancelled", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -43,7 +43,7 @@ namespace SamplingBME688Serial
             return (false);
         }
 
-        public String predictBothData(OdorBothData targetData)
+        public string predictBothData(OdorBothData targetData)
         {
             string result = "???";
             if (trainedModel == null)
@@ -70,7 +70,7 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public String predictOrData(OdorOrData targetData)
+        public string predictOrData(OdorOrData targetData)
         {
             string result = "???";
             if (trainedModel == null)
@@ -97,7 +97,7 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public String predictSingle1Data(OdorData targetData)
+        public string predictSingle1Data(OdorData targetData)
         {
             string result = "???";
             if (trainedModel == null)
@@ -124,7 +124,7 @@ namespace SamplingBME688Serial
             return (result);
         }
 
-        public String predictSingle2Data(OdorData targetData)
+        public string predictSingle2Data(OdorData targetData)
         {
             string result = "???";
             if (trainedModel == null)
@@ -150,6 +150,115 @@ namespace SamplingBME688Serial
             }
             return (result);
         }
+
+        public string predictBothData(SmellBothData targetData)
+        {
+            string result = "???";
+            if (trainedModel == null)
+            {
+                return ("(no model)");
+            }
+            try
+            {
+                var predictionEngine = mlContext.Model.CreatePredictionEngine<SmellBothData, PredictionResult>(trainedModel);
+                if (predictionEngine != null)
+                {
+                    var prediction = predictionEngine.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [Error] predictBothData(smell) : " + ex.Message);
+                console.appendText(" [Error] predictBothData(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
+        public string predictOrData(SmellOrData targetData)
+        {
+            string result = "???";
+            if (trainedModel == null)
+            {
+                return ("(no model)");
+            }
+            try
+            {
+                var predictionEngine = mlContext.Model.CreatePredictionEngine<SmellOrData, PredictionResult>(trainedModel);
+                if (predictionEngine != null)
+                {
+                    var prediction = predictionEngine.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [Error] predictOrData(smell) : " + ex.Message);
+                console.appendText(" [Error] predictOrData(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
+        public string predictSingle1Data(SmellData targetData)
+        {
+            string result = "???";
+            if (trainedModel == null)
+            {
+                return ("(no model)");
+            }
+            try
+            {
+                var predictionEngine = mlContext.Model.CreatePredictionEngine<SmellData, PredictionResult>(trainedModel);
+                if (predictionEngine != null)
+                {
+                    var prediction = predictionEngine.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [Error] predictSingle1Data(smell) : " + ex.Message);
+                console.appendText(" [Error] predictSingle1Data(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
+        public string predictSingle2Data(SmellData targetData)
+        {
+            string result = "???";
+            if (trainedModel == null)
+            {
+                return ("(no model)");
+            }
+            try
+            {
+                var predictionEngine = mlContext.Model.CreatePredictionEngine<SmellData, PredictionResult>(trainedModel);
+                if (predictionEngine != null)
+                {
+                    var prediction = predictionEngine.Predict(targetData);
+                    if ((prediction != null) && (prediction.dataLabel != null))
+                    {
+                        result = prediction.dataLabel;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [Error] predictSingle2Data(smell) : " + ex.Message);
+                console.appendText(" [Error] predictSingle2Data(smell) : " + ex.Message + "\r\n");
+            }
+            return (result);
+        }
+
         public string getMethodName()
         {
             return ("Pre-Trained");

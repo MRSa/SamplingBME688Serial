@@ -37,9 +37,9 @@ namespace SamplingBME688Serial
         }
 
         public void receivedData(
-            String sendUrl,
+            string sendUrl,
             bool isSingleEntry,
-            String category,
+            string category,
             int sensorId,
             int gas_index,
             int meas_index,
@@ -67,8 +67,8 @@ namespace SamplingBME688Serial
         }
         
         private async void receivedDataSingle(
-            String sendUrl,
-            String category,
+            string sendUrl,
+            string category,
             int sensorId,
             int gas_index,
             int meas_index,
@@ -90,7 +90,7 @@ namespace SamplingBME688Serial
 
                 // POSTメソッドで送信する
                 HttpClient client = new HttpClient();
-                String messageToSend = JsonSerializer.Serialize(singleData);
+                string messageToSend = JsonSerializer.Serialize(singleData);
                 StringContent message = new StringContent(messageToSend, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(sendUrl, message);
 
@@ -119,8 +119,8 @@ namespace SamplingBME688Serial
         }
 
         private void receivedDataBatch(
-            String sendUrl,
-            String category,
+            string sendUrl,
+            string category,
             int sensorId,
             int gas_index,
             int meas_index,
@@ -196,13 +196,13 @@ namespace SamplingBME688Serial
             }
         }
 
-        private async void sendSensorDataBatch(String sendUrl, SensorDataBatch dataToSend)
+        private async void sendSensorDataBatch(string sendUrl, SensorDataBatch dataToSend)
         {
             try
             {
                 // POSTメソッドで送信する
                 HttpClient client = new HttpClient();
-                String messageToSend = JsonSerializer.Serialize(dataToSend);
+                string messageToSend = JsonSerializer.Serialize(dataToSend);
                 StringContent message = new StringContent(messageToSend, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(sendUrl, message);
 
@@ -233,9 +233,9 @@ namespace SamplingBME688Serial
 
         class SensorDataSingle
         {
-            public String name { get; }
+            public string name { get; }
             public int sensor_id { get; }
-            public String category { get; }
+            public string category { get; }
 
             [JsonPropertyName("data")]
             public SensorDataDetail detail { get; }
@@ -250,9 +250,9 @@ namespace SamplingBME688Serial
         }
         class SensorDataBatch
         {
-            public String name { get; }
+            public string name { get; }
             public int sensor_id { get; }
-            public String category { get; }
+            public string category { get; }
 
             [JsonPropertyName("data_array")]
             public List<SensorDataDetail> detailArray { get; }

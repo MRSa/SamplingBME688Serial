@@ -9,9 +9,9 @@ namespace SamplingBME688Serial
     public interface IDataHolder
     {
         // カテゴリ名とデータセット一覧を取得する
-        Dictionary<String, List<List<GraphDataValue>>> getGasRegDataSet();
+        Dictionary<string, List<List<GraphDataValue>>> getGasRegDataSet();
 
         // カテゴリ名の一覧を取得する
-        List<String> getCollectedCategoryList();
+        List<string> getCollectedCategoryList();
     }
 }

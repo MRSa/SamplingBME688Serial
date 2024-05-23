@@ -7,7 +7,7 @@ namespace SamplingBME688Serial
 
     interface ICreateModelConsole
     {
-        void appendText(String itemData);
+        void appendText(string itemData);
     }
 
     public partial class CreateModelDialog : Form, ICreateModelConsole
@@ -21,7 +21,7 @@ namespace SamplingBME688Serial
         private IPredictionModel? trainedModel = null;
         private IDataHolder? port1 = null;
         private IDataHolder? port2 = null;
-        private List<String> categoryList = new List<String>();
+        private List<string> categoryList = new List<string>();
         private int minimumDataCount = int.MaxValue;
         private int outputDataCount = 0;
         private int startPosition = 0;
@@ -100,8 +100,8 @@ namespace SamplingBME688Serial
                 if (port1 != null)
                 {
                     appendText("Port1: ");
-                    Dictionary<String, List<List<GraphDataValue>>> dataSetMap = port1.getGasRegDataSet();
-                    foreach (KeyValuePair<String, List<List<GraphDataValue>>> item in dataSetMap)
+                    Dictionary<string, List<List<GraphDataValue>>> dataSetMap = port1.getGasRegDataSet();
+                    foreach (KeyValuePair<string, List<List<GraphDataValue>>> item in dataSetMap)
                     {
                         int count = item.Value.Count;
                         if (count < minimumDataCount)
@@ -117,8 +117,8 @@ namespace SamplingBME688Serial
                 if (port2 != null)
                 {
                     appendText("Port2: ");
-                    Dictionary<String, List<List<GraphDataValue>>> dataSetMap = port2.getGasRegDataSet();
-                    foreach (KeyValuePair<String, List<List<GraphDataValue>>> item in dataSetMap)
+                    Dictionary<string, List<List<GraphDataValue>>> dataSetMap = port2.getGasRegDataSet();
+                    foreach (KeyValuePair<string, List<List<GraphDataValue>>> item in dataSetMap)
                     {
                         int count = item.Value.Count;
                         if (count < minimumDataCount)
@@ -145,7 +145,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        public void appendText(String itemData)
+        public void appendText(string itemData)
         {
             try
             {
@@ -168,7 +168,7 @@ namespace SamplingBME688Serial
             }
         }
 
-        private void deleteDataSourceFile(String fileName)
+        private void deleteDataSourceFile(string fileName)
         {
             try
             {

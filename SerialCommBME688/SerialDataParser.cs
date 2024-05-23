@@ -12,7 +12,7 @@ namespace SerialCommBME688
 {
     interface IMessageCallback
     {
-        void messageCallback(String message);
+        void messageCallback(string message);
     }
     internal class SerialDataParser : IMessageCallback
     {
@@ -35,13 +35,13 @@ namespace SerialCommBME688
             outputArea = aOutputArea;
         }
 
-        public void parseReceivedData(String categoryName, String sendUrl, bool isSingleEntry, String data)
+        public void parseReceivedData(string categoryName, string sendUrl, bool isSingleEntry, string data)
         {
             //  データを受信したとき...
             try
             {
                 // 受信データをカンマで切り出し
-                String[] dataValues = data.Split(',');
+                string[] dataValues = data.Split(',');
                 if (dataValues.Length != NUMBER_OF_ITEMS)
                 {
                     // データの長さが期待したものではなかった。何もせず抜ける。
@@ -67,7 +67,7 @@ namespace SerialCommBME688
                 double.TryParse(dataValues[11], out gas_registance_diff);  // gas_registance_diff
 
                 // データを格納する。
-                String itemData = dataHolder.entryData(categoryName,
+                string itemData = dataHolder.entryData(categoryName,
                                                        sendUrl,
                                                        isSingleEntry,
                                                        gas_index,
@@ -91,12 +91,12 @@ namespace SerialCommBME688
             }
         }
 
-        public void importSingleData(String categoryName, int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
+        public void importSingleData(string categoryName, int gas_index, double temperature, double humidity, double pressure, double gas_registance, double gas_registance_log, double gas_registance_diff)
         {
             try
             {
                 // データを格納する。
-                String itemData = dataHolder.entryData(categoryName,
+                string itemData = dataHolder.entryData(categoryName,
                                                        "",
                                                        false,
                                                        gas_index,
@@ -118,7 +118,7 @@ namespace SerialCommBME688
         }
 
 
-        private void appendText(String itemData)
+        private void appendText(string itemData)
         {
             try
             {
@@ -146,7 +146,7 @@ namespace SerialCommBME688
             try
             {
                 // 保持クラスに終了を通知する。値が入っていたら表示する。
-                String itemData = dataHolder.finishReceivedData();
+                string itemData = dataHolder.finishReceivedData();
                 appendText(itemData);
             }
             catch (Exception e)
@@ -169,7 +169,7 @@ namespace SerialCommBME688
             }
         }
 
-        public void exportCsvDataOnlyGasRegistance(StreamWriter writer, List<String> categoryList, int validCount, int numOfDuplicate)
+        public void exportCsvDataOnlyGasRegistance(StreamWriter writer, List<string> categoryList, int validCount, int numOfDuplicate)
         {
             try
             {
@@ -181,7 +181,7 @@ namespace SerialCommBME688
             }
         }
 
-        public void messageCallback(String message)
+        public void messageCallback(string message)
         {
             try
             {
@@ -204,17 +204,17 @@ namespace SerialCommBME688
             dataHolder.reset();
         }
 
-        public Dictionary<String, List<List<double>>> getGasRegLogDataSet()
+        public Dictionary<string, List<List<double>>> getGasRegLogDataSet()
         {
             return (dataHolder.getGasRegLogDataSet());
         }
 
-        public Dictionary<String, List<List<GraphDataValue>>> getGasRegDataSet()
+        public Dictionary<string, List<List<GraphDataValue>>> getGasRegDataSet()
         {
             return (dataHolder.getGasRegDataSet());
         }
 
-        public List<String> getCollectedCategoryList()
+        public List<string> getCollectedCategoryList()
         {
             return (dataHolder.getCollectedCategoryList());
 

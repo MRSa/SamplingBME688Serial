@@ -2,7 +2,7 @@
 {
     public interface IDataImportCallback
     {
-        public void dataImportFinished(bool isSuccess, String message);
+        public void dataImportFinished(bool isSuccess, string message);
         public void dataImportProgress(int lineNumber, int totalLines);
     }
 }
