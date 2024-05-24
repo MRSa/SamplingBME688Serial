@@ -281,22 +281,22 @@ namespace SamplingBME688Serial
             TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, port1, port2, this);
             if (selSensor1and2.Checked)
             {
-                csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
                 usePort = SensorToUse.port1and2;
             }
             else if (selSensor1.Checked)
             {
-                csvExporter.outputDataSourceCSVFileSingle(1, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFileSingle(1, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
                 usePort = SensorToUse.port1;
             }
             else if (selSensor2.Checked)
             {
-                csvExporter.outputDataSourceCSVFileSingle(2, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFileSingle(2, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
                 usePort = SensorToUse.port2;
             }
             else // if (selSensor1or2.Checked)
             {
-                csvExporter.outputDataSourceCSVFile1or2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked);
+                csvExporter.outputDataSourceCSVFile1or2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
                 usePort = SensorToUse.port1or2;
             }
 
@@ -307,7 +307,7 @@ namespace SamplingBME688Serial
                     // L-BFGS
                     IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy("Label", "Features");
                     TrainingMultiClassification training1 = new TrainingMultiClassification(ref mlContext, "LbfgsMaximumEntropy", ref estimator1, _sourceDataFile, this);
-                    ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training1;
                     break;
 
@@ -315,7 +315,7 @@ namespace SamplingBME688Serial
                     // 確率的双対座標上昇法(1)
                     IEstimator<ITransformer> estimator2 = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features");
                     TrainingMultiClassification training2 = new TrainingMultiClassification(ref mlContext, "SdcaMaximumEntropy", ref estimator2, _sourceDataFile, this);
-                    ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training2;
                     break;
 
@@ -323,7 +323,7 @@ namespace SamplingBME688Serial
                     // 確率的双対座標上昇法(2)
                     IEstimator<ITransformer> estimator3 = mlContext.MulticlassClassification.Trainers.SdcaNonCalibrated("Label", "Features");
                     TrainingMultiClassification training3 = new TrainingMultiClassification(ref mlContext, "SdcaNonCalibrated", ref estimator3, _sourceDataFile, this);
-                    ret = training3.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training3.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training3;
                     break;
 
@@ -331,7 +331,7 @@ namespace SamplingBME688Serial
                     // Naive Bayes
                     IEstimator<ITransformer> estimator4 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
                     TrainingMultiClassification training4 = new TrainingMultiClassification(ref mlContext, "NaiveBayes", ref estimator4, _sourceDataFile, this);
-                    ret = training4.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training4.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training4;
                     break;
 
@@ -339,21 +339,21 @@ namespace SamplingBME688Serial
                     // 軽勾配ブースト マシン (LightGbm)
                     IEstimator<ITransformer> estimator5 = mlContext.MulticlassClassification.Trainers.LightGbm("Label", "Features");
                     TrainingMultiClassification training5 = new TrainingMultiClassification(ref mlContext, "LightGbm", ref estimator5, _sourceDataFile, this);
-                    ret = training5.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training5.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training5;
                     break;
 
                 case 5:
                     // Pairwise coupling
                     TrainingMultiBinaryClassification training6 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.PairwiseCoupling, getBinaryClassificationMethod(), _sourceDataFile, this);
-                    ret = training6.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training6.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training6;
                     break;
 
                 case 6:
                     // One versus all
                     TrainingMultiBinaryClassification training7 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.OneVersusAll, getBinaryClassificationMethod(), _sourceDataFile, this);
-                    ret = training7.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training7.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training7;
                     break;
 
@@ -361,7 +361,7 @@ namespace SamplingBME688Serial
                 default:
                     // K-Means
                     TrainingKMeansModel training0 = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);
-                    ret = training0.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked);
+                    ret = training0.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
                     trainedModel = training0;
                     break;
             }

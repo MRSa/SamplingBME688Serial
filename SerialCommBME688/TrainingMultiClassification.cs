@@ -22,66 +22,121 @@ namespace SamplingBME688Serial
             this.console = console;
         }
 
-        public bool executeTraining(SensorToUse usePort, string? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData)
+        public bool executeTraining(SensorToUse usePort, string? outputFileName, ref IDataHolder? port1, ref IDataHolder? port2, bool isLogData, bool withPresTempHum)
         {
             try
             {
                 Debug.WriteLine(DateTime.Now + " ---------- executeTraining() START " + classificationMethod + " ----------");
                 console.appendText("\r\n ---------- executeTraining() START [" + classificationMethod + "] ----------\r\n");
-                console.appendText("   Input File: " + inputDataFileName + "\r\n   Output File: " + outputFileName + " \r\n\r\n");
+                console.appendText("   Input File: " + inputDataFileName + "\r\n   Output File: " + outputFileName + " withPresTempHum: " + withPresTempHum +  " \r\n\r\n");
 
                 // ----- データの読み込みの設定
-                if (usePort == SensorToUse.port1and2)
+                if (withPresTempHum)
                 {
-                    dataView = mlContext.Data.LoadFromTextFile<OdorBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
-                    DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
-                    trainBothOdorData(outputFileName, splitData);
-                    if (trainedModel != null)
+                    if (usePort == SensorToUse.port1and2)
                     {
-                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
-                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        dataView = mlContext.Data.LoadFromTextFile<SmellBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainBothSmellData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
                     }
-                }
-                else if (usePort == SensorToUse.port1or2)
-                {
-                    dataView = mlContext.Data.LoadFromTextFile<OdorOrData>(inputDataFileName, hasHeader: false, separatorChar: ',');
-                    DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
-                    trainOrOdorData(outputFileName, splitData);
-                    if (trainedModel != null)
+                    else if (usePort == SensorToUse.port1or2)
                     {
-                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
-                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        dataView = mlContext.Data.LoadFromTextFile<SmellOrData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainOrSmellData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
                     }
-                }
-                else if (usePort == SensorToUse.port1)
-                {
-                    dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
-                    DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
-                    trainSingle1OdorData(outputFileName, splitData);
-                    if (trainedModel != null)
+                    else if (usePort == SensorToUse.port1)
                     {
-                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
-                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        dataView = mlContext.Data.LoadFromTextFile<SmellData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainSingle1SmellData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
                     }
-                }
-                else if (usePort == SensorToUse.port2)
-                {
-                    dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
-                    DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
-                    trainSingle2OdorData(outputFileName, splitData);
-                    if (trainedModel != null)
+                    else if (usePort == SensorToUse.port2)
                     {
-                        var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
-                        showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        dataView = mlContext.Data.LoadFromTextFile<SmellData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainSingle2SmellData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
+                    }
+                    else
+                    {
+                        dataView = null;
+                        console.appendText(" ----- executeTraining(smell) : unknown port number. ----- \r\n");
+                        return (false);
                     }
                 }
                 else
                 {
-                    dataView = null;
-                    console.appendText(" ----- executeTraining() : unknown port number. ----- \r\n");
-                    return (false);
+                    if (usePort == SensorToUse.port1and2)
+                    {
+                        dataView = mlContext.Data.LoadFromTextFile<OdorBothData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainBothOdorData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
+                    }
+                    else if (usePort == SensorToUse.port1or2)
+                    {
+                        dataView = mlContext.Data.LoadFromTextFile<OdorOrData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainOrOdorData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
+                    }
+                    else if (usePort == SensorToUse.port1)
+                    {
+                        dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainSingle1OdorData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
+                    }
+                    else if (usePort == SensorToUse.port2)
+                    {
+                        dataView = mlContext.Data.LoadFromTextFile<OdorData>(inputDataFileName, hasHeader: false, separatorChar: ',');
+                        DataOperationsCatalog.TrainTestData splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                        trainSingle2OdorData(outputFileName, splitData);
+                        if (trainedModel != null)
+                        {
+                            var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
+                            showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                        }
+                    }
+                    else
+                    {
+                        dataView = null;
+                        console.appendText(" ----- executeTraining() : unknown port number. ----- \r\n");
+                        return (false);
+                    }
                 }
-
                 console.appendText(" ----- executeTraining() : done. ----- \r\n");
                 Debug.WriteLine(DateTime.Now + " ---------- executeTraining() END  ----------");
                 return (true);
@@ -104,6 +159,72 @@ namespace SamplingBME688Serial
             console.appendText($"   MacroAccuracy   : {macroAccuracy:0.###}\r\n");     //  マクロ精度:   1に近づける
             console.appendText($"   LogLoss         : {logLoss:#.###}\r\n");           //  対数損失:     0に近づける
             console.appendText($"   LogLossReduction: {logLossReduction:#.###}\r\n");  //  対数損失還元: 範囲は [-inf, 1.00] で、1.00に近づける
+        }
+
+        private void trainBothSmellData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        {
+            IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
+                                                  .Append(mlContext.Transforms.Concatenate("Features",
+                                                          "sequence0Value", "sequence1Value", "sequence2Value", "sequence3Value", "sequence4Value",
+                                                          "sequence5Value", "sequence6Value", "sequence7Value", "sequence8Value", "sequence9Value",
+                                                          "sequence10Value", "sequence11Value", "sequence12Value", "sequence13Value", "sequence14Value",
+                                                          "sequence15Value", "sequence16Value", "sequence17Value", "sequence18Value", "sequence19Value",
+                                                          "averagePressureValue", "averageTemperatureValue", "averageHumidityValue"))
+                                                  .AppendCacheCheckpoint(mlContext);
+            var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
+            if (outputFileName != null)
+            {
+                mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
+            }
+        }
+
+        private void trainOrSmellData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        {
+            IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
+                                                  .Append(mlContext.Transforms.Concatenate("Features", "sensorId",
+                                                          "sequence0Value", "sequence1Value", "sequence2Value", "sequence3Value", "sequence4Value",
+                                                          "sequence5Value", "sequence6Value", "sequence7Value", "sequence8Value", "sequence9Value",
+                                                          "averagePressureValue", "averageTemperatureValue", "averageHumidityValue"))
+                                                  .AppendCacheCheckpoint(mlContext);
+            var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
+            if (outputFileName != null)
+            {
+                mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
+            }
+        }
+
+        private void trainSingle1SmellData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        {
+            IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
+                                                   .Append(mlContext.Transforms.Concatenate("Features",
+                                                          "sequence0Value", "sequence1Value", "sequence2Value", "sequence3Value", "sequence4Value",
+                                                          "sequence5Value", "sequence6Value", "sequence7Value", "sequence8Value", "sequence9Value",
+                                                          "averagePressureValue", "averageTemperatureValue", "averageHumidityValue"))
+                                                   .AppendCacheCheckpoint(mlContext);
+            var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
+            if (outputFileName != null)
+            {
+                mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
+            }
+        }
+
+        private void trainSingle2SmellData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)
+        {
+            IEstimator<ITransformer> pipeline = mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "dataLabel", outputColumnName: "Label")
+                                                   .Append(mlContext.Transforms.Concatenate("Features",
+                                                           "sequence0Value", "sequence1Value", "sequence2Value", "sequence3Value", "sequence4Value",
+                                                           "sequence5Value", "sequence6Value", "sequence7Value", "sequence8Value", "sequence9Value",
+                                                           "averagePressureValue", "averageTemperatureValue", "averageHumidityValue"))
+                                                   .AppendCacheCheckpoint(mlContext);
+            var trainingPipeline = pipeline.Append(estimator).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+            trainedModel = trainingPipeline.Fit(testData.TrainSet);
+            if (outputFileName != null)
+            {
+                mlContext.Model.Save(trainedModel, testData.TrainSet.Schema, outputFileName);
+            }
         }
 
         private void trainBothOdorData(string? outputFileName, DataOperationsCatalog.TrainTestData testData)

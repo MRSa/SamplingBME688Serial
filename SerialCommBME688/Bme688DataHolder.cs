@@ -475,7 +475,7 @@ namespace SerialCommBME688
                                 try
                                 {
                                     Bme688Data collectedValue = collectedData.getBme688Data(dataIndex);
-                                    collected.Add(new GraphDataValue(collectedValue.gas_registance, collectedValue.gas_registance_log));
+                                    collected.Add(new GraphDataValue(collectedValue.gas_registance, collectedValue.gas_registance_log, collectedValue.pressure, collectedValue.temperature, collectedValue.humidity));
                                 }
                                 catch (Exception ee)
                                 {

@@ -65,7 +65,10 @@ namespace SamplingBME688Serial
                                 }
                             }
                         }
-                        catch (Exception ee) { }
+                        catch (Exception ee)
+                        {
+                            Debug.WriteLine(DateTime.Now + " : " + ee.Message);
+                        }
                         callback.dataImportProgress(readLines, -1);
                         readLines++;
                     }
@@ -95,6 +98,7 @@ namespace SamplingBME688Serial
             catch (Exception e)
             {
                 // parse失敗
+                Debug.WriteLine(DateTime.Now + " " + e.Message);
             }
             return (value);
         }
@@ -109,6 +113,7 @@ namespace SamplingBME688Serial
             catch (Exception e)
             {
                 // parse失敗
+                Debug.WriteLine(DateTime.Now + " " + e.Message);
             }
             return (value);
         }

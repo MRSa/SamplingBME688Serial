@@ -19,6 +19,8 @@ namespace SerialCommBME688
 
         private OdorOrData? analysisData01 = null;
         private OdorOrData? analysisData02 = null;
+        private SmellOrData? analysisData11 = null;
+        private SmellOrData? analysisData12 = null;
 
         public SerialCommForm()
         {
@@ -349,14 +351,21 @@ namespace SerialCommBME688
         {
             Dictionary<int, DataGridViewRow> selectedData = new Dictionary<int, DataGridViewRow>();
 
-            GraphDataValue lowerLimit = new GraphDataValue(0.0f, 0.0f);
-            GraphDataValue upperLimit = new GraphDataValue(110000000.0f, 20.0f); ;
+            GraphDataValue lowerLimit = new GraphDataValue(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            GraphDataValue upperLimit = new GraphDataValue(110000000.0f, 20.0f, double.MaxValue, double.MaxValue, double.MaxValue); ;
 
             //  データが１つ以上選択されていた時は、グラフを表示する
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 try
                 {
+                    double lowerPressure    = Double.MaxValue;
+                    double upperPressure    = Double.MinValue;
+                    double lowerTemperature = Double.MaxValue;
+                    double upperTemperature = Double.MinValue;
+                    double lowerHumidity    = Double.MaxValue;
+                    double upperHumidity    = Double.MinValue;
+
                     double lowerLimitZoomRLog = Double.MaxValue;
                     double upperLimitZoomRLog = Double.MinValue;
                     double lowerLimitZoomR = Double.MaxValue;
@@ -384,8 +393,8 @@ namespace SerialCommBME688
                         Debug.WriteLine("[" + row.Index + "] : : " + row.Cells[0].Value + " ");
                         selectedData.Add(row.Index, row);
                     }
-                    GraphDataValue lowerLimitZoom = new GraphDataValue(lowerLimitZoomR, lowerLimitZoomRLog);
-                    GraphDataValue upperLimitZoom = new GraphDataValue(upperLimitZoomR, upperLimitZoomRLog);
+                    GraphDataValue lowerLimitZoom = new GraphDataValue(lowerLimitZoomR, lowerLimitZoomRLog, lowerPressure, lowerTemperature, lowerHumidity);
+                    GraphDataValue upperLimitZoom = new GraphDataValue(upperLimitZoomR, upperLimitZoomRLog, upperPressure, upperTemperature, upperHumidity);
                     Debug.WriteLine(DateTime.Now + " ----- upperLimit(" + upperLimit + " " + upperLimitZoom + ") lowerLimit(" + lowerLimit + " " + lowerLimitZoom + ")");
 
                     // データが選択されていた時は、詳細ダイアログを表示する

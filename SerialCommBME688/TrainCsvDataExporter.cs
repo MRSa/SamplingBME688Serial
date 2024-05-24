@@ -19,7 +19,7 @@ namespace SamplingBME688Serial
             this.console = console;
         }
 
-        public bool outputDataSourceCSVFileSingle(int sensorId, int startPosition, int outputDataCount, int duplicateTimes, bool useLogData)
+        public bool outputDataSourceCSVFileSingle(int sensorId, int startPosition, int outputDataCount, int duplicateTimes, bool useLogData, bool presTempHum)
         {
             // --- CSVファイルにデータを出力する (only mode)
             try
@@ -55,6 +55,10 @@ namespace SamplingBME688Serial
                             string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
+                                double pressure = 0.0f;
+                                double temperature = 0.0f;
+                                double humidity = 0.0f;
+                                double itemCount = 0.0f;
                                 oneLineData = "";
                                 List<GraphDataValue> portItem = baseItem.Value[position];
                                 foreach (GraphDataValue item in portItem)
@@ -67,6 +71,17 @@ namespace SamplingBME688Serial
                                     {
                                         oneLineData += item.gas_registance + ",";
                                     }
+                                    pressure += item.pressure;
+                                    temperature += item.temperature;
+                                    humidity += item.humidity;
+                                    itemCount += 1.0f;
+                                }
+                                // ---- pressure, temperature, humidity を出力する
+                                if ((presTempHum) &&(itemCount > 0.0f))
+                                {
+                                    oneLineData += (pressure / itemCount) + ",";
+                                    oneLineData += (temperature / itemCount) + ",";
+                                    oneLineData += (humidity / itemCount) + ",";
                                 }
                                 oneLineData += baseItem.Key;
                                 writer.WriteLine(oneLineData);
@@ -85,7 +100,7 @@ namespace SamplingBME688Serial
             return (true);
         }
 
-        public bool outputDataSourceCSVFile1and2(int startPosition, int outputDataCount, int duplicateTimes, bool useLogData)
+        public bool outputDataSourceCSVFile1and2(int startPosition, int outputDataCount, int duplicateTimes, bool useLogData, bool presTempHum)
         {
             // --- CSVファイルにデータを出力する (1 and 2 mode)
             try
@@ -115,6 +130,10 @@ namespace SamplingBME688Serial
                             string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
+                                double pressure = 0.0f;
+                                double temperature = 0.0f;
+                                double humidity = 0.0f;
+                                double itemCount = 0.0f;
                                 oneLineData = "";
                                 List<GraphDataValue> port1Item = item1.Value[position];
                                 foreach (GraphDataValue item in port1Item)
@@ -127,6 +146,10 @@ namespace SamplingBME688Serial
                                     {
                                         oneLineData += item.gas_registance + ",";
                                     }
+                                    pressure += item.pressure;
+                                    temperature += item.temperature;
+                                    humidity += item.humidity;
+                                    itemCount += 1.0f;
                                 }
 
                                 List<GraphDataValue> port2Item = item2[position];
@@ -140,6 +163,17 @@ namespace SamplingBME688Serial
                                     {
                                         oneLineData += item.gas_registance + ",";
                                     }
+                                    pressure += item.pressure;
+                                    temperature += item.temperature;
+                                    humidity += item.humidity;
+                                    itemCount += 1.0f;
+                                }
+                                // ---- pressure, temperature, humidity を出力する
+                                if ((presTempHum) && (itemCount > 0.0f))
+                                {
+                                    oneLineData += (pressure / itemCount) + ",";
+                                    oneLineData += (temperature / itemCount) + ",";
+                                    oneLineData += (humidity / itemCount) + ",";
                                 }
                                 oneLineData += item1.Key;
                                 writer.WriteLine(oneLineData);
@@ -158,7 +192,7 @@ namespace SamplingBME688Serial
             return (true);
         }
 
-        public bool outputDataSourceCSVFile1or2(int startPosition, int outputDataCount, int duplicateTimes, bool useLogData)
+        public bool outputDataSourceCSVFile1or2(int startPosition, int outputDataCount, int duplicateTimes, bool useLogData, bool presTempHum)
         {
             // --- CSVファイルにデータを出力する (1 or 2 mode)
             try
@@ -187,6 +221,10 @@ namespace SamplingBME688Serial
                             string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
+                                double pressure = 0.0f;
+                                double temperature = 0.0f;
+                                double humidity = 0.0f;
+                                double itemCount = 0.0f;
                                 oneLineData = "1,";
                                 List<GraphDataValue> port1Item = item1.Value[position];
                                 foreach (GraphDataValue item in port1Item)
@@ -199,6 +237,17 @@ namespace SamplingBME688Serial
                                     {
                                         oneLineData += item.gas_registance + ",";
                                     }
+                                    pressure += item.pressure;
+                                    temperature += item.temperature;
+                                    humidity += item.humidity;
+                                    itemCount += 1.0f;
+                                }
+                                // ---- pressure, temperature, humidity を出力する
+                                if ((presTempHum) && (itemCount > 0.0f))
+                                {
+                                    oneLineData += (pressure / itemCount) + ",";
+                                    oneLineData += (temperature / itemCount) + ",";
+                                    oneLineData += (humidity / itemCount) + ",";
                                 }
                                 oneLineData += item1.Key;
                                 writer.WriteLine(oneLineData);
@@ -215,6 +264,10 @@ namespace SamplingBME688Serial
                             string oneLineData;
                             for (int position = startPosition; position < (startPosition + outputDataCount); position++)
                             {
+                                double pressure = 0.0f;
+                                double temperature = 0.0f;
+                                double humidity = 0.0f;
+                                double itemCount = 0.0f;
                                 oneLineData = "2,";
                                 List<GraphDataValue> port2Item = item2.Value[position];
                                 foreach (GraphDataValue item in port2Item)
@@ -227,6 +280,17 @@ namespace SamplingBME688Serial
                                     {
                                         oneLineData += item.gas_registance + ",";
                                     }
+                                    pressure += item.pressure;
+                                    temperature += item.temperature;
+                                    humidity += item.humidity;
+                                    itemCount += 1.0f;
+                                }
+                                // ---- pressure, temperature, humidity を出力する
+                                if ((presTempHum) && (itemCount > 0.0f))
+                                {
+                                    oneLineData += (pressure / itemCount) + ",";
+                                    oneLineData += (temperature / itemCount) + ",";
+                                    oneLineData += (humidity / itemCount) + ",";
                                 }
                                 oneLineData += item2.Key;
                                 writer.WriteLine(oneLineData);

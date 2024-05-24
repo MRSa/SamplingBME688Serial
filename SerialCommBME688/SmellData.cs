@@ -35,6 +35,15 @@ namespace SamplingBME688Serial
         public float sequence9Value;
 
         [LoadColumn(10)]
+        public float averagePressureValue;
+
+        [LoadColumn(11)]
+        public float averageTemperatureValue;
+
+        [LoadColumn(12)]
+        public float averageHumidityValue;
+
+        [LoadColumn(13)]
         public string? dataLabel;
 
         public SmellData(SmellData data)
@@ -49,6 +58,9 @@ namespace SamplingBME688Serial
             this.sequence7Value = data.sequence7Value;
             this.sequence8Value = data.sequence8Value;
             this.sequence9Value = data.sequence9Value;
+            this.averagePressureValue = data.averagePressureValue;
+            this.averageTemperatureValue = data.averageTemperatureValue;
+            this.averageHumidityValue = data.averageHumidityValue;
             this.dataLabel = data.dataLabel;
         }
 
@@ -64,6 +76,9 @@ namespace SamplingBME688Serial
             this.sequence7Value = data.sequence7Value;
             this.sequence8Value = data.sequence8Value;
             this.sequence9Value = data.sequence9Value;
+            this.averagePressureValue = data.averagePressureValue;
+            this.averageTemperatureValue = data.averageTemperatureValue;
+            this.averageHumidityValue = data.averageHumidityValue;
             this.dataLabel = data.dataLabel;
         }
 
