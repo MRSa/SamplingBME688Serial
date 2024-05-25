@@ -1,7 +1,4 @@
 ﻿using Microsoft.ML.Data;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Xml.Linq;
-using System;
 
 namespace SamplingBME688Serial
 {
@@ -96,6 +93,31 @@ namespace SamplingBME688Serial
         }
 
         public OdorBothData(OdorOrData data1, OdorOrData data2)
+        {
+            this.sequence0Value = data1.sequence0Value;
+            this.sequence1Value = data1.sequence1Value;
+            this.sequence2Value = data1.sequence2Value;
+            this.sequence3Value = data1.sequence3Value;
+            this.sequence4Value = data1.sequence4Value;
+            this.sequence5Value = data1.sequence5Value;
+            this.sequence6Value = data1.sequence6Value;
+            this.sequence7Value = data1.sequence7Value;
+            this.sequence8Value = data1.sequence8Value;
+            this.sequence9Value = data1.sequence9Value;
+            this.sequence10Value = data2.sequence0Value;
+            this.sequence11Value = data2.sequence1Value;
+            this.sequence12Value = data2.sequence2Value;
+            this.sequence13Value = data2.sequence3Value;
+            this.sequence14Value = data2.sequence4Value;
+            this.sequence15Value = data2.sequence5Value;
+            this.sequence16Value = data2.sequence6Value;
+            this.sequence17Value = data2.sequence7Value;
+            this.sequence18Value = data2.sequence8Value;
+            this.sequence19Value = data2.sequence9Value;
+            this.dataLabel = data1.dataLabel;
+        }
+
+        public OdorBothData(SmellOrData data1, SmellOrData data2)
         {
             this.sequence0Value = data1.sequence0Value;
             this.sequence1Value = data1.sequence1Value;

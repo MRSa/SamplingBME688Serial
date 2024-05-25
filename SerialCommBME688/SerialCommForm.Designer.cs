@@ -526,6 +526,8 @@
             // chkWithPresTempHumi
             // 
             chkWithPresTempHumi.AutoSize = true;
+            chkWithPresTempHumi.Checked = true;
+            chkWithPresTempHumi.CheckState = CheckState.Checked;
             chkWithPresTempHumi.Location = new Point(598, 22);
             chkWithPresTempHumi.Margin = new Padding(2);
             chkWithPresTempHumi.Name = "chkWithPresTempHumi";

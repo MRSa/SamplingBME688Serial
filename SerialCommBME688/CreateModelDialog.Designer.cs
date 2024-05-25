@@ -50,13 +50,13 @@
             lblDuplicate = new Label();
             selDuplicate = new ComboBox();
             grpData = new GroupBox();
+            chkPresTempHumidity = new CheckBox();
             chkDataLog = new CheckBox();
             txtDataCount = new TextBox();
             lblDataCount = new Label();
             txtResult = new TextBox();
             cmbBinaryModel = new ComboBox();
             btnClearMessage = new Button();
-            chkPresTempHumidity = new CheckBox();
             grpInformation.SuspendLayout();
             grpSensor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)rangeFromPercent).BeginInit();
@@ -328,6 +328,19 @@
             grpData.TabStop = false;
             grpData.Text = "Data";
             // 
+            // chkPresTempHumidity
+            // 
+            chkPresTempHumidity.AutoSize = true;
+            chkPresTempHumidity.Checked = true;
+            chkPresTempHumidity.CheckState = CheckState.Checked;
+            chkPresTempHumidity.Location = new Point(587, 19);
+            chkPresTempHumidity.Margin = new Padding(2);
+            chkPresTempHumidity.Name = "chkPresTempHumidity";
+            chkPresTempHumidity.Size = new Size(70, 19);
+            chkPresTempHumidity.TabIndex = 30;
+            chkPresTempHumidity.Text = "w./P T H";
+            chkPresTempHumidity.UseVisualStyleBackColor = true;
+            // 
             // chkDataLog
             // 
             chkDataLog.AutoSize = true;
@@ -393,17 +406,6 @@
             btnClearMessage.Text = "Clear Message";
             btnClearMessage.UseVisualStyleBackColor = true;
             btnClearMessage.Click += btnClearMessage_Click;
-            // 
-            // chkPresTempHumidity
-            // 
-            chkPresTempHumidity.AutoSize = true;
-            chkPresTempHumidity.Location = new Point(587, 19);
-            chkPresTempHumidity.Margin = new Padding(2);
-            chkPresTempHumidity.Name = "chkPresTempHumidity";
-            chkPresTempHumidity.Size = new Size(70, 19);
-            chkPresTempHumidity.TabIndex = 30;
-            chkPresTempHumidity.Text = "w./P T H";
-            chkPresTempHumidity.UseVisualStyleBackColor = true;
             // 
             // CreateModelDialog
             // 

@@ -5,31 +5,28 @@ using System.Text;
 
 namespace SerialCommBME688
 {
-    public partial class SerialCommForm : Form, IDataImportCallback, ICreateModelResult, IReceivedOdorDataForAnalysis
+    public partial class SerialCommForm : Form, IDataImportCallback, ICreateModelResult
     {
         private GridDataSourceProvider dataSourceProvider;
         private SerialReceiver myReceiver;
         private SerialReceiver myReceiver_2;
         private SerialReceiverForAnalysis analysisReceiver;
         private SerialReceiverForAnalysis analysisReceiver_2;
+        private PredictAnalyzer predictAnalyzer;
         private MLContext mlContext;
         private DbEntryStatusView statusView;
-        private SensorToUse predictModelType = SensorToUse.None; // 
-        private IPredictionModel? predictionModel;
-
-        private OdorOrData? analysisData01 = null;
-        private OdorOrData? analysisData02 = null;
-        private SmellOrData? analysisData11 = null;
-        private SmellOrData? analysisData12 = null;
+        private SensorToUse predictModelType = SensorToUse.None;
+        private IPredictionModel? predictionModel = null;
 
         public SerialCommForm()
         {
             dataSourceProvider = new GridDataSourceProvider();
             statusView = new DbEntryStatusView(this);
+            predictAnalyzer = new PredictAnalyzer();
             myReceiver = new SerialReceiver(1, dataSourceProvider);
             myReceiver_2 = new SerialReceiver(2, dataSourceProvider);
-            analysisReceiver = new SerialReceiverForAnalysis(1, this);
-            analysisReceiver_2 = new SerialReceiverForAnalysis(2, this);
+            analysisReceiver = new SerialReceiverForAnalysis(1, predictAnalyzer);
+            analysisReceiver_2 = new SerialReceiverForAnalysis(2, predictAnalyzer);
             mlContext = new MLContext(seed: 0);
             InitializeComponent();
         }
@@ -604,7 +601,6 @@ namespace SerialCommBME688
             string message = " Read " + lineNumber + " lines.";
             if (totalLines > 0)
             {
-
                 double percentage = ((double)lineNumber / (double)totalLines) * 100.0d;
                 message = message + $" ({percentage:F1} %)";
             }
@@ -668,6 +664,9 @@ namespace SerialCommBME688
                             chkAnalysis.Checked = false;
                             break;
                     }
+                    predictAnalyzer.startPredict(predictModelType, predictionModel, chkWithPresTempHumi.Checked, ref fldResult1, ref fldResult2);
+                    chkWithPresTempHumi.Enabled = false;
+                    chkAnLog.Enabled = false;
                 }
                 else
                 {
@@ -690,9 +689,12 @@ namespace SerialCommBME688
                             chkAnalysis.Checked = false;
                             break;
                     }
+                    predictAnalyzer.stopPredict();
                 }
                 fldResult1.Text = message1;
                 fldResult2.Text = message2;
+                chkWithPresTempHumi.Enabled = true;
+                chkAnLog.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -700,212 +702,9 @@ namespace SerialCommBME688
                 fldResult1.Text = "Error";
                 fldResult2.Text = ex.Message;
                 chkAnalysis.Checked = false;
-            }
-        }
-
-        private void showResult(int area, string itemData)
-        {
-            System.Windows.Forms.TextBox field = (area == 1) ? fldResult1 : fldResult2;
-            try
-            {
-                if ((field != null) && (itemData.Length > 0))
-                {
-                    if (field.InvokeRequired)
-                    {
-                        Action safeWrite = delegate { field.Clear(); field.AppendText(itemData); };
-                        field.Invoke(safeWrite);
-                    }
-                    else
-                    {
-                        field.Clear();
-                        field.AppendText(itemData);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(DateTime.Now + " showResult() : " + e.Message + "  --- " + itemData);
-            }
-        }
-
-        public void receivedOdorDataForAnalysis(OdorOrData receivedData)
-        {
-            // ------ データを受信した。モデルタイプに合わせて予測処理を実行する
-            Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() RX[" + receivedData.sensorId + "]");
-            try
-            {
-                if (predictionModel == null)
-                {
-                    // ---- モデルがない...終了する
-                    showResult(1, "-- no model --");
-                    showResult(2, "-- no model --");
-                    return;
-                }
-
-                switch (predictModelType)
-                {
-                    case SensorToUse.port1and2:
-                        // ----- センサデータ２つを使う予測処理
-                        receivedOdor1and2DataForAnalysis(receivedData);
-                        break;
-                    case SensorToUse.port1or2:
-                        // ----- センサデータを1 or 2を使用する予測処理
-                        receivedOdor1or2DataForAnalysis(receivedData);
-                        break;
-                    case SensorToUse.port1:
-                    case SensorToUse.port2:
-                        // ----- センサデータ１つしか使用しない予測処理
-                        receivedOdorSingleDataForAnalysis(receivedData);
-                        break;
-                    case SensorToUse.None:
-                    default:
-                        // ---------- モデルタイプが異常なので、予測処理は実行しない
-                        showResult(1, " unknown ");
-                        showResult(2, " unknown ");
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(DateTime.Now + " showResult() : " + ex.Message + "  --- " + receivedData.sensorId);
-            }
-        }
-
-        private void receivedOdor1and2DataForAnalysis(OdorOrData receivedData)
-        {
-            // ----- sensor1 と sensor2 のデータを同時に使用して解析する
-            Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() RX[" + receivedData.sensorId + "]");
-
-            if (receivedData.sensorId == 1.0f)
-            {
-                // ----- センサ１のデータを受信
-                analysisData01 = new OdorOrData(receivedData);
-                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId 1");
-                showResult(1, "");
-            }
-            else if (receivedData.sensorId == 2.0f)
-            {
-                // ----- センサ２のデータを受信
-                analysisData02 = new OdorOrData(receivedData);
-                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() sensorId 2");
-                showResult(1, "");
-            }
-
-            // -----ひとそろえのデータを受信した！ 解析する
-            if ((analysisData01 != null) && (analysisData02 != null) && ((predictionModel != null)))
-            {
-                // ----- 解析を行う
-                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() analysis Both");
-                OdorBothData testData = new OdorBothData(analysisData01, analysisData02);
-                string result = predictionModel.predictBothData(testData);
-                Debug.WriteLine(DateTime.Now + "  receivedOdorDataForAnalysis() Result: " + result);
-
-                // ----- 解析結果を表示する
-                showResult(1, "---");
-                showResult(1, result);
-
-                // ---- 次のデータを待つために表示をクリアする
-                analysisData01 = null;
-                analysisData02 = null;
-            }
-        }
-
-        private void receivedOdor1or2DataForAnalysis(OdorOrData receivedData)
-        {
-            // ----- 受信したデータを使って予測を実行する
-            Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() RX[" + receivedData.sensorId + "]");
-            int id = 1;
-            try
-            {
-                if (receivedData.sensorId == 1.0f)
-                {
-                    // ----- センサ１のデータを受信
-                    id = 1;
-                    showResult(id, "");
-                }
-                else if (receivedData.sensorId == 2.0f)
-                {
-                    // ----- センサ２のデータを受信
-                    id = 2;
-                    showResult(id, "");
-                }
-                else
-                {
-                    // ----- センサのIDが異常な場合...
-                    showResult(1, "");
-                    showResult(2, "");
-                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() ID: " + receivedData.sensorId + " (Wrong ID)");
-                }
-                if ((predictionModel != null) && (receivedData != null))
-                {
-                    // ----- 解析(データの予測)を行う
-                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() START");
-                    string result = predictionModel.predictOrData(receivedData);
-                    Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() Result: " + result);
-                    showResult(id, result);
-                }
-            }
-            catch (Exception ex)
-            {
-                // ---- 解析時にエラーが発生した...終了する
-                Debug.WriteLine(DateTime.Now + "  receivedOdor1or2DataForAnalysis() " + ex.Message);
-                showResult(id, "[ERROR]");
-            }
-        }
-
-        private void receivedOdorSingleDataForAnalysis(OdorOrData receivedData)
-        {
-            // ----- 受信したデータを使って予測を実行する
-            Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() RX[" + receivedData.sensorId + "]");
-            int id = 1;
-            try
-            {
-                OdorData? odorData = null;
-                if (receivedData.sensorId == 1.0f)
-                {
-                    // ----- センサ１のデータを受信
-                    odorData = new OdorData(receivedData);
-                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() [1]");
-                    id = 1;
-                    showResult(id, "");
-                }
-                else if (receivedData.sensorId == 2.0f)
-                {
-                    // ----- センサ２のデータを受信
-                    odorData = new OdorData(receivedData);
-                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() [2]");
-                    id = 2;
-                    showResult(id, "");
-                }
-                else
-                {
-                    // ----- センサのIDが異常な場合...
-                    showResult(1, "");
-                    showResult(2, "");
-                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() ID: " + receivedData.sensorId + " (Wrong ID)");
-                }
-                if ((predictionModel != null) && (odorData != null))
-                {
-                    // ----- 解析(データの予測)を行う
-                    string result = "";
-                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() START");
-                    if (id == 1)
-                    {
-                        result = predictionModel.predictSingle1Data(odorData);
-                    }
-                    else
-                    {
-                        result = predictionModel.predictSingle2Data(odorData);
-                    }
-                    Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() Result: " + result);
-                    showResult(id, result);
-                }
-            }
-            catch (Exception ex)
-            {
-                // ---- 解析時にエラーが発生した...終了する
-                Debug.WriteLine(DateTime.Now + "  receivedOdorSingleDataForAnalysis() " + ex.Message);
-                showResult(id, "[ERROR]");
+                chkWithPresTempHumi.Enabled = true;
+                chkAnLog.Enabled = true;
+                predictAnalyzer.stopPredict();
             }
         }
 

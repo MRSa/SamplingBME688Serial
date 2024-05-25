@@ -1,10 +1,5 @@
 ﻿using SamplingBME688Serial;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialCommBME688
 {
@@ -13,18 +8,19 @@ namespace SerialCommBME688
         private const int NUMBER_OF_INDEX = 10;
         private const int NUMBER_OF_ITEMS = 13;
         private int sensorId;
-        private Boolean isTagetDataLog = false;
+        private bool isTagetDataLog = false;
         private TextBox? aOutputArea = null;
         private Thread? readThread = null;  // new Thread(ReadSerial);
         private System.IO.Ports.SerialPort mySerialPort = new System.IO.Ports.SerialPort(new System.ComponentModel.Container());
         private bool _continue = true;
-
-        private IReceivedOdorDataForAnalysis notify;
-        private OdorOrData receivedData = new OdorOrData();
+        private double totalPressureValue = 0.0f;
+        private double totalTemperatureValue = 0.0f;
+        private double totalHumidityValue = 0.0f;
+        private IReceivedSmellDataForAnalysis notify;
+        private SmellOrData receivedData = new SmellOrData();
         private int waitIndexNumber = 0;
 
-
-        public SerialReceiverForAnalysis(int sensorId, IReceivedOdorDataForAnalysis notify)
+        public SerialReceiverForAnalysis(int sensorId, IReceivedSmellDataForAnalysis notify)
         {
             receivedData.sensorId = sensorId;
             this.sensorId = sensorId;
@@ -137,52 +133,95 @@ namespace SerialCommBME688
                     {
                         case 0:
                             waitIndexNumber = 1;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
+
                             receivedData.sequence0Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 1:
                             waitIndexNumber = 2;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence1Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 2:
                             waitIndexNumber = 3;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence2Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 3:
                             waitIndexNumber = 4;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence3Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 4:
                             waitIndexNumber = 5;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence4Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 5:
                             waitIndexNumber = 6;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence5Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 6:
                             waitIndexNumber = 7;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence6Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 7:
                             waitIndexNumber = 8;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence7Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 8:
                             waitIndexNumber = 9;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence8Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
                             break;
                         case 9:
                             // データが全部そろった！
                             waitIndexNumber = 0;
+                            totalHumidityValue += humidity;
+                            totalPressureValue += pressure;
+                            totalTemperatureValue += temperature;
                             receivedData.sequence9Value = (float)((isTagetDataLog) ? gas_registance_log : gas_registance);
+
+                            receivedData.averagePressureValue = (float) (totalPressureValue / 10.0f);
+                            receivedData.averageTemperatureValue = (float) (totalTemperatureValue / 10.0f);
+                            receivedData.averageHumidityValue = (float) (totalHumidityValue / 10.0f);
 
                             // 受信したデータを報告する
                             appendText("\r\nGOT IT!\r\n");
-                            notify.receivedOdorDataForAnalysis(receivedData);
+                            notify.receivedSmellDataForAnalysis(receivedData);
+
+                            totalPressureValue = 0.0f;
+                            totalTemperatureValue = 0.0f;
+                            totalHumidityValue = 0.0f;
                             break;
+
                         default:
                             // 想定外の値... 最初のindex番号(0)を待つ
                             waitIndexNumber = 0;
+                            totalPressureValue = 0.0f;
+                            totalTemperatureValue = 0.0f;
+                            totalHumidityValue = 0.0f;
                             break;
                     }
                 }
