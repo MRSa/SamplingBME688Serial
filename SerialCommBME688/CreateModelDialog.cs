@@ -596,6 +596,7 @@ namespace SamplingBME688Serial
         {
             // ----- 表示エリアの内容をクリアする
             txtMessage.Text = "";
+            txtResult.Text = "";
         }
     }
 }
