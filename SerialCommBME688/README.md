@@ -23,7 +23,7 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 
 ![収集の開始](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-screen00.png?raw=true)
 
-シリアルポートの番号を間違えた場合、エラーが表示され、収集を中止します。
+シリアルポートの番号が有効でない時にConnectボタンを押した場合、エラーが表示され、収集を中止します。
 
 ![エラー発生の表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-error.png?raw=true)
 
@@ -33,7 +33,7 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 
 ## 収集の終了
 
-Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。収集結果は、「Collected Data」欄に表示します。
+Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。収集結果は、「Collected Data」欄に表示します。「Clear」ボタンを押すと、収集状況を表示していた欄をクリアします。
 
 ![収集の終了](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/sampling_result.png?raw=true)
 
@@ -107,7 +107,22 @@ CSVファイルは、1行に以下のデータをカンマ区切りで記録し�
 
 ![ZoomとLog](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/graph2.png?raw=true)
 
-
 ## モデルの作成
 
-モデルを作成します。
+「Create Model」ボタンを押すと、モデルを作成するためのダイアログを表示します。
+
+![モデル作成](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/create_model.png?raw=true)
+
+作成できるモデルの種類は、[ML.NET](https://dotnet.microsoft.com/en-us/apps/machinelearning-ai/ml-dotnet)が提供する、[多クラス分類のトレーナー](https://learn.microsoft.com/ja-jp/dotnet/machine-learning/resources/tasks#multiclass-classification)が選択可能となっています。
+なお、PairwiseCoupling と OneVersusAll を選択した場合は、同時に使用する二項分類のモデルを選択する必要があります。
+
+![作成可能なモデル](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/model_types.png?raw=true)
+
+対象とするサンプルデータの種類により、いくつか選択が可能です。
+
+- 1 and 2 : センサ1 と センサ2 の両方を利用するモードです
+- 1 Only : センサ1 だけ利用するモードです
+- 2 Only : センサ2 だけ利用するモードです
+- 1 or 2 : センサ1 か センサ2 か、どちらかのデータを使うモードです
+
+以上
