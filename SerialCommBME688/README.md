@@ -1,7 +1,7 @@
 
 # Windows アプリケーション
 
-Atom Liteから送られてきたBME688の匂いデータについて、機械学習を行い、学習したデータを使ってどの匂いか判定させるアプリです。
+Atom Liteから送られてきたBME688の匂いデータを蓄積し、機械学習を行い、学習したデータを使ってどの匂いか判定することができるアプリです。
 
 以下の３ステップで匂いを判別します。
 
@@ -9,7 +9,7 @@ Atom Liteから送られてきたBME688の匂いデータについて、機械�
 2. 匂いを判別できるよう、学習させる
 3. 学習したモデルを使って、匂いを判別する
 
-![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview0.png?raw=true)
+![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-screen.png?raw=true)
 
 ## ビルド
 
@@ -20,6 +20,10 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 データのカテゴリラベル(Data Category欄)を入力し、Sensor1 / Sensor2 の シリアルポート名を指定して「Connect」ボタンを押すと、収集を開始します。
 データカテゴリラベルを設定しない場合は、自動的に「empty」という名前をつけます。
 収集中は、「Sampling Status」欄に状況を表示します。
+
+シリアルポートの番号を間違えた場合、エラーが表示され、収集を中止します。
+
+![エラー発生の表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-error.png?raw=true)
 
 ## 収集の終了
 
@@ -32,9 +36,34 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。
 
 ### エクスポートオプション
 
-- Only Gas R.(Log) : 標準でチェックが入っています。ガス抵抗値の対数だけをCSVファイルに出力します。後述するモデル学習で使用する形式です。チェックなしの場合は、収集全データを出力します。
+以前のプロトタイプで使用するためのオプションです。現状、このエクスポートオプションを使用する必要はありません。
+
+- Only Gas R.(Log) : ガス抵抗値の対数だけをCSVファイルに出力します。後述するモデル学習で使用する形式です。チェックなしの場合は、収集全データを出力します。
 - Combine sensor : チェックを入れると、センサ１とセンサ２の同時収集を行った場合、そのデータを結合（ステップ数を０－９を０－１９にする）してCSVファイルに出力する形式です。チェックを入れた場合は、後述のモデル学習や判定でオプション(-i 20)を付与する必要があります。
 - Duplicate : 標準は１です。収集データをCSVファイルに指定した回数出力します。データ増殖に利用できます。
+
+### CSVファイルのフォーマット
+
+CSVファイルは、1行に以下のデータをカンマ区切りで記録しています。（１行目はデータの説明を記載しています。）
+
+- sensorId
+  - センサID (1 or 2)
+- category
+  - データのカテゴリ名 
+- index
+  - 収集データのインデックス番号(0-9)
+- temperature
+  - 温度
+- humidity
+  - 湿度
+- pressure
+  - 圧力
+- gas_registance
+  - ガス抵抗値
+- gas_registance_log
+  - ガス抵抗値の対数
+- gas_registance_diff
+  - ガス抵抗値の前回との差分値
 
 ## Collected Data欄の表示
 
@@ -48,25 +77,19 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。
 - GasR. Max/Min : センサで収集したガス抵抗値の最大値/最小値を表示します。
 - GasR.(log) Max/Min : センサで収集したガス抵抗値の対数値の最大値/最小値を表示します。
 
+## CSVファイルからインポート
+
+「Import CSV」ボタンを押すと、あらかじめ保存していたCSVファイルを読み込みます。
+
 ## 収集データのリセット
 
 アプリ右下の「Reset」ボタンで、収集データすべてをクリアします。
 アプリ右上の「Clear」ボタンでは、「sampling Status」画面表示をクリアします。
 
-## CSVファイル： モデル作成用
+## グラフの表示
 
-Windowsアプリで作成した、CSVファイルです。データのカテゴリラベルを入力して収集・ストップを繰り返すと、そのカテゴリラベル分のガス抵抗値の対数をステップ数毎に出力します。
-データ数は、有効なデータ数(validCount)の最小の数で全てのデータカテゴリのデータを揃えます。
+収集したデータのグラフを表示します。
 
-[モデル作成用CSVファイル](https://github.com/MRSa/SamplingBME688Serial/blob/master/python/sample_data/for_smell_model.csv)
+## モデルの作成
 
-## CSVファイル： 判定用
-
-フォーマットはモデル作成用と同じですが、データを１回収集して、ストップしたデータを想定しています。
-
-[判定用CSVファイル](https://github.com/MRSa/SamplingBME688Serial/blob/master/python/sample_data/for_test1.csv)
-
-## 収集全データ
-
-CSV形式で、収集した有効なデータを全て出力します。
-なお、有効なデータとは、ステップ0-9がすべて収集できているデータです。
+モデルを作成します。
