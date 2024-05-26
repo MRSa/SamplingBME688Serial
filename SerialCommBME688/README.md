@@ -9,7 +9,7 @@ Atom Liteから送られてきたBME688の匂いデータを蓄積し、機械�
 2. 匂いを判別できるよう、学習させる
 3. 学習したモデルを使って、匂いを判別する
 
-![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-screen.png?raw=true)
+![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview0.png?raw=true)
 
 ## ビルド
 
@@ -21,14 +21,21 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 データカテゴリラベルを設定しない場合は、自動的に「empty」という名前をつけます。
 収集中は、「Sampling Status」欄に状況を表示します。
 
+![収集の開始](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-screen00.png?raw=true)
+
 シリアルポートの番号を間違えた場合、エラーが表示され、収集を中止します。
 
 ![エラー発生の表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-error.png?raw=true)
 
+収集中は、ストップボタンが有効となり、収集状況を表示します。
+
+![収集中表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/sampling.png?raw=true)
+
 ## 収集の終了
 
-Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。
-収集結果は、「Collected Data」欄に表示します。
+Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。収集結果は、「Collected Data」欄に表示します。
+
+![収集の終了](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/sampling_result.png?raw=true)
 
 ## CSVファイルへのエクスポート
 
@@ -49,7 +56,7 @@ CSVファイルは、1行に以下のデータをカンマ区切りで記録し�
 - sensorId
   - センサID (1 or 2)
 - category
-  - データのカテゴリ名 
+  - データのカテゴリ名
 - index
   - 収集データのインデックス番号(0-9)
 - temperature
@@ -88,7 +95,18 @@ CSVファイルは、1行に以下のデータをカンマ区切りで記録し�
 
 ## グラフの表示
 
-収集したデータのグラフを表示します。
+収集したデータ(ガス抵抗値)のグラフを表から選択した行のデータについて表示します。
+グラフは、収集した１つのシーケンスのグラフを最大３つまで重ね合わせて表示できます。
+デフォルトでは、最初と最後と中間の３点のグラフを表示しています。
+
+時系列の変位を確認する、収集したカテゴリそれぞれの差異を確認することができます。
+
+![グラフ表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/graph1.png?raw=true)
+
+グラフは、Y軸の高さを拡大するモード（Zoomモード）、対数値を表示するモード(Logモード)を持っています。
+
+![ZoomとLog](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/graph2.png?raw=true)
+
 
 ## モデルの作成
 
