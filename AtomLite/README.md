@@ -1,6 +1,7 @@
 # BME688-Atom Lite
 
-[BOSCHのガスセンサである、BME688](https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme688/)と[M5 Atom Lite](https://docs.m5stack.com/en/core/atom_lite)をI2C(Groveコネクタ)で接続し、それをWindows PCにUSB シリアル接続(COMポート接続)を行い、センサーのデータをWindowsのアプリケーションに送るためのスケッチです。
+[BOSCHのガスセンサである、BME688](https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme688/)と[M5 Atom Lite](https://docs.m5stack.com/en/core/atom_lite)をI2C(Groveコネクタ)で接続し、
+それをWindows PCにUSB シリアル接続(COMポート接続)を行い、センサーのデータをWindowsのアプリケーションに送るためのスケッチです。
 
 BME688のI2Cアドレス(0x76 or 0x77)は自動で判定しますので、Atom LiteとBME688はワイヤ１本で接続するだけで利用可能です。スケッチ等の変更は必要ありません。
 
@@ -26,8 +27,6 @@ Atom Lite と、センサ(BME688)を接続し、さらにUSBケーブルでWindo
 
 センサとの接続がうまくできていない場合は、緑色の点滅になりますので、Atom LiteとBME688との配線のチェックをお願いします。
 
-##
-
 ## PCへ送信するデータ
 
 本スケッチは、以下のデータをカンマ区切りでWindows PCに送信しています。定義や意味については、 [https://github.com/boschsensortec/BME68x_SensorAPI/blob/master/bme68x_defs.h](https://github.com/boschsensortec/BME68x_SensorAPI/blob/master/bme68x_defs.h) を参照してください。
@@ -44,6 +43,12 @@ Atom Lite と、センサ(BME688)を接続し、さらにUSBケーブルでWindo
 * gas_registanceの対数 : float
 * gas_registanceの変動値 : float
 * データの末尾 : セミコロン
+
+## その他
+
+ヒータプロファイルの変更は、スケッチ内で可能となっています。
+スケッチ内のコメント「ヒーターの温度(℃)の１サイクル分の温度変化。」で設定温度、「ヒーターの温度を保持する時間の割合。」で保持時間が変更可能です。
+必要な場合は、この部分の変更をお試しください。
 
 --------
 
@@ -72,6 +77,16 @@ Atom Lite と、センサ(BME688)を接続し、さらにUSBケーブルでWindo
 6. ダウンロードした ZIPファイルを　Sketch > Include Library > Add .ZIP Library... のメニューからライブラリをインストールする
 7. Atom Lite を USB経由で接続し、シリアルポートの番号を把握する
 
+#### Arduino IDE スクリーンショット集
+
+追加のボードマネージャ
+
+![Arduino Board Management設定](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/arduino01.png?raw=true)
+
+ボードマネージャのインストール
+
+![Arduino Board Manager](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/arduino02.png?raw=true)
+
 ### スケッチのコンパイルと転送
 
 1. File>Open... で、[スケッチ](https://raw.githubusercontent.com/MRSa/SamplingBME688Serial/master/AtomLite/sketch_BME688_SAMPLING.ino)を読み込む
@@ -80,7 +95,26 @@ Atom Lite と、センサ(BME688)を接続し、さらにUSBケーブルでWindo
 4. コンパイルでエラーが出なかった場合は、Sketch>Uploadを選択し、Atom Liteにプログラムを送る （コンパイルが実行されてから、エラーが発生してないときにスケッチが転送される）
 5. コンパイラエラーが出ておらず、スケッチが転送されると、LEDが緑色で0.5秒間隔で点滅する
 
-## BME688のプロファイルについて
+#### スクリーンショット集
 
+GitHub上のBosch BME68x ライブラリ(ダウンロード)
+
+![Bosch BME68x Library(GitHub)](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/arduino10.png?raw=true)
+
+ライブラリの設定
+
+![Libraryの設定](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/arduino11.png?raw=true)
+
+接続したAtom Liteのport設定
+
+![Atom Lite port設定](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/arduino12.png?raw=true)
+
+スケッチのコンパイルと転送
+
+![スケッチのコンパイルと転送](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/arduino13.png?raw=true)
+
+コンパイルと転送が成功した例
+
+![スケッチのコンパイルと転送（成功）](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/arduino14.png?raw=true)
 
 以上
