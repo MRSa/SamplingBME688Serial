@@ -125,4 +125,23 @@ CSVファイルは、1行に以下のデータをカンマ区切りで記録し�
 - 2 Only : センサ2 だけ利用するモードです
 - 1 or 2 : センサ1 か センサ2 か、どちらかのデータを使うモードです
 
+## 予測の実施
+
+モデル作成ダイアログを閉じ、"Prediction" の中にある、Analyze チェックボックスをONにすると、予測を開始します。
+
+## サンプルデータ
+
+収集したサンプルのデータ（CSVファイル、6種類の試料をセンサ２個で収集したデータ、コーヒー：５、ほうじ茶：１）です。
+
+![6種類の試料](https://github.com/MRSa/SamplingBME688Serial/blob/master/sample_data/COFFEE-SMELLS.JPG?raw=true)
+
+[CSVファイル](https://raw.githubusercontent.com/MRSa/SamplingBME688Serial/master/sample_data/coffee-smells.csv)
+
+- イタリアンロースト (カルディ)
+- 炭焼珈琲 (カルディ)
+- マイルドカルディ (カルディ)
+- ダークロースト (カルディ)
+- TOKYOロースト (スターバックス)
+- ほうじ茶 (伊藤園)
+
 以上
