@@ -137,8 +137,6 @@ namespace SamplingBME688Serial
             // 
             chkRangeZoom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             chkRangeZoom.AutoSize = true;
-            chkRangeZoom.Checked = true;
-            chkRangeZoom.CheckState = CheckState.Checked;
             chkRangeZoom.Location = new Point(905, 535);
             chkRangeZoom.Name = "chkRangeZoom";
             chkRangeZoom.Size = new Size(57, 19);
