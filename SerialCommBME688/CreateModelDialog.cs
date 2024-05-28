@@ -386,6 +386,9 @@ namespace SamplingBME688Serial
 
             // ----- モデル作成の完了を通知 -----
             callback?.createModelFinished(ret, usePort, trainedModel, "create model done.");
+
+            // ----- モデル作成の完了を通知する
+            MessageBox.Show("Create model finished.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private SensorToUse getPortType()

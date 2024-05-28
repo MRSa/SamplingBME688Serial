@@ -128,6 +128,7 @@ namespace SamplingBME688Serial
                         {
                             var testMetrics = mlContext.MulticlassClassification.Evaluate(trainedModel.Transform(splitData.TestSet));
                             showTestMetrics(testMetrics.MicroAccuracy, testMetrics.MacroAccuracy, testMetrics.LogLoss, testMetrics.LogLossReduction);
+                            
                         }
                     }
                     else

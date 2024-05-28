@@ -1,5 +1,5 @@
 
-# Windows アプリケーション
+# Windows アプリケーション for BME688
 
 Atom Liteから送られてきたBME688の匂いデータを蓄積し、機械学習を行い、学習したデータを使ってどの匂いか判定することができるアプリです。
 
@@ -37,9 +37,21 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ![収集の終了](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/sampling_result.png?raw=true)
 
+### Collected Data欄の表示
+
+- Category : 収集時に指定したカテゴリ名を表示します。
+- sensorId : 収集したセンサ番号 (Sensor1: 1, Sensor2: 2)を表示します。
+- dataCount : 収集したデータ数を表示します。
+- validCount : 収集したデータ数のうち、有効な数（データが0-9の10個分そろっている数）を表示します。
+- Temp. Max/Min : センサで収集した温度の最大値/最小値を表示します。
+- Humi. Max/Min : センサで収集した湿度の最大値/最小値を表示します。
+- Pres. Max/Min : センサで収集した圧力の最大値/最小値を表示します。
+- GasR. Max/Min : センサで収集したガス抵抗値の最大値/最小値を表示します。
+- GasR.(log) Max/Min : センサで収集したガス抵抗値の対数値の最大値/最小値を表示します。
+
 ## CSVファイルへのエクスポート
 
-「Export CSV」ボタンを押すと、収集した結果をエクスポートします。
+「Export CSV」ボタンを押すと、収集した結果をエクスポートします。あとで収集したデータを読み込みたいという場合もありますので、収集後に保管することをお勧めします。
 
 ### エクスポートオプション
 
@@ -48,10 +60,13 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 - Only Gas R.(Log) : ガス抵抗値の対数だけをCSVファイルに出力します。後述するモデル学習で使用する形式です。チェックなしの場合は、収集全データを出力します。
 - Combine sensor : チェックを入れると、センサ１とセンサ２の同時収集を行った場合、そのデータを結合（ステップ数を０－９を０－１９にする）してCSVファイルに出力する形式です。チェックを入れた場合は、後述のモデル学習や判定でオプション(-i 20)を付与する必要があります。
 - Duplicate : 標準は１です。収集データをCSVファイルに指定した回数出力します。データ増殖に利用できます。
+- From (%) : エクスポートするデータの最初の位置を割合(パーセント)で指定します。初期値は 0 です。
+- To (%) : エクスポートするデータの最後の位置を割合(パーセント)で指定します。初期値は 0 です。
 
 ### CSVファイルのフォーマット
 
-CSVファイルは、1行に以下のデータをカンマ区切りで記録しています。（１行目はデータの説明を記載しています。）
+エクスポートするCSVファイルは、1行に以下のデータをカンマ区切りで記録しています。１行目はデータの説明を記載しています。インポート可能なCSVファイルも、この形式です。
+具体的な出力内容は、[出力したサンプルCSVファイル](https://raw.githubusercontent.com/MRSa/SamplingBME688Serial/master/sample_data/coffee-smells.csv) を参照してください。
 
 - sensorId
   - センサID (1 or 2)
@@ -72,26 +87,14 @@ CSVファイルは、1行に以下のデータをカンマ区切りで記録し�
 - gas_registance_diff
   - ガス抵抗値の前回との差分値
 
-## Collected Data欄の表示
-
-- Category : 収集時に指定したカテゴリ名を表示します。
-- sensorId : 収集したセンサ番号 (Sensor1: 1, Sensor2: 2)を表示します。
-- dataCount : 収集したデータ数を表示します。
-- validCount : 収集したデータ数のうち、有効な数（データが0-9の10個分そろっている数）を表示します。
-- Temp. Max/Min : センサで収集した温度の最大値/最小値を表示します。
-- Humi. Max/Min : センサで収集した湿度の最大値/最小値を表示します。
-- Pres. Max/Min : センサで収集した圧力の最大値/最小値を表示します。
-- GasR. Max/Min : センサで収集したガス抵抗値の最大値/最小値を表示します。
-- GasR.(log) Max/Min : センサで収集したガス抵抗値の対数値の最大値/最小値を表示します。
-
 ## CSVファイルからインポート
 
-「Import CSV」ボタンを押すと、あらかじめ保存していたCSVファイルを読み込みます。
+「Import CSV」ボタンを押すと、あらかじめエクスポートしていたCSVファイルを読み込みます。本ツールでエクスポートしたファイル以外はサポートできませんので、ご注意ください。
 
 ## 収集データのリセット
 
 アプリ右下の「Reset」ボタンで、収集データすべてをクリアします。
-アプリ右上の「Clear」ボタンでは、「sampling Status」画面表示をクリアします。
+（アプリ右上の「Clear」ボタンでは、「sampling Status」画面表示をクリアするだけなので、ご注意ください。）
 
 ## グラフの表示
 
@@ -111,12 +114,9 @@ CSVファイルは、1行に以下のデータをカンマ区切りで記録し�
 
 「Create Model」ボタンを押すと、モデルを作成するためのダイアログを表示します。
 
-![モデル作成](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/create_model.png?raw=true)
+![モデル作成](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/create-model.png?raw=true)
 
-作成できるモデルの種類は、[ML.NET](https://dotnet.microsoft.com/en-us/apps/machinelearning-ai/ml-dotnet)が提供する、[多クラス分類のトレーナー](https://learn.microsoft.com/ja-jp/dotnet/machine-learning/resources/tasks#multiclass-classification)が選択可能となっています。
-なお、PairwiseCoupling と OneVersusAll を選択した場合は、同時に使用する二項分類のモデルを選択する必要があります。
-
-![作成可能なモデル](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/model_types.png?raw=true)
+### モデル作成時に使用するセンサ
 
 対象とするサンプルデータの種類により、いくつか選択が可能です。
 
@@ -124,6 +124,92 @@ CSVファイルは、1行に以下のデータをカンマ区切りで記録し�
 - 1 Only : センサ1 だけ利用するモードです
 - 2 Only : センサ2 だけ利用するモードです
 - 1 or 2 : センサ1 か センサ2 か、どちらかのデータを使うモードです
+
+### 利用可能なアルゴリズム
+
+利用可能なアルゴリズムの種類は、[ML.NET](https://dotnet.microsoft.com/en-us/apps/machinelearning-ai/ml-dotnet)が提供する、[多クラス分類のトレーナー](https://learn.microsoft.com/ja-jp/dotnet/machine-learning/resources/tasks#multiclass-classification)が選択可能となっています。
+
+![選択可能なアルゴリズム](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/model_types.png?raw=true)
+
+選択可能なアルゴリズムは以下です。
+
+- LightGbm
+- LbfgsMaximumEntropy
+- SdcaMaximumEntropy
+- SdcaNonCalibrated
+- Navie Bayes
+- Pairwise Coupling
+- OneVersusAll
+- K-Means
+
+なお、PairwiseCoupling と OneVersusAll を選択した場合は、同時に使用する二項分類のアルゴリズムを以下から選択する必要があります。
+
+- LightGbm
+- Gam
+- FastTree
+- FastForest
+- AveragedPerceptron
+- LbfgsLogisticRegression
+- SymbolicSgdLogisticRegression
+
+### トレーニングデータについて
+
+#### トレーニングに使用するデータの区間
+
+トレーニングするデータの区間を割合(0%～100%)で指定できます。カテゴリによって、サンプルサイズのばらつきが発生するのを防ぐために、最小のサンプルデータ数をベースに区間を指定します。
+
+![データの区間](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/data-range.png?raw=true)
+
+#### トレーニングデータの増幅
+
+「Duplicate」で、トレーニングデータを増やすことができます。
+
+- x1 : 1倍、通常です
+- x5 : データを5倍にします        (同じデータを5回使います)
+- x10 : データを10倍にします      (同じデータを10回使います)
+- x20 : データを20倍にします      (同じデータを20回使います)
+- x30 : データを30倍にします      (同じデータを30回使います)
+- x50 : データを50倍にします      (同じデータを50回使います)
+- x100 : データを100倍にします    (同じデータを100回使います)
+- x1000 : データを1000倍にします  (同じデータを1000回使います)
+
+#### 対数データでのトレーニング
+
+「Log」のチェックを ON にすると、ガス抵抗値を対数値で学習することができます。
+
+#### 圧力、温度、湿度込みでのトレーニング
+
+「w./P T H」のチェックを ON にすると、ガス抵抗値に加えて、圧力、温度、湿度（の平均値）を使用してトレーニングを実行します。
+（デフォルトでチェックは ON にしています。）
+
+### トレーニングの開始
+
+「Create Model」を押すと、トレーニングを開始するかどうか、確認を求めるダイアログを表示します。OKを押すと、トレーニングを開始します。トレーニングが終了するまで、しばらくお待ちください。
+トレーニングが終了すると、そのことを示すダイアログを表示します。
+
+![トレーニングの開始](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/create_model.png?raw=true)
+
+
+### トレーニング結果の評価
+
+トレーニングが終了すると、「Message」欄にトレーニング結果の評価が表示されます。モデルの精度の目安にお使いください。
+
+- MicroAccuracy : マイクロ平均精度 (1に近いほどよい)
+- MacroAccuracy : マクロ平均精度 (1に近いほどよい)
+- LogLoss : 分類子の平均対数損失 (0に近いほどよい)
+- LogLossReduction : 分類子の対数損失の減少 (1に近いほどよい)
+
+![トレーニング結果](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/model-result.png?raw=true)
+
+
+###　トレーニング結果
+
+
+
+## モデルの読み込み
+
+「Load」
+
 
 ## 予測の実施
 
