@@ -189,7 +189,6 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ![トレーニングの開始](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/create_model.png?raw=true)
 
-
 ### トレーニング結果の評価
 
 トレーニングが終了すると、「Message」欄にトレーニング結果の評価が表示されます。モデルの精度の目安にお使いください。
@@ -201,19 +200,32 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ![トレーニング結果](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/model-result.png?raw=true)
 
+### トレーニング結果の保存
 
-###　トレーニング結果
-
-
+トレーニングが終了すると、「Save Model」ボタンが表示されます。このボタンを押すと、トレーニングしたモデルをファイル（zip形式）で保存することができます。
 
 ## モデルの読み込み
 
-「Load」
+「Load Model」ボタンを押すと、保存していたモデルファイル（zip形式）を読み出すことができます。このとき、**モデル作成時に使用するセンサの設定は、モデルを保存したときの設定と合わせてください。**
+適切な予測ができませんのでご注意ください。
 
+## 予測の実行
 
-## 予測の実施
+モデルの作成、あるいはモデルの読み込みを行ったあと、モデル作成ダイアログを閉じると、アプリケーションは学習モードから予測モードに切り替わり、「Prediction」が有効になります。
 
-モデル作成ダイアログを閉じ、"Prediction" の中にある、Analyze チェックボックスをONにすると、予測を開始します。
+![トレーニング結果](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction-mode.png?raw=true)
+
+"Prediction" の中にある、Analyze チェックボックスをONにすると、予測を開始します。
+
+![予測の実行](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction.png?raw=true)
+
+Analyze チェックボックスを外すと、予測の実行を終了します。
+
+## 予測モードから学習モードへの切り替え
+
+予測モードから、学習モードに戻す場合は、右上の「Clear」ボタンか、右下の「Reset」ボタンを押してください。
+「Clear」ボタンは、モデルを作り直す場合、「Reset」ボタンは、センサのデータを最初から収集しなおす場合にご使用ください。
+
 
 ## サンプルデータ
 
