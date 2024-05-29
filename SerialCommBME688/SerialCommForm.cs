@@ -2,6 +2,7 @@ using Microsoft.ML;
 using SamplingBME688Serial;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Forms;
 
 namespace SerialCommBME688
 {
@@ -695,6 +696,33 @@ namespace SerialCommBME688
                 fldResult2.Text = message2;
                 chkWithPresTempHumi.Enabled = true;
                 chkAnLog.Enabled = true;
+
+                int resultCount = predictAnalyzer.getResultCount();
+                if (resultCount > 0)
+                {
+                    // ----- 結果が何件か取得できていた、保存する
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
+                    string message = " Analysis " + resultCount + " times, save the result?";
+                    DialogResult result = MessageBox.Show(message, "Information", buttons, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        // ----- ファイル保存ダイアログを表示して結果を保存する
+                        SaveFileDialog saveFileDialog = new SaveFileDialog();
+                        saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                        saveFileDialog.FilterIndex = 2;
+                        saveFileDialog.RestoreDirectory = true;
+                        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            // ファイル名を取得できたときは、結果を保存する
+                            int count = predictAnalyzer.exportResultList(saveFileDialog.FileName);
+                            if (count <= 0)
+                            {
+                                // ----- エラーが出たとき
+                                MessageBox.Show("Export failure...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {

@@ -14,7 +14,7 @@ namespace SamplingBME688Serial
         private SmellOrData? analysisData12 = null;
         private TextBox? fldResult1 = null;
         private TextBox? fldResult2 = null;
-        private List<string> resultList = new List<string>();
+        private List<CheckResult> resultList = new List<CheckResult>();
 
         public void startPredict(SensorToUse predictModelType, IPredictionModel? predictionModel, bool withPresTempHum, ref TextBox fldResult1, ref TextBox fldResult2)
         {
@@ -99,7 +99,7 @@ namespace SamplingBME688Serial
                 }
                 if (result.Length > 0)
                 {
-                    resultList.Add(result);
+                    resultList.Add(new CheckResult(result));
                 }
             }
             catch (Exception ex)
@@ -138,7 +138,7 @@ namespace SamplingBME688Serial
                 }
                 if (result.Length > 0)
                 {
-                    resultList.Add(result);
+                    resultList.Add(new CheckResult(result));
                 }
             }
             catch (Exception ex)
@@ -467,6 +467,11 @@ namespace SamplingBME688Serial
             }
         }
 
+        public int getResultCount()
+        {
+            return resultList.Count;
+        }
+
         public int exportResultList(string outputFileName)
         {
             if (resultList.Count <= 0)
@@ -479,10 +484,11 @@ namespace SamplingBME688Serial
             int index = 1;
             using (StreamWriter writer = new StreamWriter(outputFileName, false, Encoding.UTF8))
             {
+                writer.WriteLine("index,time,result");
                 string oneLine = "";
-                foreach (string result in resultList)
+                foreach (CheckResult result in resultList)
                 {
-                    oneLine = index + "," + result;
+                    oneLine = index + "," + result.resultLabel + "," + result.sampleTime.ToString();
                     writer.WriteLine(oneLine);
                     index++;
                 }
