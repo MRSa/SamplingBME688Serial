@@ -1,5 +1,19 @@
 # SamplingBME688Serial : BME688でにおいを判別する（一式）
 
+-----
+
+- [SamplingBME688Serial : BME688でにおいを判別する（一式）](#samplingbme688serial--bme688でにおいを判別する一式)
+  - [リポジトリ](#リポジトリ)
+  - [概要](#概要)
+  - [全体像](#全体像)
+    - [以前のPythonスクリプトについて](#以前のpythonスクリプトについて)
+  - [BME688-Atom Lite](#bme688-atom-lite)
+  - [Windows アプリケーション](#windows-アプリケーション)
+  - [Database on Docker](#database-on-docker)
+  - [サンプルデータ](#サンプルデータ)
+
+-----
+
 ## リポジトリ
 
 [https://github.com/MRSa/SamplingBME688Serial](https://github.com/MRSa/SamplingBME688Serial)
@@ -61,4 +75,14 @@ Windows アプリケーションの詳細は [こちら](SerialCommBME688/README
 
 Docker databaseの詳細は [こちら](docker-database/README.md) を参照してください。
 
+## サンプルデータ
+
+BME688で収集したデータを置いています。
+
+詳細は [こちら](sample_data/README.md) を参照してください。
+
 以上
+<!----
+
+
+---->
