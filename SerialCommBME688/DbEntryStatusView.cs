@@ -1,26 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SamplingBME688Serial
 {
-    internal class DbEntryStatusView
+    internal class DbEntryStatusView : ILoadDataFromDatabase
     {
         private DataTable sensorDataList = new DataTable();
         private DbStatusDialog? dbStatusDialog = null;
-        private System.Windows.Forms.Form parentForm;
+        private Form parentForm;
 
-        public DbEntryStatusView(System.Windows.Forms.Form parent)
+        public DbEntryStatusView(Form parent)
         {
             this.parentForm = parent;
         }
 
-        public void showDbEntryStatus(string listUrl)
+        public void LoadDataFromDatabase(List<LoadSensorDataInformation> categoryToLoad)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public void showDbEntryStatus(string listUrl, bool isLoadMode)
         {
             try
             {
@@ -30,8 +36,9 @@ namespace SamplingBME688Serial
                 // ダイアログを表示する、重複してダイアログの表示はしないようにする
                 if ((dbStatusDialog == null) || (dbStatusDialog.IsDisposed))
                 {
-                    dbStatusDialog = new DbStatusDialog(sensorDataList);
+                    dbStatusDialog = new DbStatusDialog(sensorDataList, this);
                 }
+                dbStatusDialog.setLoadDataMode(isLoadMode);
                 dbStatusDialog.Owner = parentForm;
                 if (!dbStatusDialog.Visible)
                 {

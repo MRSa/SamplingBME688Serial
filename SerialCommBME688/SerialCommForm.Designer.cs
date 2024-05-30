@@ -415,7 +415,6 @@
             // btnLoadData
             // 
             btnLoadData.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLoadData.Enabled = false;
             btnLoadData.Location = new Point(650, 22);
             btnLoadData.Name = "btnLoadData";
             btnLoadData.Size = new Size(71, 23);

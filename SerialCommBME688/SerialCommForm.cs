@@ -2,7 +2,6 @@ using Microsoft.ML;
 using SamplingBME688Serial;
 using System.Diagnostics;
 using System.Text;
-using System.Windows.Forms;
 
 namespace SerialCommBME688
 {
@@ -490,7 +489,7 @@ namespace SerialCommBME688
             // DBのステータスボタンを押したとき...センサのデータ登録情報を表示する
             try
             {
-                statusView.showDbEntryStatus(urlDatabaseToEntry.Text + "sensor/list");
+                statusView.showDbEntryStatus(urlDatabaseToEntry.Text + "sensor/list", false);
             }
             catch (Exception ex)
             {
@@ -741,7 +740,8 @@ namespace SerialCommBME688
             // ---------- Database から データをロードする処理
             try
             {
-
+                // DBのステータスボタンを押したとき...センサのデータ登録情報を表示する
+                statusView.showDbEntryStatus(urlDatabaseToEntry.Text + "sensor/list", true);
             }
             catch (Exception ex)
             {
