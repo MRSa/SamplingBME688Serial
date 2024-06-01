@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,8 +14,10 @@ namespace SamplingBME688Serial
 {
     public partial class DbStatusDialog : Form
     {
+        private bool loadData = false;
         private ILoadDataFromDatabase loadDataFromDatabase;
         private List<LoadSensorDataInformation> categoryToLoad = new List<LoadSensorDataInformation>();
+        private string urlToGetData;
         public DbStatusDialog(DataTable dataToShow, ILoadDataFromDatabase loadDataFromDatabase)
         {
             InitializeComponent();
@@ -22,19 +26,39 @@ namespace SamplingBME688Serial
             gridDbStatus.DataSource = dataToShow;
             gridDbStatus.ReadOnly = true;
             gridDbStatus.RowHeadersVisible = false;
+            gridDbStatus.AllowUserToAddRows = false;
 
         }
 
-        public void setLoadDataMode(bool isLoadData)
+        public void setLoadDataMode(bool isLoadData, string getUrl)
         {
-            this.Text = isLoadData ? "Load data from database" : "Dabase Entry Status";
+            this.Text = isLoadData ? "Load data from database" : "Dabase Entry Status : " + getUrl;
             btnLoad.Enabled = isLoadData;
             btnLoad.Visible = isLoadData;
+            loadData = isLoadData;
+            urlToGetData = getUrl;
          }
 
         public void setDataTable(DataTable dataToShow)
         {
             gridDbStatus.DataSource = dataToShow;
+            if (loadData)
+            {
+                // データ読み込みモードの時は、先頭列のみ編集可にする
+                gridDbStatus.ReadOnly = false;
+                gridDbStatus.Columns[0].ReadOnly = false;
+                gridDbStatus.Columns[0].DisplayIndex = 0;
+                for (int index = 1; index < gridDbStatus.ColumnCount; index++)
+                {
+                    gridDbStatus.Columns[index].ReadOnly = true;
+                    gridDbStatus.Columns[index].DisplayIndex = index;
+                }
+            }
+            else
+            {
+                // 表全体を Read Only にする
+                gridDbStatus.ReadOnly = true;
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -45,8 +69,44 @@ namespace SamplingBME688Serial
         private void btnLoad_Click(object sender, EventArgs e)
         {
             categoryToLoad.Clear();
+            try
+            {
+                // ---------- チェックの入った データを引っ張る準備
+                foreach (DataGridViewRow row in gridDbStatus.Rows)
+                {
+                    if ((row.Cells[0].ValueType == typeof(bool)) && (row.Cells[0].Value.ToString() == "True"))
+                    {
+                        string? sensorIdStr = row.Cells["sensor_id"].Value.ToString();
+                        string? dataCountStr = row.Cells["count"].Value.ToString();
+                        string? categoryName = row.Cells["category"].Value.ToString();
 
-            loadDataFromDatabase.LoadDataFromDatabase(categoryToLoad);
+                        if (sensorIdStr != null && dataCountStr != null && categoryName != null)
+                        {
+                            Debug.WriteLine(DateTime.Now + " [INFO] btnLoad_Click() : Load  " + categoryName + " (" + sensorIdStr + "), count: " + dataCountStr);
+                            int dataCount = int.Parse(dataCountStr);
+                            if (dataCount > 0)
+                            {
+                                categoryToLoad.Add(new LoadSensorDataInformation(categoryName, int.Parse(sensorIdStr), 0, dataCount));
+                            }
+                        }
+                    }
+                }
+
+                if (categoryToLoad.Count > 0)
+                {
+                    DialogResult result = MessageBox.Show(" Data Load " + categoryToLoad.Count + " items from database, are you OK?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        // ----- データベースからのデータ読み込みを開始する
+                        Debug.WriteLine(DateTime.Now + " [INFO] btnLoad_Click() : confirmation OK : " + categoryToLoad.Count + " items.");
+                        loadDataFromDatabase.LoadDataFromDatabase(ref categoryToLoad);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " [ERROR] btnLoad_Click() " + ex.Message);
+            }
         }
     }
 }

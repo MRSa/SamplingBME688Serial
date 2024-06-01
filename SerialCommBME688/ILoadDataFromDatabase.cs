@@ -2,6 +2,6 @@
 {
     public interface ILoadDataFromDatabase
     {
-        void LoadDataFromDatabase(List<LoadSensorDataInformation> categoryToLoad);
+        void LoadDataFromDatabase(ref List<LoadSensorDataInformation> categoryToLoad);
     }
 }

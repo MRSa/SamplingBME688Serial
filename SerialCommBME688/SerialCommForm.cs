@@ -21,13 +21,13 @@ namespace SerialCommBME688
         public SerialCommForm()
         {
             dataSourceProvider = new GridDataSourceProvider();
-            statusView = new DbEntryStatusView(this);
             predictAnalyzer = new PredictAnalyzer();
             myReceiver = new SerialReceiver(1, dataSourceProvider);
             myReceiver_2 = new SerialReceiver(2, dataSourceProvider);
             analysisReceiver = new SerialReceiverForAnalysis(1, predictAnalyzer);
             analysisReceiver_2 = new SerialReceiverForAnalysis(2, predictAnalyzer);
             mlContext = new MLContext(seed: 0);
+            statusView = new DbEntryStatusView(this, ref myReceiver, ref myReceiver_2);
             InitializeComponent();
         }
 
@@ -489,7 +489,7 @@ namespace SerialCommBME688
             // DBのステータスボタンを押したとき...センサのデータ登録情報を表示する
             try
             {
-                statusView.showDbEntryStatus(urlDatabaseToEntry.Text + "sensor/list", false);
+                statusView.showDbEntryStatus(urlDatabaseToEntry.Text + "sensor/list");
             }
             catch (Exception ex)
             {
@@ -741,7 +741,7 @@ namespace SerialCommBME688
             try
             {
                 // DBのステータスボタンを押したとき...センサのデータ登録情報を表示する
-                statusView.showDbEntryStatus(urlDatabaseToEntry.Text + "sensor/list", true);
+                statusView.getDataFromDatabase(urlDatabaseToEntry.Text + "sensor/list", urlDatabaseToEntry.Text + "sensor/get");
             }
             catch (Exception ex)
             {
