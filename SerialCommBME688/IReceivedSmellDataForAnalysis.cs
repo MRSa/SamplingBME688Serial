@@ -1,5 +1,4 @@
-﻿
-namespace SamplingBME688Serial
+﻿namespace SamplingBME688Serial
 {
     interface IReceivedSmellDataForAnalysis
     {

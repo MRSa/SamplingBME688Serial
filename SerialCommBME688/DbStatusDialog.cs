@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SamplingBME688Serial
 {
@@ -17,7 +8,7 @@ namespace SamplingBME688Serial
         private bool loadData = false;
         private ILoadDataFromDatabase loadDataFromDatabase;
         private List<LoadSensorDataInformation> categoryToLoad = new List<LoadSensorDataInformation>();
-        private string urlToGetData;
+        // private string urlToGetData;
         public DbStatusDialog(DataTable dataToShow, ILoadDataFromDatabase loadDataFromDatabase)
         {
             InitializeComponent();
@@ -36,7 +27,7 @@ namespace SamplingBME688Serial
             btnLoad.Enabled = isLoadData;
             btnLoad.Visible = isLoadData;
             loadData = isLoadData;
-            urlToGetData = getUrl;
+            //urlToGetData = getUrl;
          }
 
         public void setDataTable(DataTable dataToShow)
@@ -94,11 +85,11 @@ namespace SamplingBME688Serial
 
                 if (categoryToLoad.Count > 0)
                 {
-                    DialogResult result = MessageBox.Show(" Data Load " + categoryToLoad.Count + " items from database, are you OK?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = MessageBox.Show(" Data import " + categoryToLoad.Count + " categories from database, are you OK?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
                         // ----- データベースからのデータ読み込みを開始する
-                        Debug.WriteLine(DateTime.Now + " [INFO] btnLoad_Click() : confirmation OK : " + categoryToLoad.Count + " items.");
+                        Debug.WriteLine(DateTime.Now + " [INFO] btnLoad_Click() : confirmation OK : " + categoryToLoad.Count + " categories.");
                         loadDataFromDatabase.LoadDataFromDatabase(ref categoryToLoad);
                     }
                 }

@@ -1,7 +1,4 @@
 ﻿using Microsoft.ML.Data;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Xml.Linq;
-using System;
 
 namespace SamplingBME688Serial
 {

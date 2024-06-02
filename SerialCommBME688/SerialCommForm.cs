@@ -741,7 +741,7 @@ namespace SerialCommBME688
             try
             {
                 // DBのステータスボタンを押したとき...センサのデータ登録情報を表示する
-                statusView.getDataFromDatabase(urlDatabaseToEntry.Text + "sensor/list", urlDatabaseToEntry.Text + "sensor/get");
+                statusView.getDataFromDatabase(urlDatabaseToEntry.Text + "sensor/list", urlDatabaseToEntry.Text + "sensor/get", this);
             }
             catch (Exception ex)
             {

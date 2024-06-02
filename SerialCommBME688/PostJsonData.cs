@@ -1,18 +1,8 @@
-﻿using SerialCommBME688;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing.Text;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
-using System.Reflection.Metadata;
-using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SamplingBME688Serial
 {

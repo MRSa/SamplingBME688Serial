@@ -13,6 +13,7 @@ namespace SamplingBME688Serial
         private SerialReceiver serialReceiver1;
         private SerialReceiver serialReceiver2;
         private List<LoadSensorDataInformation> categoryToLoad;
+        private IDataImportCallback? importCallback = null;
         private string urlToGetData;
 
         public DbEntryStatusView(Form parent, ref SerialReceiver receiver1, ref SerialReceiver receiver2)
@@ -28,9 +29,12 @@ namespace SamplingBME688Serial
             try
             {
                 this.categoryToLoad = categoryToLoad;
-                Thread thread = new Thread(new ThreadStart(loadDataFromDatabaseImpl));
-                thread.IsBackground = true;
-                thread.Start();
+                loadDataFromDatabaseImpl();
+                //{
+                //    Thread thread = new Thread(new ThreadStart(loadDataFromDatabaseImpl));
+                //    thread.IsBackground = true;
+                //    thread.Start();
+                //}
             }
             catch (Exception ex)
             {
@@ -38,14 +42,13 @@ namespace SamplingBME688Serial
             }
         }
 
-        private async void loadDataFromDatabaseImpl()
+        private void loadDataFromDatabaseImpl()
         {
             // ----- (データベースから)データを読み込む本処理 (スレッドで実行)
             try
             {
                 bool importResult = false;
                 int numberOfCategories = 0;
-                int totalCount = 0;
 
                 // ------------------------------------------------------------------------------------
                 foreach (LoadSensorDataInformation info in categoryToLoad)
@@ -54,12 +57,11 @@ namespace SamplingBME688Serial
                     int sensorId = info.sensorId;
                     int start = info.startFrom;
                     int count = info.dataCount;
-                    int dataToGet = 10000;
+                    int dataToGet = 10000;  // 1回の取得でどれくらいのデータをとってくるかの指定
 
                     for (int loopCount = start; loopCount < count; loopCount += dataToGet)
                     {
                         string getUrl = urlToGetData + "?category=" + categoryName + "&sensor_id=" + sensorId + "&option=true&offset=" + loopCount + "&limit=" + dataToGet;
-                        Debug.WriteLine(DateTime.Now + " [GET URL] " + getUrl);
                         if (sensorId == 1)
                         {
                             getSensorDataBody(getUrl, serialReceiver1);
@@ -68,48 +70,19 @@ namespace SamplingBME688Serial
                         {
                             getSensorDataBody(getUrl, serialReceiver2);
                         }
+                        // Debug.WriteLine(DateTime.Now + " [GET DATA] " + categoryName + " (START: " + loopCount + " COUNT: " + dataToGet + ")");
                     }
                     importResult = true;
                     numberOfCategories++;
-                    totalCount = dataToGet;
                 }
                 // ------------------------------------------------------------------------------------
 
-                // 受信終了を呼び出す
-                serialReceiver1.stopReceive();
-                serialReceiver1.stopReceive();
-
                 // ----- インポート終了を通知する。
-                await finishDataImport(importResult, numberOfCategories);
+                importCallback?.dataImportFinished(importResult, "Data import finished. (" + numberOfCategories + " categories.)");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(DateTime.Now + " [ERROR] loadDataFromDatabaseImpl() " + ex.Message);
-            }
-        }
-
-        private async Task finishDataImport(bool result, int nofItems)
-        {
-            try
-            {
-                string message = "Data import finished.  category: " + nofItems + " " + ". ";
-                if (parentForm.InvokeRequired)
-                {
-                    // 別スレッドによるUI操作
-                    parentForm.Invoke((MethodInvoker)(() => {
-                        MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }));
-                }
-                else
-                {
-                    // UIスレッドからのUI操作
-                    MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                Debug.WriteLine(DateTime.Now + " [INFO] finishDataImport() " + result + " " + " items: " + nofItems + " .");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(DateTime.Now + " [ERROR] finishDataImport() " + ex.Message);
             }
         }
 
@@ -119,10 +92,13 @@ namespace SamplingBME688Serial
             databaseOperation(listUrl, false);
         }
 
-        public void getDataFromDatabase(string listUrl, string getUrl)
+        public void getDataFromDatabase(string listUrl, string getUrl, in IDataImportCallback importCallback)
         {
-            // データを取得する箇所のURL
+            // ----- データを取得する箇所のURL
             urlToGetData = getUrl;
+
+            // ----- インポート結果を報告するところ
+            this.importCallback = importCallback;
 
             // データベースからデータを取得する
             databaseOperation(listUrl, true);
@@ -158,9 +134,10 @@ namespace SamplingBME688Serial
             }
         }
 
-        private async void getSensorDataBody(string listUrl, SerialReceiver? serialReceiver)
+        private async void getSensorDataBody(string getUrl, SerialReceiver? serialReceiver)
         {
             //  センサデータをデータベースからインポートする実処理
+            // ----- Debug.WriteLine(DateTime.Now + " getSensorDataBody() : " + getUrl);
             if (serialReceiver == null)
             {
                 Debug.WriteLine(DateTime.Now + " getSensorDataBody() SerialReceiver is null...");
@@ -169,8 +146,10 @@ namespace SamplingBME688Serial
             int count = 0;
             try
             {
-                var result = await new HttpClient().GetAsync(listUrl, HttpCompletionOption.ResponseHeadersRead);
+                var result = await new HttpClient().GetAsync(getUrl, HttpCompletionOption.ResponseHeadersRead);
                 string response = await result.Content.ReadAsStringAsync();
+
+                Debug.WriteLine(DateTime.Now + " [RECV] getSensorDataBody() ");
                 try
                 {
                     var dataList = JsonSerializer.Deserialize<SensorDataResult>(response);
@@ -189,7 +168,7 @@ namespace SamplingBME688Serial
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(DateTime.Now + " --- getSensorDataBody() " + e.Message);
+                    Debug.WriteLine(DateTime.Now + " ------ getSensorDataBody() " + e.Message);
                 }
                 GC.Collect();
             }
@@ -197,7 +176,10 @@ namespace SamplingBME688Serial
             {
                 Debug.WriteLine(DateTime.Now + " getSensorDataBody() " + ex.Message);
             }
-            Debug.WriteLine(DateTime.Now + " getSensorDataBody() Entered: " + count);
+
+            // ----- 登録終了
+            serialReceiver.stopReceive();
+            Debug.WriteLine(DateTime.Now + " getSensorDataBody() data entry: " + count);
         }
 
         private bool importReceivedData(SensorData data, SerialReceiver serialReceiver)

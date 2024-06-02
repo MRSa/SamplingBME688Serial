@@ -1,12 +1,6 @@
 ﻿using SamplingBME688Serial;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SerialCommBME688
 {
@@ -160,14 +154,22 @@ namespace SerialCommBME688
             string result = "";
             try
             {
-                if (targetDataSet != null)
+                Debug.WriteLine(DateTime.Now + " ----- finishReceivedData [" + sensorId + "] -----");
                 {
                     try
                     {
                         // 受信データを保管する。(MAPに格納されていない場合は)
-                        if (!dataSetMap.ContainsKey(targetDataSet.dataGroupName))
+                        if (targetDataSet != null)
                         {
-                            dataSetMap.Add(targetDataSet.dataGroupName, targetDataSet);
+                            if (!dataSetMap.ContainsKey(targetDataSet.dataGroupName))
+                            {
+                                dataSetMap.Add(targetDataSet.dataGroupName, targetDataSet);
+                            }
+                        }
+                        else
+                        {
+                            // -----
+                            Debug.WriteLine(DateTime.Now + " ----- finishReceivedData [" + sensorId + "] 'targetDataSet' is null.");
                         }
                         targetDataSet = null;
                     }
@@ -200,7 +202,6 @@ namespace SerialCommBME688
                    result = result + " valid:" + validDataSet + "\r\n";
                 }
                 result = result + "-----\r\n\r\n";
-
 
                 // 終了報告をする
                 finishReceivedDataSet();

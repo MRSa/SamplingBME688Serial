@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialCommBME688
+﻿namespace SerialCommBME688
 {
     internal class Bme688Data
     {

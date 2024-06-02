@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace SerialCommBME688
 {
     internal class Bme688DataSetGroup
     {
-        private int nofIndex;
+        private int nofIndex = 10;
 
         public string dataGroupName { get; private set; }
         private List<Bme688DataSet> collectedDataSet = new List<Bme688DataSet>();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace SerialCommBME688
 {
@@ -44,7 +39,6 @@ namespace SerialCommBME688
                 }
 
                 // 初回データ(の先頭データに)格納
-
                 observedData[0].setBme688Data(temperature, humidity, pressure, gas_registance, gas_registance_log, gas_registance_diff);
                 lack_data--;
 
@@ -106,7 +100,7 @@ namespace SerialCommBME688
                 {
                     // すでにデータが格納されていた...
                     //  (本来、ありえない状況のはずだが...)
-                    Debug.WriteLine(DateTime.Now + " setBme688Data( " + index + " " + ") : already entries");
+                    Debug.WriteLine(DateTime.Now + " setBme688Data( " + index + " " + ") [isValid] : already entries");
                 }
             }
             catch (Exception e)
