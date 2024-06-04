@@ -97,6 +97,7 @@ namespace SerialCommBME688
             chkExportOnlyGasRegistanceLogarithm.Enabled = isEnable;
             btnReset.Enabled = isEnable;
             btnDbStatus.Enabled = isEnable;
+            btnLoadData.Enabled = isEnable;
             chkEntryDatabase.Enabled = isEnable;
             chkDbEntrySingle.Enabled = isEnable;
             urlDatabaseToEntry.Enabled = isEnable;
@@ -123,6 +124,7 @@ namespace SerialCommBME688
             chkExportOnlyGasRegistanceLogarithm.Enabled = isEnable;
             btnReset.Enabled = isEnable;
             btnDbStatus.Enabled = isEnable;
+            btnLoadData.Enabled = isEnable;
             chkEntryDatabase.Enabled = isEnable;
             chkDbEntrySingle.Enabled = isEnable;
             urlDatabaseToEntry.Enabled = isEnable;
