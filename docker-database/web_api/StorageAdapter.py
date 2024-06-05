@@ -4,6 +4,7 @@ import sys
 import SensorData
 from sqlalchemy import create_engine, text, distinct
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.orm import sessionmaker
 
 class StorageAdapter:
@@ -116,16 +117,16 @@ class StorageAdapter:
             if len(limit) > 0 or len(offset) > 0:
                 if len(limit) <= 0:
                     # offset だけ指定された
-                    results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).offset(offset).all()
+                    results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).offset(offset).all()
                 elif len(offset) <= 0:
                     # limit だけ指定された
-                    results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).limit(limit).all()
+                    results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).limit(limit).all()
                 else:
                     # limit と offsetの両方が指定された
-                    results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).limit(limit).offset(offset).all()
+                    results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).limit(limit).offset(offset).all()
             else:
                 # limit と offsetの両方とも指定がなかった
-                results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).all()
+                results = session.query(SensorData.SensorData.gas_index, SensorData.SensorData.gas_registance_log).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).all()
 
             for result in results:
                 item = dict(index = result[0], value = result[1])
@@ -157,7 +158,7 @@ class StorageAdapter:
                         SensorData.SensorData.gas_registance_log,
                         SensorData.SensorData.gas_registance_diff,
                         SensorData.SensorData.comment
-                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).offset(offset).all()
+                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).offset(offset).all()
                 elif len(offset) <= 0:
                     # limit だけ指定された
                     results = session.query(
@@ -173,7 +174,7 @@ class StorageAdapter:
                         SensorData.SensorData.gas_registance_log,
                         SensorData.SensorData.gas_registance_diff,
                         SensorData.SensorData.comment
-                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).limit(limit).all()
+                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).limit(limit).all()
                 else:
                     # limit と offsetの両方が指定された
                     results = session.query(
@@ -189,7 +190,7 @@ class StorageAdapter:
                         SensorData.SensorData.gas_registance_log,
                         SensorData.SensorData.gas_registance_diff,
                         SensorData.SensorData.comment
-                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).limit(limit).offset(offset).all()
+                        ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).limit(limit).offset(offset).all()
             else:
                 # limit と offsetの両方とも指定がなかった
                 results = session.query(
@@ -205,7 +206,7 @@ class StorageAdapter:
                         SensorData.SensorData.gas_registance_log,
                         SensorData.SensorData.gas_registance_diff,
                         SensorData.SensorData.comment
-                    ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).all()
+                    ).filter(SensorData.SensorData.category == category, SensorData.SensorData.sensor_id == sensor_id).order_by(SensorData.SensorData.serial).all()
 
             for result in results:
                 item = dict(
