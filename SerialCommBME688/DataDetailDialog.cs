@@ -19,6 +19,9 @@ namespace SamplingBME688Serial
         private CheckBox chk3Visible;
         private CheckBox chk2Visible;
         private CheckBox chk1Visible;
+        private Label lbl1Info;
+        private Label lbl2Info;
+        private Label lbl3Info;
         private List<string> labelList = new List<string>();
 
 
@@ -53,6 +56,9 @@ namespace SamplingBME688Serial
             chk3Visible = new CheckBox();
             chk2Visible = new CheckBox();
             chk1Visible = new CheckBox();
+            lbl1Info = new Label();
+            lbl2Info = new Label();
+            lbl3Info = new Label();
             ((System.ComponentModel.ISupportInitialize)bar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bar3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bar2).BeginInit();
@@ -135,7 +141,7 @@ namespace SamplingBME688Serial
             // 
             // chkRangeZoom
             // 
-            chkRangeZoom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            chkRangeZoom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chkRangeZoom.AutoSize = true;
             chkRangeZoom.Location = new Point(905, 535);
             chkRangeZoom.Name = "chkRangeZoom";
@@ -147,7 +153,7 @@ namespace SamplingBME688Serial
             // 
             // chkLogRData
             // 
-            chkLogRData.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            chkLogRData.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chkLogRData.AutoSize = true;
             chkLogRData.Location = new Point(905, 504);
             chkLogRData.Name = "chkLogRData";
@@ -199,10 +205,46 @@ namespace SamplingBME688Serial
             chk1Visible.UseVisualStyleBackColor = true;
             chk1Visible.CheckedChanged += chk1Visible_CheckedChanged;
             // 
+            // lbl1Info
+            // 
+            lbl1Info.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lbl1Info.AutoSize = true;
+            lbl1Info.ImageAlign = ContentAlignment.TopLeft;
+            lbl1Info.Location = new Point(191, 539);
+            lbl1Info.Name = "lbl1Info";
+            lbl1Info.Size = new Size(28, 15);
+            lbl1Info.TabIndex = 16;
+            lbl1Info.Text = "XXX";
+            // 
+            // lbl2Info
+            // 
+            lbl2Info.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lbl2Info.AutoSize = true;
+            lbl2Info.ImageAlign = ContentAlignment.TopLeft;
+            lbl2Info.Location = new Point(437, 539);
+            lbl2Info.Name = "lbl2Info";
+            lbl2Info.Size = new Size(28, 15);
+            lbl2Info.TabIndex = 17;
+            lbl2Info.Text = "XXX";
+            // 
+            // lbl3Info
+            // 
+            lbl3Info.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lbl3Info.AutoSize = true;
+            lbl3Info.ImageAlign = ContentAlignment.TopLeft;
+            lbl3Info.Location = new Point(675, 539);
+            lbl3Info.Name = "lbl3Info";
+            lbl3Info.Size = new Size(28, 15);
+            lbl3Info.TabIndex = 18;
+            lbl3Info.Text = "XXX";
+            // 
             // DataDetailDialog
             // 
             AutoScaleBaseSize = new Size(6, 16);
             ClientSize = new Size(974, 561);
+            Controls.Add(lbl3Info);
+            Controls.Add(lbl2Info);
+            Controls.Add(lbl1Info);
             Controls.Add(chk1Visible);
             Controls.Add(chk2Visible);
             Controls.Add(chk3Visible);
@@ -271,8 +313,12 @@ namespace SamplingBME688Serial
             float position2 = chk2Visible.Checked ? bar2.Value / 100.0f : -1.0f;
             float position3 = chk3Visible.Checked ? bar3.Value / 100.0f : -1.0f;
 
-
             graphDrawer.drawGraph(g, drawArea, currentIndexNumber, position1, position2, position3);
+
+            // ----- 表示位置のカウントを描画する
+            lbl1Info.Text = (position1 < 0.0f) ? "" : "" + graphDrawer.getStartPositionCount() + "/" + graphDrawer.getMaxPositionCount();
+            lbl2Info.Text = (position2 < 0.0f) ? "" : "" + graphDrawer.getMiddlePositionCount() + "/" + graphDrawer.getMaxPositionCount();
+            lbl3Info.Text = (position3 < 0.0f) ? "" : "" + graphDrawer.getFinishPositionCount() + "/" + graphDrawer.getMaxPositionCount();
         }
 
         public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
@@ -300,6 +346,10 @@ namespace SamplingBME688Serial
             chk1Visible.Text = bar1.Value + "%";
             chk2Visible.Text = bar2.Value + "%";
             chk3Visible.Text = bar3.Value + "%";
+
+            lbl1Info.Text = "";
+            lbl2Info.Text = "";
+            lbl3Info.Text = "";
         }
 
         private void btnPrev_Click(object sender, EventArgs e)

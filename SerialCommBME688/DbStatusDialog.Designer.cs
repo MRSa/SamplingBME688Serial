@@ -57,7 +57,7 @@
             // 
             // btnLoad
             // 
-            btnLoad.Anchor = AnchorStyles.Bottom;
+            btnLoad.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnLoad.Enabled = false;
             btnLoad.Location = new Point(497, 331);
             btnLoad.Name = "btnLoad";

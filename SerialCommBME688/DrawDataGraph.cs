@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 
 namespace SamplingBME688Serial
 {
@@ -25,6 +26,11 @@ namespace SamplingBME688Serial
         private double currentUpperLimit = 110000000.0f;
         private double currentLowerLimit = 0.0f;
         private const bool isDebug = false;
+
+        private int startPositionCount = -1;
+        private int middlePositionCount = -1;
+        private int finishPositionCount = -1;
+        private int maxPositionCount = -1;
 
         public void selectGraphData(bool useGasRegistanceLog, bool isZoom)
         {
@@ -147,6 +153,24 @@ namespace SamplingBME688Serial
         }
 
 
+        public int getStartPositionCount()
+        {
+            return startPositionCount;
+        }
+
+        public int getMiddlePositionCount()
+        {
+            return middlePositionCount;
+        }
+        public int getFinishPositionCount()
+        {
+            return finishPositionCount;
+        }
+        public int getMaxPositionCount()
+        {
+            return maxPositionCount;
+        }
+
         public void drawGraph(Graphics g, RectangleF drawArea, int strongLineIndex, float line1Position, float line2Position, float line3Position)
         {
             Debug.WriteLine(DateTime.Now + " ----- drawGraph ----- : " + strongLineIndex);
@@ -172,6 +196,14 @@ namespace SamplingBME688Serial
                         int startCount = (int)(targetDataSet.Count * line1Position);  // 先頭データの場所
                         List<GraphDataValue> startDataset = targetDataSet[startCount];
                         drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP), lineStroke), categoryName + " (" + sensorIdStr + ")", startDataset);
+                        if (strongLineIndex == strongIndex)
+                        {
+                            startPositionCount = startCount;
+                        }
+                    }
+                    else
+                    {
+                        startPositionCount = -1;
                     }
 
                     // 真ん中データ
@@ -180,6 +212,14 @@ namespace SamplingBME688Serial
                         int middleCount = (int)(targetDataSet.Count * line2Position);  // 真ん中データの場所
                         List<GraphDataValue> middleDataset = targetDataSet[middleCount];
                         drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE), lineStroke), "", middleDataset);
+                        if (strongLineIndex == strongIndex)
+                        {
+                            middlePositionCount = middleCount;
+                        }
+                    }
+                    else
+                    {
+                        middlePositionCount = -1;
                     }
 
                     // 末尾データ
@@ -188,7 +228,17 @@ namespace SamplingBME688Serial
                         int finishCount = (int)(targetDataSet.Count * line3Position);  // 末尾データの場所
                         List<GraphDataValue> finishDataset = targetDataSet[finishCount];
                         drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM), lineStroke), "", finishDataset);
+                        if (strongLineIndex == strongIndex)
+                        {
+                            finishPositionCount = finishCount;
+                            maxPositionCount = targetDataSet.Count;
+                        }
                     }
+                    else
+                    {
+                        finishPositionCount = -1;
+                    }
+  
                     if (isDebug)
                     {
                         Debug.WriteLine($"{rowData.Cells[0].Value}[Sensor{rowData.Cells[1].Value}] ({(int)(targetDataSet.Count * line1Position)} / {(int)(targetDataSet.Count * line2Position)} / {(int)(targetDataSet.Count * line3Position)})");
@@ -201,7 +251,6 @@ namespace SamplingBME688Serial
                 Debug.WriteLine(DateTime.Now + " drawGraph()" + ex.Message);
             }
             Debug.WriteLine(" ----- ");
-
         }
 
         private Color getColor(int indexNo, int sensorId, int position)
