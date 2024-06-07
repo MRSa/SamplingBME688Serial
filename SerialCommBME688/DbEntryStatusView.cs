@@ -56,7 +56,7 @@ namespace SamplingBME688Serial
                     string categoryName = info.dataCategory;
                     int sensorId = info.sensorId;
                     int start = info.startFrom;
-                    int count = info.dataCount;
+                    int count = info.dataCount + info.startFrom;
                     int dataToGet = 10000;  // 1回の取得でどれくらいのデータをとってくるかの指定
 
                     for (int loopCount = start; loopCount < count; loopCount += dataToGet)
