@@ -310,4 +310,6 @@ Analyze チェックボックスを外すと、予測の実行を終了します
 予測モードから、学習モードに戻す場合は、右上の「Clear」ボタンか、右下の「Reset」ボタンを押してください。
 「Clear」ボタンは、モデルを作り直す場合、「Reset」ボタンは、センサのデータを最初から収集しなおす場合にご使用ください。
 
+![画面遷移について](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/screen-transition.png?raw=true)
+
 以上
