@@ -8,6 +8,7 @@
   - [ビルド](#ビルド)
     - [使用NuGetパッケージ](#使用nugetパッケージ)
   - [収集の開始](#収集の開始)
+    - [データベースへの登録](#データベースへの登録)
   - [収集の終了](#収集の終了)
     - [Collected Data欄の表示](#collected-data欄の表示)
   - [CSVファイルへのエクスポート](#csvファイルへのエクスポート)
@@ -72,6 +73,14 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 収集中は、ストップボタンが有効となり、収集状況を表示します。
 
 ![収集中表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/sampling.png?raw=true)
+
+### データベースへの登録
+
+データの収集時、Databaseエリアの先頭にあるチェックボックスをONにすることで[docker-database](../docker-database/README.md)へデータを保管し、あとから読み込むことができます。（保管先データベースの詳細については[docker-database](../docker-database/README.md)を参照してください。）
+
+![データベースへ登録](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/entry-database.png?raw=true)
+
+なお、後からデータを読み出し、利用するためには、Entry All Data のチェックはONのままにしておく必要がありますので、ご注意ください。
 
 ## 収集の終了
 
@@ -169,10 +178,13 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ![ZoomとLog](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/graph2.png?raw=true)
 
-左下に強調表示しているグラフの名前を表示しています。
-グラフ名の左右にあるボタンを押すことで、強調表示するグラフを変更することができます。
+左下に強調表示しているグラフの名前を表示しています。グラフ名の左右にあるボタンを押すことで、強調表示するグラフを変更することができます。
 
 ![強調表示するグラフの変更](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/Graph_selection.gif?raw=true)
+
+グラフのスライダーを動かすことで、表示するグラフのタイミングが変更できます。スライダーを 0% → 99% まで動かすと、データの経時変化を確認することができます。
+
+![グラフの経時変化確認](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/Graph_move.gif?raw=true)
 
 ## モデルの作成
 
