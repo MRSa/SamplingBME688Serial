@@ -6,6 +6,7 @@
   - [目次](#目次)
   - [概要](#概要)
   - [ビルド](#ビルド)
+    - [使用NuGetパッケージ](#使用nugetパッケージ)
   - [収集の開始](#収集の開始)
   - [収集の終了](#収集の終了)
     - [Collected Data欄の表示](#collected-data欄の表示)
@@ -29,6 +30,7 @@
   - [モデルの読み込み](#モデルの読み込み)
   - [予測の実行](#予測の実行)
     - [予測結果の保存](#予測結果の保存)
+      - [予測結果のCSVファイルフォーマット](#予測結果のcsvファイルフォーマット)
   - [予測モードから学習モードへの切り替え](#予測モードから学習モードへの切り替え)
 
 ## 概要
@@ -46,6 +48,14 @@ Atom Liteから送られてきたBME688の匂いデータを蓄積し、機械�
 ## ビルド
 
 Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定しています。ソリューションファイルを読み込んでビルドしてください。
+
+### 使用NuGetパッケージ
+
+本アプリケーションは、以下のNuGetパッケージを利用しています。
+
+- [Microsoft.ML](https://www.nuget.org/packages/Microsoft.ML/)
+- [Microsoft.ML.LightGbm](https://www.nuget.org/packages/Microsoft.ML.LightGbm/)
+- [System.IO.Ports](https://www.nuget.org/packages/System.IO.Ports/)
 
 ## 収集の開始
 
@@ -121,12 +131,22 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ## CSVファイルからインポート
 
-「Import CSV」ボタンを押すと、あらかじめエクスポートしていたCSVファイルを読み込みます。本ツールでエクスポートしたファイル以外はサポートできませんので、ご注意ください。
+「Import CSV」ボタンを押すと、あらかじめエクスポートしていたCSVファイルを読み込むことができます。**本ツールのデフォルト設定でCSVエクスポートしたファイル以外は読み込みがきませんので、ご注意ください。**
+
+ボタンを押すと、「作りが悪いのでアプリケーションが固まりますけど、ちょっと待ってください」といったワーニングメッセージを表示しますので、「OK」を押してください。続けてファイル選択ダイアログが表示されるので、読み出したいCSVファイルを選択し、「開く」ボタンを押してください。CSVファイルのインポートが始まりますので、しばらくお待ちください。
+
+![CSVファイルからインポート・ワーニングダイアログ](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/import-warning.png?raw=true)
+
+インポートが終了すると、読み込みが終了したことをダイアログでお知らせします。
+
+![CSVファイルからインポート・成功ダイアログ](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/import-success.png?raw=true)
 
 ## 収集データのリセット
 
 アプリ右下の「Reset」ボタンで、収集データすべてをクリアします。
 （アプリ右上の「Clear」ボタンでは、「sampling Status」画面表示をクリアするだけなので、ご注意ください。）
+
+![収集データのリセット](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/data-reset.png?raw=true)
 
 ## グラフの表示
 
@@ -236,10 +256,18 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 トレーニングが終了すると、「Save Model」ボタンが表示されます。このボタンを押すと、トレーニングしたモデルをファイル（zip形式）で保存することができます。
 
+モデルの保存が終わると、保存したモデルファイルのファイル名を表示します。
+
+![モデルの保存](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/save-model.png?raw=true)
+
 ## モデルの読み込み
 
 「Load Model」ボタンを押すと、保存していたモデルファイル（zip形式）を読み出すことができます。このとき、**モデル作成時に使用するセンサの設定は、モデルを保存したときの設定と合わせてください。**
 適切な予測ができませんのでご注意ください。
+
+モデルの読み込みが終わると、読み込んだモデルファイルのファイル名を表示します。
+
+![モデルの読み込み](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/load-model.png?raw=true)
 
 ## 予測の実行
 
@@ -253,6 +281,10 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 Analyze チェックボックスを外すと、予測の実行を終了します。
 
+終了後、予測した結果を出力するかどうかの確認ダイアログを表示します。「はい」を選択すると、予測した結果をCSVファイルに出力します。
+
+![予測結果の保存](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/save-result.png?raw=true)
+
 ### 予測結果の保存
 
 予測の実行を終了させたとき、予測を１回以上実行していたときには、予測結果の実行確認ダイアログが表示されます。
@@ -261,6 +293,17 @@ Analyze チェックボックスを外すと、予測の実行を終了します
 
 予測結果を保存したい場合は、「はい(Yes)」を選んでください。名前を付けて保存ダイアログが表示され、ファイル名を決めると、
 予測結果をCSV形式で保存することができます。
+
+#### 予測結果のCSVファイルフォーマット
+
+予測結果のCSVファイルは、1行に以下のデータをカンマ区切りで記録しています。１行目はデータの説明を記載しています。
+
+- count
+  - 予測実行した回数
+- result
+  - 予測した結果
+- time
+  - 予測を実行した時間
 
 ## 予測モードから学習モードへの切り替え
 

@@ -484,7 +484,7 @@ namespace SamplingBME688Serial
             int index = 1;
             using (StreamWriter writer = new StreamWriter(outputFileName, false, Encoding.UTF8))
             {
-                writer.WriteLine("index,time,result");
+                writer.WriteLine("count,result,time");
                 string oneLine = "";
                 foreach (CheckResult result in resultList)
                 {
