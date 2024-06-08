@@ -15,6 +15,7 @@
     - [エクスポートオプション](#エクスポートオプション)
     - [CSVファイルのフォーマット](#csvファイルのフォーマット)
   - [CSVファイルからインポート](#csvファイルからインポート)
+  - [データベースからのデータロード](#データベースからのデータロード)
   - [収集データのリセット](#収集データのリセット)
   - [グラフの表示](#グラフの表示)
   - [モデルの作成](#モデルの作成)
@@ -76,11 +77,11 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 
 ### データベースへの登録
 
-データの収集時、Databaseエリアの先頭にあるチェックボックスをONにすることで[docker-database](../docker-database/README.md)へデータを保管し、あとから読み込むことができます。（保管先データベースの詳細については[docker-database](../docker-database/README.md)を参照してください。）
+データの収集時、Databaseエリアの先頭にあるチェックボックスをONにすることで、アプリ内にデータが到着したタイミングで、[Web API経由でデータベース](../docker-database/README.md)にデータを保管し、あとからアプリへ読み込むことができます。保管先データベースの詳細については [docker-database](../docker-database/README.md) を参照してください。
 
 ![データベースへ登録](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/entry-database.png?raw=true)
 
-なお、後からデータを読み出し、利用するためには、Entry All Data のチェックはONのままにしておく必要がありますので、ご注意ください。
+なお、後からデータを読み出し、利用するためには、**Entry All Data のチェックはONのままにしておく必要がありますので、ご注意ください。**
 
 ## 収集の終了
 
@@ -149,6 +150,19 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 インポートが終了すると、読み込みが終了したことをダイアログでお知らせします。
 
 ![CSVファイルからインポート・成功ダイアログ](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/import-success.png?raw=true)
+
+## データベースからのデータロード
+
+「Load data」ボタン、または、「Status」ボタンを押すと、データベースに接続し、格納されているデータの情報を表示します。
+
+![データベースの状態](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/database-status.png?raw=true)
+
+「Load Data」ボタンを押して表示されたダイアログでは、読み込みたいデータにチェックを入れて、「Load Data」ボタンを押すことで、データを読み込むことができます。また、ダイアログの下部に表示されている「From」で、データの読み出し開始の位置を、「Count」で読み出しデータ数の指定ができます。
+
+なお、ここでのcountは、データのインデックスデータ１つが１件ですので、センサデータとしては10個で１組のデータとして取り扱いますのでご注意ください。
+（メイン画面のdataCount, validCountは、ここで指定した count のおよそ 1/10 になります。）
+
+![データベースからの読み出し](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/load-data.png?raw=true)
 
 ## 収集データのリセット
 
