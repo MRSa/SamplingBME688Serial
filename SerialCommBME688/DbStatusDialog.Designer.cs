@@ -33,9 +33,11 @@
             btnCheckUncheckAll = new Button();
             lblFrom = new Label();
             lblCount = new Label();
-            fldFrom = new TextBox();
-            fldCount = new TextBox();
+            fldFrom = new NumericUpDown();
+            fldCount = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)gridDbStatus).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)fldFrom).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)fldCount).BeginInit();
             SuspendLayout();
             // 
             // gridDbStatus
@@ -78,7 +80,7 @@
             // 
             lblFrom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblFrom.AutoSize = true;
-            lblFrom.Location = new Point(264, 335);
+            lblFrom.Location = new Point(226, 335);
             lblFrom.Name = "lblFrom";
             lblFrom.Size = new Size(33, 15);
             lblFrom.TabIndex = 4;
@@ -88,7 +90,7 @@
             // 
             lblCount.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblCount.AutoSize = true;
-            lblCount.Location = new Point(380, 335);
+            lblCount.Location = new Point(366, 335);
             lblCount.Name = "lblCount";
             lblCount.Size = new Size(39, 15);
             lblCount.TabIndex = 5;
@@ -97,22 +99,21 @@
             // fldFrom
             // 
             fldFrom.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            fldFrom.Location = new Point(303, 332);
+            fldFrom.Location = new Point(265, 333);
+            fldFrom.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
             fldFrom.Name = "fldFrom";
-            fldFrom.Size = new Size(55, 23);
-            fldFrom.TabIndex = 6;
-            fldFrom.Text = "0";
-            fldFrom.TextAlign = HorizontalAlignment.Right;
+            fldFrom.Size = new Size(80, 23);
+            fldFrom.TabIndex = 8;
             // 
             // fldCount
             // 
             fldCount.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            fldCount.Location = new Point(425, 332);
+            fldCount.Location = new Point(411, 333);
+            fldCount.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
             fldCount.Name = "fldCount";
-            fldCount.Size = new Size(55, 23);
-            fldCount.TabIndex = 7;
-            fldCount.Text = "1000000";
-            fldCount.TextAlign = HorizontalAlignment.Right;
+            fldCount.Size = new Size(80, 23);
+            fldCount.TabIndex = 9;
+            fldCount.Value = new decimal(new int[] { 1000000, 0, 0, 0 });
             // 
             // DbStatusDialog
             // 
@@ -129,6 +130,8 @@
             Name = "DbStatusDialog";
             Text = "Dabase Entry Status";
             ((System.ComponentModel.ISupportInitialize)gridDbStatus).EndInit();
+            ((System.ComponentModel.ISupportInitialize)fldFrom).EndInit();
+            ((System.ComponentModel.ISupportInitialize)fldCount).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -140,7 +143,7 @@
         private Button btnCheckUncheckAll;
         private Label lblFrom;
         private Label lblCount;
-        private TextBox fldFrom;
-        private TextBox fldCount;
+        private NumericUpDown fldFrom;
+        private NumericUpDown fldCount;
     }
 }
