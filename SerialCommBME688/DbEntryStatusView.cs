@@ -7,6 +7,7 @@ namespace SamplingBME688Serial
 {
     internal class DbEntryStatusView : ILoadDataFromDatabase
     {
+        private const int GET_LIMIT_COUNT = 100000;
         private DataTable sensorDataList = new DataTable();
         private DbStatusDialog? dbStatusDialog = null;
         private Form parentForm;
@@ -57,7 +58,7 @@ namespace SamplingBME688Serial
                     int sensorId = info.sensorId;
                     int start = info.startFrom;
                     int count = info.dataCount + info.startFrom;
-                    int dataToGet = 10000;  // 1回の取得でどれくらいのデータをとってくるかの指定
+                    int dataToGet = (info.dataCount < GET_LIMIT_COUNT) ? info.dataCount : GET_LIMIT_COUNT;  // 1回の取得でどれくらいのデータをとってくるかの指定
 
                     for (int loopCount = start; loopCount < count; loopCount += dataToGet)
                     {
@@ -70,7 +71,7 @@ namespace SamplingBME688Serial
                         {
                             getSensorDataBody(getUrl, serialReceiver2);
                         }
-                        // Debug.WriteLine(DateTime.Now + " [GET DATA] " + categoryName + " (START: " + loopCount + " COUNT: " + dataToGet + ")");
+                        Debug.WriteLine(DateTime.Now + " [GET DATA] " + categoryName + " (START: " + loopCount + " COUNT: " + dataToGet + ")");
                     }
                     importResult = true;
                     numberOfCategories++;
