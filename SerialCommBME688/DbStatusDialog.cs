@@ -75,7 +75,7 @@ namespace SamplingBME688Serial
         private void btnLoad_Click(object sender, EventArgs e)
         {
             categoryToLoad.Clear();
-            int dataCountFrom = 0;
+            int dataCountFrom;
             int getDataCount = 0;
 
             try
@@ -124,9 +124,9 @@ namespace SamplingBME688Serial
                             int dataCount = int.Parse(dataCountStr);
                             Debug.WriteLine(DateTime.Now + " [INFO] btnLoad_Click() : Load  " + categoryName + " (" + sensorIdStr + "), count: " + dataCount + " " + getDataCount + " from " + dataCountFrom);
 
-                            if (dataCount > (getDataCount + dataCountFrom))
+                            if ((getDataCount > 0)&&(dataCount > (getDataCount + dataCountFrom)))
                             {
-                                // 取得データカウント数を制限する
+                                // ----- 取得データカウント数を制限する
                                 dataCount = getDataCount;
                             }
 

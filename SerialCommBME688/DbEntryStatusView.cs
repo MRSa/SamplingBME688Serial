@@ -59,6 +59,11 @@ namespace SamplingBME688Serial
                     int start = info.startFrom;
                     int count = info.dataCount + info.startFrom;
                     int dataToGet = (info.dataCount < GET_LIMIT_COUNT) ? info.dataCount : GET_LIMIT_COUNT;  // 1回の取得でどれくらいのデータをとってくるかの指定
+                    if (info.dataCount <= 0)
+                    {
+                        // ---- データカウントが 0 だった場合は、全データを取得する
+                        dataToGet = GET_LIMIT_COUNT;
+                    }
 
                     for (int loopCount = start; loopCount < count; loopCount += dataToGet)
                     {
@@ -71,7 +76,7 @@ namespace SamplingBME688Serial
                         {
                             getSensorDataBody(getUrl, serialReceiver2);
                         }
-                        Debug.WriteLine(DateTime.Now + " [GET DATA] " + categoryName + " (START: " + loopCount + " COUNT: " + dataToGet + ")");
+                        // Debug.WriteLine(DateTime.Now + " [GET DATA] " + categoryName + " (START: " + loopCount + " COUNT: " + dataToGet + ")");
                     }
                     importResult = true;
                     numberOfCategories++;

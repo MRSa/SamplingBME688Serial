@@ -150,7 +150,6 @@
             selSensor2.Name = "selSensor2";
             selSensor2.Size = new Size(59, 19);
             selSensor2.TabIndex = 2;
-            selSensor2.TabStop = true;
             selSensor2.Text = "2 Only";
             selSensor2.UseVisualStyleBackColor = true;
             // 
@@ -158,13 +157,11 @@
             // 
             selSensor1and2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             selSensor1and2.AutoSize = true;
-            selSensor1and2.Checked = true;
             selSensor1and2.Location = new Point(11, 18);
             selSensor1and2.Margin = new Padding(2);
             selSensor1and2.Name = "selSensor1and2";
             selSensor1and2.Size = new Size(63, 19);
             selSensor1and2.TabIndex = 0;
-            selSensor1and2.TabStop = true;
             selSensor1and2.Text = "1 and 2";
             selSensor1and2.UseVisualStyleBackColor = true;
             // 
@@ -172,6 +169,7 @@
             // 
             selSensor1or2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             selSensor1or2.AutoSize = true;
+            selSensor1or2.Checked = true;
             selSensor1or2.Location = new Point(275, 18);
             selSensor1or2.Margin = new Padding(2);
             selSensor1or2.Name = "selSensor1or2";
@@ -190,7 +188,6 @@
             selSensor1.Name = "selSensor1";
             selSensor1.Size = new Size(59, 19);
             selSensor1.TabIndex = 1;
-            selSensor1.TabStop = true;
             selSensor1.Text = "1 Only";
             selSensor1.UseVisualStyleBackColor = true;
             // 
