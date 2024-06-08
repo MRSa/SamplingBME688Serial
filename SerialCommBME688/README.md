@@ -97,7 +97,7 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ### エクスポートオプション
 
-以前のプロトタイプで使用するためのオプションです。現状、このエクスポートオプションを使用する必要はありません。
+以前のプロトタイプで使用するために作成したオプションです。 **現状、このエクスポートオプションを使用する必要はありません。**
 
 - Only Gas R.(Log) : ガス抵抗値の対数だけをCSVファイルに出力します。後述するモデル学習で使用する形式です。チェックなしの場合は、収集全データを出力します。
 - Combine sensor : チェックを入れると、センサ１とセンサ２の同時収集を行った場合、そのデータを結合（ステップ数を０－９を０－１９にする）してCSVファイルに出力する形式です。チェックを入れた場合は、後述のモデル学習や判定でオプション(-i 20)を付与する必要があります。
@@ -151,6 +151,13 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 ## グラフの表示
 
 収集したデータ(ガス抵抗値)のグラフを表から選択した行のデータについて表示します。
+
+![行の選択](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/select-row.png?raw=true)
+
+行を選択していない場合は、「行を選択してください」というダイアログを表示します。
+
+![行選択エラー](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/warning-row.png?raw=true)
+
 グラフは、収集した１つのシーケンスのグラフを最大３つまで重ね合わせて表示できます。
 デフォルトでは、最初と最後と中間の３点のグラフを表示しています。
 
@@ -161,6 +168,11 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 グラフは、Y軸の高さを拡大するモード（Zoomモード）、対数値を表示するモード(Logモード)を持っています。
 
 ![ZoomとLog](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/graph2.png?raw=true)
+
+左下に強調表示しているグラフの名前を表示しています。
+グラフ名の左右にあるボタンを押すことで、強調表示するグラフを変更することができます。
+
+![強調表示するグラフの変更](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/Graph_selection.gif?raw=true)
 
 ## モデルの作成
 
@@ -273,17 +285,13 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 モデルの作成、あるいはモデルの読み込みを行ったあと、モデル作成ダイアログを閉じると、アプリケーションは学習モードから予測モードに切り替わり、「Prediction」が有効になります。
 
-![トレーニング結果](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction-mode.png?raw=true)
+![予測モード](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction_mode.png?raw=true)
 
 "Prediction" の中にある、Analyze チェックボックスをONにすると、予測を開始します。
 
 ![予測の実行](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction.png?raw=true)
 
 Analyze チェックボックスを外すと、予測の実行を終了します。
-
-終了後、予測した結果を出力するかどうかの確認ダイアログを表示します。「はい」を選択すると、予測した結果をCSVファイルに出力します。
-
-![予測結果の保存](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/save-result.png?raw=true)
 
 ### 予測結果の保存
 
