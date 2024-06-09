@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SamplingBME688Serial", "Ser
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{BF996FD7-A4D2-43E6-B9E0-5E2860BF6D0C}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AppInstaller", "AppInstaller\AppInstaller.vdproj", "{AE4BBE0B-F09B-4BB7-A9DB-BBD54F61B09E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,8 @@ Global
 		{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE4BBE0B-F09B-4BB7-A9DB-BBD54F61B09E}.Debug|Any CPU.ActiveCfg = Debug
+		{AE4BBE0B-F09B-4BB7-A9DB-BBD54F61B09E}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
