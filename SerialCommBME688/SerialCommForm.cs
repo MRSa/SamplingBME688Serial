@@ -719,7 +719,12 @@ namespace SerialCommBME688
                             if (count <= 0)
                             {
                                 // ----- エラーが出たとき
-                                MessageBox.Show("Export failure...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Result save failure...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                // ----- 正常に出力が終わったとき
+                                MessageBox.Show("Result saved : " + saveFileDialog.FileName, "Save Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                         }
                     }
