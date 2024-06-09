@@ -7,6 +7,7 @@
   - [概要](#概要)
   - [ビルド](#ビルド)
     - [使用NuGetパッケージ](#使用nugetパッケージ)
+  - [サンプリングモードと予測モード](#サンプリングモードと予測モード)
   - [収集の開始](#収集の開始)
     - [データベースへの登録](#データベースへの登録)
   - [収集の終了](#収集の終了)
@@ -33,7 +34,7 @@
   - [予測の実行](#予測の実行)
     - [予測結果の保存](#予測結果の保存)
       - [予測結果のCSVファイルフォーマット](#予測結果のcsvファイルフォーマット)
-  - [予測モードから学習モードへの切り替え](#予測モードから学習モードへの切り替え)
+  - [予測モードからサンプリングモードへの切り替え](#予測モードからサンプリングモードへの切り替え)
 
 ## 概要
 
@@ -59,6 +60,12 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 - [Microsoft.ML.LightGbm](https://www.nuget.org/packages/Microsoft.ML.LightGbm/)
 - [System.IO.Ports](https://www.nuget.org/packages/System.IO.Ports/)
 
+## サンプリングモードと予測モード
+
+アプリケーションは、おおまかに、センサからデータを収集・蓄積する「サンプリングモード」と、センサからのデータを使って、匂いが何かをあてる「予測モード」があります。アプリケーション起動直後は、サンプリングモードです。
+
+[アプリケーションのモード](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/app-mode.png?raw=true)
+
 ## 収集の開始
 
 データのカテゴリラベル(Data Category欄)を入力し、Sensor1 / Sensor2 の シリアルポート名を指定して「Connect」ボタンを押すと、収集を開始します。
@@ -67,11 +74,11 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 
 ![収集の開始](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-screen00.png?raw=true)
 
-シリアルポートの番号が有効でない時にConnectボタンを押した場合、エラーが表示され、収集を中止します。
+シリアルポートの番号が有効でない時にConnectボタンを押した場合は、エラーが表示されて収集ができません。
 
 ![エラー発生の表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-error.png?raw=true)
 
-収集中は、ストップボタンが有効となり、収集状況を表示します。
+収集中は、ストップボタンが有効となり、"Sampling Status"欄に収集状況を表示します。
 
 ![収集中表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/sampling.png?raw=true)
 
@@ -309,7 +316,7 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ## 予測の実行
 
-モデルの作成、あるいはモデルの読み込みを行ったあと、モデル作成ダイアログを閉じると、アプリケーションは学習モードから予測モードに切り替わり、「Prediction」が有効になります。
+モデルの作成、あるいはモデルの読み込みを行ったあと、モデル作成ダイアログを閉じると、アプリケーションはサンプリングモードから予測モードに切り替わり、「Prediction」が有効になります。
 
 ![予測モード](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction_mode.png?raw=true)
 
@@ -339,9 +346,9 @@ Analyze チェックボックスを外すと、予測の実行を終了します
 - time
   - 予測を実行した時間
 
-## 予測モードから学習モードへの切り替え
+## 予測モードからサンプリングモードへの切り替え
 
-予測モードから、学習モードに戻す場合は、右上の「Clear」ボタンか、右下の「Reset」ボタンを押してください。
+予測モードから、サンプリングモードに戻す場合は、右上の「Clear」ボタンか、右下の「Reset」ボタンを押してください。
 「Clear」ボタンは、モデルを作り直す場合、「Reset」ボタンは、センサのデータを最初から収集しなおす場合にご使用ください。
 
 ![画面遷移について](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/screen-transition.png?raw=true)
