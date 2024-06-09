@@ -16,7 +16,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0FF1D060D20A49D1A13E13CDAD621913"
+        "MsmKey" = "8:_4176B8182E124FCD83334E1297DD5A50"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AA81CA0782474827B65C6B1926B6BBED"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -251,7 +257,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BME688SerialInstaller"
         "ProductCode" = "8:{CE122AA7-A6C4-462F-829E-DA0BB6E6DB55}"
-        "PackageCode" = "8:{6B77AFA8-553C-4171-A09F-E0A293E8BB42}"
+        "PackageCode" = "8:{F6245536-C5A1-4A38-92BA-31D9F7864768}"
         "UpgradeCode" = "8:{3A6BF683-15A3-4E20-97DB-E0EFC56B46B8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -259,7 +265,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
+        "Manufacturer" = "8:Gokigen Project"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/MRSa/SamplingBME688Serial"
         "Title" = "8:BME688Serial"
@@ -371,20 +377,6 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_030970EE76FE459A9D61B6998ACC06CE"
-            {
-            "Name" = "8:BME688Serial"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_0FF1D060D20A49D1A13E13CDAD621913"
-            "Folder" = "8:_5740ABB2B601415B9FBE897BCF93788C"
-            "WorkingFolder" = "8:_D55B70E36641467B93C1BE8B6C43C7A8"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
         }
         "UserInterface"
         {
@@ -784,9 +776,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0FF1D060D20A49D1A13E13CDAD621913"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4176B8182E124FCD83334E1297DD5A50"
             {
-            "SourcePath" = "8:..\\SerialCommBME688\\obj\\Release\\net8.0-windows7.0\\SamplingBME688Serial.dll"
+            "SourcePath" = "8:..\\SerialCommBME688\\obj\\Release\\net8.0-windows7.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D55B70E36641467B93C1BE8B6C43C7A8"
@@ -805,7 +797,35 @@
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AA81CA0782474827B65C6B1926B6BBED"
+            {
+            "SourcePath" = "8:..\\SerialCommBME688\\obj\\Release\\net8.0-windows7.0\\apphost.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_5740ABB2B601415B9FBE897BCF93788C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
