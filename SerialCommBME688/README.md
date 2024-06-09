@@ -38,7 +38,7 @@
 
 ## 概要
 
-Atom Liteから送られてきたBME688の匂いデータを蓄積し、機械学習を行い、学習したデータを使ってどの匂いか判定することができるアプリです。
+最大２台のAtom Liteから送られてきたBME688の匂いデータを蓄積し、機械学習を行い、学習したデータを使ってどの匂いか判定することができるWindowsアプリです。
 
 以下の３ステップで匂いを判別します。
 
@@ -62,19 +62,21 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 
 ## サンプリングモードと予測モード
 
-アプリケーションは、おおまかに、センサからデータを収集・蓄積する「サンプリングモード」と、センサからのデータを使って、匂いが何かをあてる「予測モード」があります。アプリケーション起動直後は、サンプリングモードです。
+アプリケーションは、おおまかに、センサからデータを収集・蓄積する **サンプリングモード** と、センサからのデータを使って、匂いが何かをあてる **予測モード** があります。
 
-[アプリケーションのモード](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/app-mode.png?raw=true)
+アプリケーション起動直後は、 **サンプリングモード** です。
+
+![アプリケーションのモード](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/app-mode.png?raw=true)
 
 ## 収集の開始
 
-データのカテゴリラベル(Data Category欄)を入力し、Sensor1 / Sensor2 の シリアルポート名を指定して「Connect」ボタンを押すと、収集を開始します。
-データカテゴリラベルを設定しない場合は、自動的に「empty」という名前をつけます。
+データのカテゴリラベル("Data Category"欄)を入力し、Sensor1 / Sensor2 の シリアルポート名を指定して「Connect」ボタンを押すと、収集を開始します。
+データカテゴリラベルを設定しない場合は、自動的に "empty" という名前をつけます。
 収集中は、"Sampling Status" 欄に状況を表示します。
 
 ![収集の開始](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-screen00.png?raw=true)
 
-シリアルポートの番号が有効でない時にConnectボタンを押した場合は、エラーが表示されて収集ができません。
+シリアルポートの番号が有効でない時に「Connect」ボタンを押した場合は、エラーが表示されて収集ができません。
 
 ![エラー発生の表示](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/main-error.png?raw=true)
 
@@ -84,7 +86,9 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 
 ### データベースへの登録
 
-データの収集時、Databaseエリアの先頭にあるチェックボックスをONにすることで、アプリ内にデータが到着したタイミングで、[Web API経由でデータベース](../docker-database/README.md)にデータを保管し、あとからアプリへ読み込むことができます。保管先データベースの詳細については [docker-database](../docker-database/README.md) を参照してください。
+データの収集時、Databaseエリアの先頭にあるチェックボックスをONにすることで、アプリ内にデータが到着したタイミングで、[Web API経由でデータベース](../docker-database/README.md)にデータを保管し、あとからアプリへ読み込むことができます。
+
+保管先データベースの詳細については [docker-database](../docker-database/README.md) を参照してください。
 
 ![データベースへ登録](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/entry-database.png?raw=true)
 
@@ -92,11 +96,13 @@ Visual Studio 2022 で .NET 6.0をターゲットフレームワークと設定�
 
 ## 収集の終了
 
-Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。収集結果は、「Collected Data」欄に表示します。「Clear」ボタンを押すと、収集状況を表示していた欄をクリアします。
+Sensor1 / Sensor2 の「Stop」ボタンを押すと、収集を終了します。収集結果は、「Collected Data」欄に表示します。「Clear」ボタンを押すと、収集状況を表示していた欄をクリアします。
 
 ![収集の終了](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/sampling_result.png?raw=true)
 
 ### Collected Data欄の表示
+
+"Collected Data"欄に表示している１行の表示内容は以下となっています。
 
 - Category : 収集時に指定したカテゴリ名を表示します。
 - sensorId : 収集したセンサ番号 (Sensor1: 1, Sensor2: 2)を表示します。
@@ -126,7 +132,8 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ### CSVファイルのフォーマット
 
-エクスポートするCSVファイルは、1行に以下のデータをカンマ区切りで記録しています。１行目はデータの説明を記載しています。インポート可能なCSVファイルも、この形式です。
+エクスポートするCSVファイルは、1行に以下のデータをカンマ区切りで記録します。１行目はデータの説明ラベルで、２行目から実データを出力します。
+なお、インポート可能なCSVファイルも、この形式です。
 具体的な出力内容は、[出力したサンプルCSVファイル](https://raw.githubusercontent.com/MRSa/SamplingBME688Serial/master/sample_data/coffee-smells.csv) を参照してください。
 
 - sensorId
@@ -152,7 +159,8 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 「Import CSV」ボタンを押すと、あらかじめエクスポートしていたCSVファイルを読み込むことができます。**本ツールのデフォルト設定でCSVエクスポートしたファイル以外は読み込みがきませんので、ご注意ください。**
 
-ボタンを押すと、「作りが悪いのでアプリケーションが固まりますけど、ちょっと待ってください」といったワーニングメッセージを表示しますので、「OK」を押してください。続けてファイル選択ダイアログが表示されるので、読み出したいCSVファイルを選択し、「開く」ボタンを押してください。CSVファイルのインポートが始まりますので、しばらくお待ちください。
+ボタンを押すと、「作りが悪いのでアプリケーションが固まりますけど、ちょっと待ってください」といった意味合いのワーニングメッセージを表示しますので、「OK」を押してください。
+続けてファイル選択ダイアログが表示されるので、読み出したいCSVファイルを選択し、「開く」ボタンを押してください。CSVファイルのインポートが始まりますので、しばらくお待ちください。
 
 ![CSVファイルからインポート・ワーニングダイアログ](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/import-warning.png?raw=true)
 
@@ -162,27 +170,40 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 
 ## データベースからのデータロード
 
-「Load data」ボタン、または、「Status」ボタンを押すと、データベースに接続し、格納されているデータの情報を表示します。
+「Status」ボタンを押すと、データベースに格納されているデータの情報を参照することができます。
+「Load data」ボタンを押すと、データベース内に格納されたデータの読み込みができます。
 
 ![データベースの状態](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/database-status.png?raw=true)
 
-「Load Data」ボタンを押して表示されたダイアログでは、読み込みたいデータにチェックを入れて、「Load Data」ボタンを押すことで、データを読み込むことができます。また、ダイアログの下部に表示されている「From」で、データの読み出し開始の位置を、「Count」で読み出しデータ数の指定ができます。
+一行に表示するデータは以下です。
 
-なお、ここでのcountは、データのインデックスデータ１つが１件ですので、センサデータとしては10個で１組のデータとして取り扱いますのでご注意ください。
+- category
+  - データのカテゴリ名
+- sensor_id
+  - センサID (1 or 2)
+- count
+  - 登録されているデータの数
+
+データベースからデータを読み込む場合、「Load data」ボタンを押してダイアログを表示し、読み込みたいデータの行にチェックを入れて、「Load Data」ボタンを押してください。
+このとき、ダイアログの下部に表示されている「From」で、データの読み出し開始の位置を、「Count」で読み出しデータ数の指定ができます。
+
+また、ここでのcountは、データのインデックスデータ１つが１件ですので、センサデータとしては10個で１組のデータとして取り扱いますのでご注意ください。
 （メイン画面のdataCount, validCountは、ここで指定した count のおよそ 1/10 になります。）
+
+データの読み込みが終わると、メッセージが表示され、"Collected Data"欄に読み込まれた情報が反映されます。
 
 ![データベースからの読み出し](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/load-data.png?raw=true)
 
 ## 収集データのリセット
 
 アプリ右下の「Reset」ボタンで、収集データすべてをクリアします。
-（アプリ右上の「Clear」ボタンでは、「sampling Status」画面表示をクリアするだけなので、ご注意ください。）
+（アプリ右上の「Clear」ボタンでは、"sampling Status"欄の画面表示をクリアするだけなので、ご注意ください。）
 
 ![収集データのリセット](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/data-reset.png?raw=true)
 
 ## グラフの表示
 
-収集したデータ(ガス抵抗値)のグラフを表から選択した行のデータについて表示します。
+収集したデータ(ガス抵抗値)のグラフを表から選択した行のデータについて表示します。行選択が必要ですので、ご注意ください。複数行の選択、全選択も可能です。
 
 ![行の選択](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/select-row.png?raw=true)
 
@@ -191,7 +212,9 @@ Sensor1 / Sensor2 の Stop ボタンを押すと、収集を終了します。�
 ![行選択エラー](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/warning-row.png?raw=true)
 
 グラフは、収集した１つのシーケンスのグラフを最大３つまで重ね合わせて表示できます。
-デフォルトでは、最初と最後と中間の３点のグラフを表示しています。
+デフォルトでは、最初(0%)と最後(99%)と中間(49%)の３点のグラフを重ねて表示しています。チェックを外すと、グラフを表示しません。
+
+![グラフ表示(3つ)](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/graph-0.png?raw=true)
 
 時系列の変位を確認する、収集したカテゴリそれぞれの差異を確認することができます。
 
