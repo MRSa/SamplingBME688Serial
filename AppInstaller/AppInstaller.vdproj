@@ -22,6 +22,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_75DA6DCCCCF94736AE550864B0CB8B44"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B74895F699B1479A8BCFBC67C7DA47F1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -148,6 +154,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_75DA6DCCCCF94736AE550864B0CB8B44"
+            {
+            "SourcePath" = "8:..\\SerialCommBME688\\LICENSE.txt"
+            "TargetName" = "8:LICENSE.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_D55B70E36641467B93C1BE8B6C43C7A8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B74895F699B1479A8BCFBC67C7DA47F1"
             {
             "SourcePath" = "8:..\\SerialCommBME688\\README.md"
@@ -225,7 +251,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamplingBME688Serial"
         "ProductCode" = "8:{CE122AA7-A6C4-462F-829E-DA0BB6E6DB55}"
-        "PackageCode" = "8:{FCCD388A-B732-459E-B36A-BF8FF54241A0}"
+        "PackageCode" = "8:{66D0CD01-C1CC-47F1-9F59-279A00F4B4AA}"
         "UpgradeCode" = "8:{3A6BF683-15A3-4E20-97DB-E0EFC56B46B8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
