@@ -22,12 +22,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AA81CA0782474827B65C6B1926B6BBED"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B74895F699B1479A8BCFBC67C7DA47F1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -92,7 +86,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\BME688SerialInstaller.msi"
+        "OutputFilename" = "8:Release\\SamplingBME688SerialInstaller.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -200,22 +194,11 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_5740ABB2B601415B9FBE897BCF93788C"
-                    {
-                    "Name" = "8:BME688Serial"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_E774879E8833401A9ED3D6E74B995DE3"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_D55B70E36641467B93C1BE8B6C43C7A8"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -240,9 +223,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:BME688SerialInstaller"
+        "ProductName" = "8:SamplingBME688Serial"
         "ProductCode" = "8:{CE122AA7-A6C4-462F-829E-DA0BB6E6DB55}"
-        "PackageCode" = "8:{C36CB45B-89C1-4B36-87C7-CBA08BDD1304}"
+        "PackageCode" = "8:{FCCD388A-B732-459E-B36A-BF8FF54241A0}"
         "UpgradeCode" = "8:{3A6BF683-15A3-4E20-97DB-E0EFC56B46B8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -253,7 +236,7 @@
         "Manufacturer" = "8:Gokigen Project"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/MRSa/SamplingBME688Serial"
-        "Title" = "8:BME688SerialInstaller"
+        "Title" = "8:SamplingBME688Serial"
         "Subject" = "8:BME688Serial"
         "ARPCONTACT" = "8:MRSa"
         "Keywords" = "8:"
@@ -263,7 +246,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
@@ -362,17 +345,31 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B1BDBB310B1E43A6BE611549755532BF"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C969B31902FC47448A2ACA955CB9C680"
             {
-            "Name" = "8:BME688Serial"
+            "Name" = "8:SamplingBME688Serial"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_87600C3CF2B14D5EA54A59EC6D503633"
+            "Target" = "8:_4176B8182E124FCD83334E1297DD5A50"
             "Folder" = "8:_87600C3CF2B14D5EA54A59EC6D503633"
-            "WorkingFolder" = "8:_87600C3CF2B14D5EA54A59EC6D503633"
+            "WorkingFolder" = "8:_D55B70E36641467B93C1BE8B6C43C7A8"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DCD65DFEA4854FDF8A8F6B0446AD60D8"
+            {
+            "Name" = "8:SamplingBME688Serial"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_4176B8182E124FCD83334E1297DD5A50"
+            "Folder" = "8:_597E3950A9E740C5ADA6D1A60AE2A608"
+            "WorkingFolder" = "8:_D55B70E36641467B93C1BE8B6C43C7A8"
             "Icon" = "8:"
             "Feature" = "8:"
             }
@@ -781,35 +778,6 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D55B70E36641467B93C1BE8B6C43C7A8"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:PublishItems"
-            "OutputProjectGuid" = "8:{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}"
-            "ShowKeyOutput" = "11:TRUE"
-            "PublishProfilePath" = "8:Properties\\PublishProfiles\\FolderProfile.pubxml"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AA81CA0782474827B65C6B1926B6BBED"
-            {
-            "SourcePath" = "8:..\\SerialCommBME688\\obj\\Release\\net8.0-windows7.0\\apphost.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_5740ABB2B601415B9FBE897BCF93788C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

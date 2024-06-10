@@ -12,7 +12,12 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/MRSa/SamplingBME688Serial</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <ApplicationIcon>icon0.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="icon0.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ML" Version="3.0.1" />
