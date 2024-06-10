@@ -116,25 +116,10 @@
                     "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 および x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.7.2"
                     }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.CoreRuntime.8.0.x64"
-                    {
-                    "Name" = "8:.NET ランタイム 8.0.5 (x64)"
-                    "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.8.0.x64"
-                    }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.CoreRuntime.8.0.x86"
-                    {
-                    "Name" = "8:.NET ランタイム 8.0.5 (x86)"
-                    "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.8.0.x86"
-                    }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.DesktopRuntime.8.0.x64"
                     {
                     "Name" = "8:.NET デスクトップ ランタイム 8.0.5 (x64)"
                     "ProductCode" = "8:Microsoft.NetCore.DesktopRuntime.8.0.x64"
-                    }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.DesktopRuntime.8.0.x86"
-                    {
-                    "Name" = "8:.NET デスクトップ ランタイム 8.0.5 (x86)"
-                    "ProductCode" = "8:Microsoft.NetCore.DesktopRuntime.8.0.x86"
                     }
                 }
             }
@@ -257,7 +242,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BME688SerialInstaller"
         "ProductCode" = "8:{CE122AA7-A6C4-462F-829E-DA0BB6E6DB55}"
-        "PackageCode" = "8:{F6245536-C5A1-4A38-92BA-31D9F7864768}"
+        "PackageCode" = "8:{C36CB45B-89C1-4B36-87C7-CBA08BDD1304}"
         "UpgradeCode" = "8:{3A6BF683-15A3-4E20-97DB-E0EFC56B46B8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -268,11 +253,11 @@
         "Manufacturer" = "8:Gokigen Project"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/MRSa/SamplingBME688Serial"
-        "Title" = "8:BME688Serial"
-        "Subject" = "8:"
+        "Title" = "8:BME688SerialInstaller"
+        "Subject" = "8:BME688Serial"
         "ARPCONTACT" = "8:MRSa"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:BME688 Predict App."
+        "ARPCOMMENTS" = "8:A \"smell\" detect application using BME688"
         "ARPURLINFOABOUT" = "8:https://github.com/MRSa/SamplingBME688Serial"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -377,6 +362,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B1BDBB310B1E43A6BE611549755532BF"
+            {
+            "Name" = "8:BME688Serial"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_87600C3CF2B14D5EA54A59EC6D503633"
+            "Folder" = "8:_87600C3CF2B14D5EA54A59EC6D503633"
+            "WorkingFolder" = "8:_87600C3CF2B14D5EA54A59EC6D503633"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -800,6 +799,7 @@
             "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}"
             "ShowKeyOutput" = "11:TRUE"
+            "PublishProfilePath" = "8:Properties\\PublishProfiles\\FolderProfile.pubxml"
                 "ExcludeFilters"
                 {
                 }
@@ -828,6 +828,7 @@
             "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{5D10BDF6-ED6A-4CB3-83C4-17A02F1C9DDE}"
             "ShowKeyOutput" = "11:TRUE"
+            "PublishProfilePath" = "8:Properties\\PublishProfiles\\FolderProfile.pubxml"
                 "ExcludeFilters"
                 {
                 }
