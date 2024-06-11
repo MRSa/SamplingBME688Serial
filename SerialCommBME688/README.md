@@ -5,8 +5,7 @@
 - [Windows アプリケーション for BME688](#windows-アプリケーション-for-bme688)
   - [目次](#目次)
   - [概要](#概要)
-  - [ビルド](#ビルド)
-    - [使用NuGetパッケージ](#使用nugetパッケージ)
+  - [前提パッケージ](#前提パッケージ)
   - [サンプリングモードと予測モード](#サンプリングモードと予測モード)
   - [収集の開始](#収集の開始)
     - [データベースへの登録](#データベースへの登録)
@@ -36,10 +35,14 @@
       - [予測結果のCSVファイルフォーマット](#予測結果のcsvファイルフォーマット)
   - [予測モードからサンプリングモードへの切り替え](#予測モードからサンプリングモードへの切り替え)
   - [その他](#その他)
+    - [ソースコードリポジトリ](#ソースコードリポジトリ)
+    - [開発環境](#開発環境)
+    - [使用NuGetパッケージ](#使用nugetパッケージ)
+    - [ライセンス](#ライセンス)
 
 ## 概要
 
-最大２台のAtom Liteから送られてきたBME688の匂いデータを蓄積し、機械学習を行い、学習したデータを使ってどの匂いか判定することができるWindowsアプリです。
+最大２台のAtom Liteから送られてきたBME688の匂いデータを蓄積し、[ML.NET](https://dotnet.microsoft.com/ja-jp/apps/machinelearning-ai/ml-dotnet)を使用して機械学習を行い、学習したデータを使ってどの匂いか判定することができるWindowsアプリです。
 
 以下の３ステップで匂いを判別します。
 
@@ -49,23 +52,18 @@
 
 ![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview0.png?raw=true)
 
-## ビルド
+## 前提パッケージ
 
-Visual Studio 2022 で .NET 8.0をターゲットフレームワークと設定しています。ソリューションファイルを読み込んでビルドしてください。
+本アプリケーションを実行するには、.NET 8.0 デスクトップ ランタイムが必要です。
+インストーラを使用すると、インストールが必要な場合は、本アプリケーションをインストールする前に[.NET 8のインストール](https://dotnet.microsoft.com/download/dotnet)を行います。
 
-### 使用NuGetパッケージ
-
-本アプリケーションは、以下のNuGetパッケージを利用しています。
-
-- [Microsoft.ML](https://www.nuget.org/packages/Microsoft.ML/)
-- [Microsoft.ML.LightGbm](https://www.nuget.org/packages/Microsoft.ML.LightGbm/)
-- [System.IO.Ports](https://www.nuget.org/packages/System.IO.Ports/)
+.NET について詳しくは「[Windows に .NET をインストールする](https://learn.microsoft.com/ja-jp/dotnet/core/install/windows?tabs=net80)」を参照してください。
 
 ## サンプリングモードと予測モード
 
-アプリケーションは、おおまかに、センサからデータを収集・蓄積する **サンプリングモード** と、センサからのデータを使って、匂いが何かをあてる **予測モード** があります。
+本アプリケーションは、おおまかに、センサからデータを収集・蓄積する **サンプリングモード** と、センサからのデータを使って、匂いが何かをあてる **予測モード** があります。
 
-アプリケーション起動直後は、 **サンプリングモード** です。
+起動直後は、 **サンプリングモード** になっています。
 
 ![アプリケーションのモード](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/app-mode.png?raw=true)
 
@@ -347,6 +345,7 @@ Sensor1 / Sensor2 の「Stop」ボタンを押すと、収集を終了します�
 ![予測モード](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction_mode.png?raw=true)
 
 "Prediction" の中にある、Analyze チェックボックスをONにすると、予測を開始します。
+このとき、「Log」と「w/P T H」のチェックは、モデル作成時とチェックの状態を合わせてください。
 
 ![予測の実行](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/prediction.png?raw=true)
 
@@ -381,6 +380,28 @@ Analyze チェックボックスを外すと、予測の実行を終了します
 
 ## その他
 
-- 「Log」と「w/P T H」のチェックは、モデル作成時と予測時のチェックを合わせてください。
+### ソースコードリポジトリ
+
+本アプリケーションはオープンソースです。以下のリポジトリに格納しています。
+
+[https://github.com/MRSa/SamplingBME688Serial/tree/master/SerialCommBME688](https://github.com/MRSa/SamplingBME688Serial/tree/master/SerialCommBME688)
+
+### 開発環境
+
+開発環境は、Visual Studio 2022 を使用しています。インストーラを作成するために、拡張機能として[Microsoft Visual Studio Installer Projects 2022](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects)を使用しています。
+
+ソリューションファイルを読み込んでビルドしてください。.NET 8.0をターゲットフレームワークと設定しています。
+
+### 使用NuGetパッケージ
+
+本アプリケーションは、以下のNuGetパッケージを利用しています。
+
+- [Microsoft.ML](https://www.nuget.org/packages/Microsoft.ML/)
+- [Microsoft.ML.LightGbm](https://www.nuget.org/packages/Microsoft.ML.LightGbm/)
+- [System.IO.Ports](https://www.nuget.org/packages/System.IO.Ports/)
+
+### ライセンス
+
+本アプリケーションのライセンスは [Apache 2.0](LICENSE.txt) です。
 
 以上

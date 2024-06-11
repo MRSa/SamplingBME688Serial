@@ -1,16 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Version>1.0.1</Version>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Copyright>MRSa</Copyright>
+    <Authors>MRSa</Authors>
+    <Company>Gokigen Project</Company>
+    <Copyright>Copyright 2024- GOKIGEN Project</Copyright>
     <Description>A "smell" detector using BME688</Description>
     <PackageProjectUrl>https://github.com/MRSa/SamplingBME688Serial</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/MRSa/SamplingBME688Serial</RepositoryUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>icon0.ico</ApplicationIcon>
   </PropertyGroup>
