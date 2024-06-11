@@ -275,120 +275,143 @@ namespace SamplingBME688Serial
                     break;
             }
 
-            // ===== CSVファイルへの出力 ... チェックボックスの選択によって、出力内容を変更する
-            bool ret = false;
-            SensorToUse usePort;
-            TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, port1, port2, this);
-            if (selSensor1and2.Checked)
+
+            bool modelIsCreated = true;
+            string messageResult = "";
+            try
             {
-                csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                usePort = SensorToUse.port1and2;
+                // ===== CSVファイルへの出力 ... チェックボックスの選択によって、出力内容を変更する
+                bool ret = false;
+                SensorToUse usePort;
+                TrainCsvDataExporter csvExporter = new TrainCsvDataExporter(_sourceDataFile, port1, port2, this);
+                if (selSensor1and2.Checked)
+                {
+                    csvExporter.outputDataSourceCSVFile1and2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                    usePort = SensorToUse.port1and2;
+                }
+                else if (selSensor1.Checked)
+                {
+                    csvExporter.outputDataSourceCSVFileSingle(1, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                    usePort = SensorToUse.port1;
+                }
+                else if (selSensor2.Checked)
+                {
+                    csvExporter.outputDataSourceCSVFileSingle(2, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                    usePort = SensorToUse.port2;
+                }
+                else // if (selSensor1or2.Checked)
+                {
+                    csvExporter.outputDataSourceCSVFile1or2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                    usePort = SensorToUse.port1or2;
+                }
+
+                // ----- モデルの作成
+                switch (cmbModel.SelectedIndex)
+                {
+                    case 1:
+                        // L-BFGS
+                        IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy("Label", "Features");
+                        TrainingMultiClassification training1 = new TrainingMultiClassification(ref mlContext, "LbfgsMaximumEntropy", ref estimator1, _sourceDataFile, this);
+                        ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training1;
+                        break;
+
+                    case 2:
+                        // 確率的双対座標上昇法(1)
+                        IEstimator<ITransformer> estimator2 = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features");
+                        TrainingMultiClassification training2 = new TrainingMultiClassification(ref mlContext, "SdcaMaximumEntropy", ref estimator2, _sourceDataFile, this);
+                        ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training2;
+                        break;
+
+                    case 3:
+                        // 確率的双対座標上昇法(2)
+                        IEstimator<ITransformer> estimator3 = mlContext.MulticlassClassification.Trainers.SdcaNonCalibrated("Label", "Features");
+                        TrainingMultiClassification training3 = new TrainingMultiClassification(ref mlContext, "SdcaNonCalibrated", ref estimator3, _sourceDataFile, this);
+                        ret = training3.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training3;
+                        break;
+
+                    case 4:
+                        // Naive Bayes
+                        IEstimator<ITransformer> estimator4 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
+                        TrainingMultiClassification training4 = new TrainingMultiClassification(ref mlContext, "NaiveBayes", ref estimator4, _sourceDataFile, this);
+                        ret = training4.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training4;
+                        break;
+
+                    case 0:
+                        // 軽勾配ブースト マシン (LightGbm)
+                        IEstimator<ITransformer> estimator5 = mlContext.MulticlassClassification.Trainers.LightGbm("Label", "Features");
+                        TrainingMultiClassification training5 = new TrainingMultiClassification(ref mlContext, "LightGbm", ref estimator5, _sourceDataFile, this);
+                        ret = training5.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training5;
+                        break;
+
+                    case 5:
+                        // Pairwise coupling
+                        TrainingMultiBinaryClassification training6 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.PairwiseCoupling, getBinaryClassificationMethod(), _sourceDataFile, this);
+                        ret = training6.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training6;
+                        break;
+
+                    case 6:
+                        // One versus all
+                        TrainingMultiBinaryClassification training7 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.OneVersusAll, getBinaryClassificationMethod(), _sourceDataFile, this);
+                        ret = training7.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training7;
+                        break;
+
+                    case 7:
+                    default:
+                        // K-Means
+                        TrainingKMeansModel training0 = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);
+                        ret = training0.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
+                        trainedModel = training0;
+                        break;
+                }
+                if (trainedModel != null)
+                {
+                    // モデルが作成された(保存ボタンを有効にする)
+                    btnSaveModel.Enabled = true;
+                    btnSaveModel.Visible = true;
+
+                    // ----- 作成したモデルをチェックする
+                    checkTheTrainedModel();
+
+                    txtResult.Text = " Created : " + trainedModel.getMethodName();
+                }
+                else
+                {
+                    // モデルは作成できなかった(保存ボタンを無効にする)
+                    btnSaveModel.Enabled = false;
+                    btnSaveModel.Visible = false;
+                    txtResult.Text = "";
+                    modelIsCreated = false;
+                    messageResult = " ";
+                }
+
+                // ----- モデル作成の完了を通知 -----
+                callback?.createModelFinished(ret, usePort, trainedModel, "create model done.");
             }
-            else if (selSensor1.Checked)
+            catch (Exception ex)
             {
-                csvExporter.outputDataSourceCSVFileSingle(1, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                usePort = SensorToUse.port1;
-            }
-            else if (selSensor2.Checked)
-            {
-                csvExporter.outputDataSourceCSVFileSingle(2, startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                usePort = SensorToUse.port2;
-            }
-            else // if (selSensor1or2.Checked)
-            {
-                csvExporter.outputDataSourceCSVFile1or2(startPosition, outputDataCount, duplicateTimes, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                usePort = SensorToUse.port1or2;
+                // --- 例外発生。。。
+                Debug.WriteLine(DateTime.Now + " [ERROR] btnCreateModel_Click() " + _sourceDataFile + " Exception " + ex.Message);
+                modelIsCreated = false;
+                messageResult = " " + ex.Message;
             }
 
-            // ----- モデルの作成
-            switch (cmbModel.SelectedIndex)
+            if (modelIsCreated)
             {
-                case 1:
-                    // L-BFGS
-                    IEstimator<ITransformer> estimator1 = mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy("Label", "Features");
-                    TrainingMultiClassification training1 = new TrainingMultiClassification(ref mlContext, "LbfgsMaximumEntropy", ref estimator1, _sourceDataFile, this);
-                    ret = training1.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training1;
-                    break;
-
-                case 2:
-                    // 確率的双対座標上昇法(1)
-                    IEstimator<ITransformer> estimator2 = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features");
-                    TrainingMultiClassification training2 = new TrainingMultiClassification(ref mlContext, "SdcaMaximumEntropy", ref estimator2, _sourceDataFile, this);
-                    ret = training2.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training2;
-                    break;
-
-                case 3:
-                    // 確率的双対座標上昇法(2)
-                    IEstimator<ITransformer> estimator3 = mlContext.MulticlassClassification.Trainers.SdcaNonCalibrated("Label", "Features");
-                    TrainingMultiClassification training3 = new TrainingMultiClassification(ref mlContext, "SdcaNonCalibrated", ref estimator3, _sourceDataFile, this);
-                    ret = training3.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training3;
-                    break;
-
-                case 4:
-                    // Naive Bayes
-                    IEstimator<ITransformer> estimator4 = mlContext.MulticlassClassification.Trainers.NaiveBayes("Label", "Features");
-                    TrainingMultiClassification training4 = new TrainingMultiClassification(ref mlContext, "NaiveBayes", ref estimator4, _sourceDataFile, this);
-                    ret = training4.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training4;
-                    break;
-
-                case 0:
-                    // 軽勾配ブースト マシン (LightGbm)
-                    IEstimator<ITransformer> estimator5 = mlContext.MulticlassClassification.Trainers.LightGbm("Label", "Features");
-                    TrainingMultiClassification training5 = new TrainingMultiClassification(ref mlContext, "LightGbm", ref estimator5, _sourceDataFile, this);
-                    ret = training5.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training5;
-                    break;
-
-                case 5:
-                    // Pairwise coupling
-                    TrainingMultiBinaryClassification training6 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.PairwiseCoupling, getBinaryClassificationMethod(), _sourceDataFile, this);
-                    ret = training6.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training6;
-                    break;
-
-                case 6:
-                    // One versus all
-                    TrainingMultiBinaryClassification training7 = new TrainingMultiBinaryClassification(ref mlContext, MultiClassMethod.OneVersusAll, getBinaryClassificationMethod(), _sourceDataFile, this);
-                    ret = training7.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training7;
-                    break;
-
-                case 7:
-                default:
-                    // K-Means
-                    TrainingKMeansModel training0 = new TrainingKMeansModel(ref mlContext, _sourceDataFile, categoryCount, this);
-                    ret = training0.executeTraining(usePort, null, ref port1, ref port2, chkDataLog.Checked, chkPresTempHumidity.Checked);
-                    trainedModel = training0;
-                    break;
-            }
-            if (trainedModel != null)
-            {
-                // モデルが作成された(保存ボタンを有効にする)
-                btnSaveModel.Enabled = true;
-                btnSaveModel.Visible = true;
-
-                // ----- 作成したモデルをチェックする
-                checkTheTrainedModel();
-
-                txtResult.Text = " Created : " + trainedModel.getMethodName();
+                // ----- モデル作成の完了を通知する
+                MessageBox.Show("Create model finished.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                // モデルは作成できなかった(保存ボタンを無効にする)
-                btnSaveModel.Enabled = false;
-                btnSaveModel.Visible = false;
-                txtResult.Text = "";
+                // ----- モデル作成の失敗を通知する
+                MessageBox.Show("Create model failure." + messageResult, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            // ----- モデル作成の完了を通知 -----
-            callback?.createModelFinished(ret, usePort, trainedModel, "create model done.");
-
-            // ----- モデル作成の完了を通知する
-            MessageBox.Show("Create model finished.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private SensorToUse getPortType()
