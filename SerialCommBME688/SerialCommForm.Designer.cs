@@ -62,7 +62,6 @@
             chkEntryDatabase = new CheckBox();
             btnImport = new Button();
             btnCreateModel = new Button();
-            chkAnalyze = new CheckBox();
             grpAnalysis = new GroupBox();
             chkWithPresTempHumi = new CheckBox();
             chkAnLog = new CheckBox();
@@ -71,6 +70,7 @@
             lblResult2 = new Label();
             fldResult2 = new TextBox();
             fldResult1 = new TextBox();
+            btnPortList = new Button();
             grpPort.SuspendLayout();
             grpDataCategory.SuspendLayout();
             grpData.SuspendLayout();
@@ -142,9 +142,9 @@
             // btnClear
             // 
             btnClear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnClear.Location = new Point(741, 33);
+            btnClear.Location = new Point(741, 26);
             btnClear.Name = "btnClear";
-            btnClear.Size = new Size(79, 23);
+            btnClear.Size = new Size(76, 23);
             btnClear.TabIndex = 5;
             btnClear.Text = "Clear";
             btnClear.UseVisualStyleBackColor = true;
@@ -200,7 +200,6 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.RowTemplate.Height = 25;
             dataGridView1.Size = new Size(676, 206);
             dataGridView1.TabIndex = 0;
             // 
@@ -490,18 +489,6 @@
             btnCreateModel.UseVisualStyleBackColor = true;
             btnCreateModel.Click += btnCreateModel_Click;
             // 
-            // chkAnalyze
-            // 
-            chkAnalyze.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            chkAnalyze.AutoSize = true;
-            chkAnalyze.Location = new Point(733, 8);
-            chkAnalyze.Name = "chkAnalyze";
-            chkAnalyze.Size = new Size(93, 19);
-            chkAnalyze.TabIndex = 15;
-            chkAnalyze.Text = "Analyze data";
-            chkAnalyze.UseVisualStyleBackColor = true;
-            chkAnalyze.Visible = false;
-            // 
             // grpAnalysis
             // 
             grpAnalysis.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -582,7 +569,7 @@
             // 
             // fldResult2
             // 
-            fldResult2.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            fldResult2.Font = new Font("Yu Gothic UI", 12F);
             fldResult2.Location = new Point(337, 15);
             fldResult2.Margin = new Padding(2);
             fldResult2.MaxLength = 128;
@@ -593,7 +580,7 @@
             // 
             // fldResult1
             // 
-            fldResult1.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            fldResult1.Font = new Font("Yu Gothic UI", 12F);
             fldResult1.Location = new Point(102, 15);
             fldResult1.Margin = new Padding(2);
             fldResult1.MaxLength = 128;
@@ -602,12 +589,24 @@
             fldResult1.Size = new Size(200, 29);
             fldResult1.TabIndex = 0;
             // 
+            // btnPortList
+            // 
+            btnPortList.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnPortList.Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnPortList.Location = new Point(741, 55);
+            btnPortList.Name = "btnPortList";
+            btnPortList.Size = new Size(76, 23);
+            btnPortList.TabIndex = 22;
+            btnPortList.Text = "Port List";
+            btnPortList.UseVisualStyleBackColor = true;
+            btnPortList.Click += btnPortList_Click;
+            // 
             // SerialCommForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(835, 566);
-            Controls.Add(chkAnalyze);
+            Controls.Add(btnPortList);
             Controls.Add(grpAnalysis);
             Controls.Add(btnCreateModel);
             Controls.Add(btnImport);
@@ -646,7 +645,6 @@
             grpAnalysis.ResumeLayout(false);
             grpAnalysis.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -682,7 +680,6 @@
         private Button btnDbStatus;
         private Button btnImport;
         private Button btnCreateModel;
-        private CheckBox chkAnalyze;
         private NumericUpDown importToPercent;
         private Label label1;
         private NumericUpDown importFromPercent;
@@ -696,5 +693,6 @@
         private CheckBox chkAnLog;
         private Button btnLoadData;
         private CheckBox chkWithPresTempHumi;
+        private Button btnPortList;
     }
 }

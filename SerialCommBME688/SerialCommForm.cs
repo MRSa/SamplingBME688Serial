@@ -1,6 +1,7 @@
 using Microsoft.ML;
 using SamplingBME688Serial;
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Text;
 
 namespace SerialCommBME688
@@ -104,6 +105,8 @@ namespace SerialCommBME688
             btnShowGraph.Enabled = isEnable;
             grpAnalysis.Enabled = isEnable;
 
+            btnPortList.Enabled = isEnable;
+
             //btnCreateModel.Visible = isEnable;
             btnCreateModel.Enabled = isEnable;
 
@@ -130,6 +133,8 @@ namespace SerialCommBME688
             urlDatabaseToEntry.Enabled = isEnable;
             btnShowGraph.Enabled = isEnable;
             grpAnalysis.Enabled = isEnable;
+
+            btnPortList.Enabled = isEnable;
 
             //btnCreateModel.Visible = isEnable;
             btnCreateModel.Enabled = isEnable;
@@ -358,12 +363,12 @@ namespace SerialCommBME688
             {
                 try
                 {
-                    double lowerPressure    = Double.MaxValue;
-                    double upperPressure    = Double.MinValue;
+                    double lowerPressure = Double.MaxValue;
+                    double upperPressure = Double.MinValue;
                     double lowerTemperature = Double.MaxValue;
                     double upperTemperature = Double.MinValue;
-                    double lowerHumidity    = Double.MaxValue;
-                    double upperHumidity    = Double.MinValue;
+                    double lowerHumidity = Double.MaxValue;
+                    double upperHumidity = Double.MinValue;
 
                     double lowerLimitZoomRLog = Double.MaxValue;
                     double upperLimitZoomRLog = Double.MinValue;
@@ -754,6 +759,26 @@ namespace SerialCommBME688
             {
                 // ---- エラーが発生した...終了する
                 Debug.WriteLine(DateTime.Now + "  btnLoadData_Click() " + ex.Message);
+            }
+        }
+
+        private void btnPortList_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string message = "";
+                string[] ports = SerialPort.GetPortNames();
+                foreach (string port in ports)
+                {
+                    message = message + "     " + port + "\r\n";
+                }
+                message = message + "\r\n";
+                MessageBox.Show(message, "Available COM Ports", MessageBoxButtons.OK, MessageBoxIcon.None);
+            }
+            catch (Exception ex)
+            {
+                // ---- エラーが発生した...終了する
+                Debug.WriteLine(DateTime.Now + "  btnPortList_Click() " + ex.Message);
             }
         }
     }
