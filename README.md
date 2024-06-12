@@ -71,7 +71,7 @@ Windows アプリケーションの詳細は [こちら](SerialCommBME688/README
 ## Database on Docker
 
 においデータをあとで活用するために、WSL (Windows Subsystem for Linux)上で動くDockerのデータベース(PostgreSQL)に登録することができます。
-ただし、まだ登録したデータを読み込むことはできません。。
+登録したデータは、前述の[Windowsアプリケーション](SerialCommBME688/README.md)から読み出すことができます。
 
 Docker databaseの詳細は [こちら](docker-database/README.md) を参照してください。
 
@@ -83,6 +83,5 @@ BME688で収集したデータを置いています。
 
 以上
 <!----
-
 
 ---->

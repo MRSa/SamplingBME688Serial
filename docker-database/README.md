@@ -1,6 +1,6 @@
 # Database on Docker
 
-においデータをあとで活用するために、Web API経由で、WSL (Windows Subsystem for Linux)上で動くDockerコンテナのデータベース(PostgreSQL)に登録することができます。
+においデータをあとで活用するために、Web API経由で、WSL (Windows Subsystem for Linux)上で動くDockerコンテナのデータベース(PostgreSQL)に登録/参照することができます。
 
 ![Database on Docker](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/docker-database.png?raw=true)
 
