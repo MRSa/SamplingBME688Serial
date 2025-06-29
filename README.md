@@ -81,6 +81,13 @@ BME688で収集したデータを置いています。
 
 詳細は [こちら](sample_data/README.md) を参照してください。
 
+## センサ固定用ボード (M5 Env Pro Unit用)
+
+[M5 Env Pro Unit](https://docs.m5stack.com/en/unit/ENV%20Pro%20Unit)を2台まとめて板に固定できるボードです。
+
+- [EnvProUnit_BaseBoard.stl](EnvProUnit_BaseBoard.stl)
+
+
 以上
 <!----
 
