@@ -19,7 +19,7 @@
 #include "bme68xLibrary.h"
 
 #define NEW_GAS_MEAS (BME68X_GASM_VALID_MSK | BME68X_HEAT_STAB_MSK | BME68X_NEW_DATA_MSK)
-#define MEAS_DUR 100
+#define MEAS_DUR 140
 #define WAIT_DUR 20
 
 //  Error LED Control
@@ -113,6 +113,7 @@ void loop(void)
   uint8_t nFieldsLeft = 0;
   
   M5.dis.drawpix(0, 0x0000f0);
+  delay(MEAS_DUR);
   delay(WAIT_DUR);
 
   if (bme.fetchData())
@@ -146,7 +147,6 @@ void loop(void)
         last = current;
         delay(WAIT_DUR);
         M5.dis.drawpix(0, 0x0000f0);
-        delay(WAIT_DUR);
       }
     } while (nFieldsLeft);
   }
