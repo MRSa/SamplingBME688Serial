@@ -2,7 +2,7 @@
 //   https://gist.githubusercontent.com/ksasao/5505e0e59a97cde799cf0ed2d2009b2d/raw/ec847139310ed5a3e51c163d95d8062d3e8f5d3d/M5BME688.ino
 // 2022/1/6 @ksasao
 //
-// 2025/06/29  @MRSa  BME690向けに調整 (M5Unified化、Atom S3 Lite対応、bme688Library をBME690に変更し、リポジトリ内に取り込み、M5Unified化)
+// 2025/07/03  @MRSa  BME690向けに調整 (M5Unified化、Atom S3 Lite対応、bme688Library をBME690に変更し、リポジトリ内に取り込み、M5Unified化)
 // 
 
 #include "M5Unified.h"
@@ -15,7 +15,7 @@ CRGB mainLED;
 #define MEAS_DUR 100
 #define WAIT_DUR 20
 
-//  Error LED Control
+// Error LED Control
 #define ERROR_DUR 1000
 void errLeds(void);
 
@@ -28,7 +28,7 @@ void errLeds(void);
 #define SCL_PIN 1
 #endif
 
-//  I2C: Address
+// I2C: Address
 #define BME690_I2C_ADDR_1ST 0x76
 #define BME690_I2C_ADDR_2ND 0x77
 
@@ -50,26 +50,25 @@ void setup(void)
 
 #if defined(ARDUINO_M5STACK_ATOM)
   // ----- RGB LED OFF : for M5 Atom Lite
-    FastLED.addLeds<NEOPIXEL, 27>(&mainLED, 1);
+  pinMode(27, OUTPUT);
+  FastLED.addLeds<NEOPIXEL, 27>(&mainLED, 1);
 #else // #if defined(ARDUINO_M5STACK_ATOMS3)
   // ----- RGB LED OFF : for M5 Atom S3 Lite
   FastLED.addLeds<NEOPIXEL, 35>(&mainLED, 1);
 #endif
 
-  delay(50);
+  delay(WAIT_DUR);
 
   //  LED OFF
   FastLED.setBrightness(10);
   mainLED = CRGB::Black;
+#if defined(ARDUINO_M5STACK_ATOM)
+  neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
+#else // #if defined(ARDUINO_M5STACK_ATOMS3)
   FastLED.show();
+#endif
 
-  //Serial.begin(115200);
   Wire.begin(SDA_PIN, SCL_PIN);
-
-  ////while (!Serial)
-  //{
-  //  delay(10);
-  //}
 
   /* initializes the sensor based on I2C library */
   bme.begin(BME690_I2C_ADDR_2ND, Wire);
@@ -123,8 +122,12 @@ void loop(void)
   uint8_t nFieldsLeft = 0;
 
   mainLED = CRGB::Blue;
+#if defined(ARDUINO_M5STACK_ATOM)
+  neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
+#else // #if defined(ARDUINO_M5STACK_ATOMS3)
   FastLED.show();
-  delay(WAIT_DUR);
+#endif
+  delay(MEAS_DUR);
 
   if (bme.fetchData())
   {
@@ -140,7 +143,12 @@ void loop(void)
         }else{
           mainLED = CRGB::Blue;
         }
+
+#if defined(ARDUINO_M5STACK_ATOM)
+        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
+#else // #if defined(ARDUINO_M5STACK_ATOMS3)
         FastLED.show();
+#endif
 
         // ちょっと出力データを追加。
         Serial.print(",");
@@ -162,8 +170,11 @@ void loop(void)
 
         delay(WAIT_DUR);
         mainLED = CRGB::Black;
+#if defined(ARDUINO_M5STACK_ATOM)
+        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
+#else // #if defined(ARDUINO_M5STACK_ATOMS3)
         FastLED.show();
-        delay(WAIT_DUR);
+#endif
       }
     } while (nFieldsLeft);
   }
@@ -175,12 +186,20 @@ void errLeds(void)
     {
         //  LED ON
         mainLED = CRGB::Red;
+#if defined(ARDUINO_M5STACK_ATOM)
+        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
+#else // #if defined(ARDUINO_M5STACK_ATOMS3)
         FastLED.show();
+#endif
         delay(ERROR_DUR);
 
         //  LED OFF
         mainLED = CRGB::Black;
+#if defined(ARDUINO_M5STACK_ATOM)
+        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
+#else // #if defined(ARDUINO_M5STACK_ATOMS3)
         FastLED.show();
+#endif
         delay(ERROR_DUR);
     }
 }
