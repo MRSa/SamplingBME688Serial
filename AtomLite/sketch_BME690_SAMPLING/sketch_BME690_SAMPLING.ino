@@ -16,7 +16,6 @@
 //            CMD:SETPROF {"name":"HP-xxx","tempProf":[200, 200, 320, 320, 320, 200, 200, 100, 100, 100],"holdProf":[3, 9, 3, 10, 10, 3, 10, 3, 10, 10]}
 //            CMD:SETPROF {"name":"HP-yyy","tempProf":[200, 200, 320, 250, 280, 150, 200, 100, 250, 100],"holdProf":[5, 10, 5, 10, 10, 5, 10, 5, 10, 10]}
 
-
 #include "ESP.h"
 #include "M5Unified.h"
 #include "src/bme690Library/bme690Library.h"
@@ -33,13 +32,15 @@ CRGB mainLED;
 #define ERROR_DUR 1000
 void errLeds(void);
 
-// Grove (I2C SDA/SCL)
+// Grove (I2C SDA/SCL/LED)
 #if defined(ARDUINO_M5STACK_ATOM)
 #define SDA_PIN 26
 #define SCL_PIN 32
+#define LED_PIN 27
 #else  // #if defined(ARDUINO_M5STACK_ATOMS3)
 #define SDA_PIN 2
 #define SCL_PIN 1
+#define LED_PIN 35
 #endif
 
 // I2C: Address
@@ -280,25 +281,15 @@ void setup(void)
   cfg.led_brightness = 96;
   M5.begin(cfg);
 
-#if defined(ARDUINO_M5STACK_ATOM)
-  // ----- RGB LED OFF : for M5 Atom Lite
-  pinMode(27, OUTPUT);
-  FastLED.addLeds<NEOPIXEL, 27>(&mainLED, 1);
-#else // #if defined(ARDUINO_M5STACK_ATOMS3)
-  // ----- RGB LED OFF : for M5 Atom S3 Lite
-  FastLED.addLeds<NEOPIXEL, 35>(&mainLED, 1);
-#endif
+  pinMode(LED_PIN, OUTPUT);
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(&mainLED, 1);
 
   delay(WAIT_DUR);
 
   //  LED OFF
   FastLED.setBrightness(10);
   mainLED = CRGB::Black;
-#if defined(ARDUINO_M5STACK_ATOM)
-  neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
-#else // #if defined(ARDUINO_M5STACK_ATOMS3)
-  FastLED.show();
-#endif
+  neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue); // FastLED.show();
 
   Wire.begin(SDA_PIN, SCL_PIN);
 
@@ -445,11 +436,7 @@ void loop(void)
   uint8_t nFieldsLeft = 0;
 
   mainLED = CRGB::Blue;
-#if defined(ARDUINO_M5STACK_ATOM)
-  neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
-#else // #if defined(ARDUINO_M5STACK_ATOMS3)
-  FastLED.show();
-#endif
+  neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue);
   delay(MEAS_DUR);
 
 //  ------------------------------
@@ -481,12 +468,7 @@ void loop(void)
         }else{
           mainLED = CRGB::Blue;
         }
-
-#if defined(ARDUINO_M5STACK_ATOM)
-        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
-#else // #if defined(ARDUINO_M5STACK_ATOMS3)
-        FastLED.show();
-#endif
+        neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue);
 
         // ちょっと出力データを追加。
         Serial.print(",");
@@ -518,11 +500,8 @@ void loop(void)
 
         delay(WAIT_DUR);
         mainLED = CRGB::Black;
-#if defined(ARDUINO_M5STACK_ATOM)
-        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
-#else // #if defined(ARDUINO_M5STACK_ATOMS3)
-        FastLED.show();
-#endif
+        neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue);
+        delay(WAIT_DUR);
       }
     } while (nFieldsLeft);
   }
@@ -534,20 +513,12 @@ void errLeds(void)
     {
         //  LED ON
         mainLED = CRGB::Red;
-#if defined(ARDUINO_M5STACK_ATOM)
-        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
-#else // #if defined(ARDUINO_M5STACK_ATOMS3)
-        FastLED.show();
-#endif
+        neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue);
         delay(ERROR_DUR);
 
         //  LED OFF
         mainLED = CRGB::Black;
-#if defined(ARDUINO_M5STACK_ATOM)
-        neopixelWrite(27, mainLED.red, mainLED.green, mainLED.blue);
-#else // #if defined(ARDUINO_M5STACK_ATOMS3)
-        FastLED.show();
-#endif
+        neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue);
         delay(ERROR_DUR);
     }
 }
