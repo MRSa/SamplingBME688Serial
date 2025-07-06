@@ -17,7 +17,7 @@
 //   https://twitter.com/ksasao/status/1479108937861709825
 //
 //
-// 2025/07/06  @MRSa  温度プロファイルをシリアル経由で変更できるようにした (区切り文字：0x0a / New Line)
+// 2025/07/06  @MRSa  温度プロファイルをシリアル経由で変更できるようにした (区切り文字：0x0a / New Line)、M5Unified + FastLED に置き換え
 //
 //    [コマンド]  ※ シリアル経由で受け付けるコマンド
 //      CMD:RESTART  → Atom Liteを再起動
@@ -32,10 +32,12 @@
 //            CMD:SETPROF {"name":"HP-yyy","tempProf":[200, 200, 320, 250, 280, 150, 200, 100, 250, 100],"holdProf":[5, 10, 5, 10, 10, 5, 10, 5, 10, 10]}
 
 #include "ESP.h"
-#include "M5Atom.h"
+#include "M5Unified.h"
 #include "bme68xLibrary.h"
 #include "Preferences.h"
 #include "ArduinoJson.h"
+#include "FastLED.h"
+CRGB mainLED;
 
 #define NEW_GAS_MEAS (BME68X_GASM_VALID_MSK | BME68X_HEAT_STAB_MSK | BME68X_NEW_DATA_MSK)
 #define MEAS_DUR 140
@@ -45,13 +47,16 @@
 #define ERROR_DUR 1000
 void errLeds(void);
 
-// Atomic proto
-//#define SDA_PIN 25
-//#define SCL_PIN 21
-
-// Grove
+// Grove (I2C SDA/SCL/LED)
+#if defined(ARDUINO_M5STACK_ATOM)
 #define SDA_PIN 26
 #define SCL_PIN 32
+#define LED_PIN 27
+#else  // #if defined(ARDUINO_M5STACK_ATOMS3)
+#define SDA_PIN 2
+#define SCL_PIN 1
+#define LED_PIN 35
+#endif
 
 //  I2C: Address
 #define BME688_I2C_ADDR_1ST 0x76
@@ -283,12 +288,23 @@ void applyDefaultProfile()
  */
 void setup(void)
 {
-  M5.begin(true, false, true);
-  delay(50);
+  auto cfg = M5.config();
+  cfg.serial_baudrate = 115200;
+  cfg.pmic_button = false;
+  cfg.output_power = true;
+  cfg.clear_display = true;
+  cfg.led_brightness = 96;
+  M5.begin(cfg);
+
+  mainLED = CRGB::Black;
+  pinMode(LED_PIN, OUTPUT);
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(&mainLED, 1);
+
+  delay(WAIT_DUR);
 
   //  LED OFF
-  M5.dis.drawpix(0, 0x000000);
-
+  FastLED.setBrightness(10);
+  neopixelWrite(LED_PIN, 0, 0, 0); // FastLED.show();
 
   Serial.begin(115200);
   Wire.begin(SDA_PIN, SCL_PIN);
@@ -432,9 +448,8 @@ void loop(void)
   bme68xData data;   // struct bme68x_data
   uint8_t nFieldsLeft = 0;
   
-  M5.dis.drawpix(0, 0x0000f0);
+  neopixelWrite(LED_PIN, 0x00, 0x00, 0xf0);
   delay(MEAS_DUR);
-  delay(WAIT_DUR);
 
 //  ------------------------------
   if (Serial.available() > 0)
@@ -455,13 +470,15 @@ void loop(void)
   {
     do
     {
+      M5.update();
+
       nFieldsLeft = bme.getData(data);
       if (data.status == NEW_GAS_MEAS)
       {
         if(data.gas_index == 9){
-          M5.dis.drawpix(0, 0x00f000);
+          neopixelWrite(LED_PIN, 0x00, 0xf0, 0x00);
         }else{
-          M5.dis.drawpix(0, 0xf060f0);
+          neopixelWrite(LED_PIN, 0x60, 0xf0, 0xf0);
         }
         // ちょっと出力データを追加。
         Serial.print(",");
@@ -491,7 +508,7 @@ void loop(void)
         Serial.println();
         last = current;
         delay(WAIT_DUR);
-        M5.dis.drawpix(0, 0x0000f0);
+        neopixelWrite(LED_PIN, 0x00, 0x00, 0xf0);
       }
     } while (nFieldsLeft);
   }
@@ -502,11 +519,11 @@ void errLeds(void)
     while(1)
     {
         //  LED ON
-        M5.dis.drawpix(0, 0x00ff00);
+        neopixelWrite(LED_PIN, 0xff, 0x00, 0x00);
         delay(ERROR_DUR);
 
         //  LED OFF
-        M5.dis.drawpix(0, 0x000000);
+        neopixelWrite(LED_PIN, 0x00, 0x00, 0x00);
         delay(ERROR_DUR);
     }
 }
