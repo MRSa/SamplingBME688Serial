@@ -509,6 +509,7 @@ void loop(void)
         last = current;
         delay(WAIT_DUR);
         neopixelWrite(LED_PIN, 0x00, 0x00, 0xf0);
+        delay(WAIT_DUR);
       }
     } while (nFieldsLeft);
   }
