@@ -188,14 +188,16 @@ namespace SamplingBME688Serial
                     string categoryName = key ?? "";
                     List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
 
-                    int lineStroke = (strongLineIndex == strongIndex) ? 5 : 0;
+                    int lineStroke = (strongLineIndex == strongIndex) ? 2 : 0;
 
                     // 先頭データ
                     if (line1Position >= 0.0f)
                     {
                         int startCount = (int)(targetDataSet.Count * line1Position);  // 先頭データの場所
                         List<GraphDataValue> startDataset = targetDataSet[startCount];
-                        drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_TOP), lineStroke), categoryName + " (" + sensorIdStr + ")", startDataset);
+                        Pen startPen = new Pen(getColor(index, sensorId, POSITION_TOP), lineStroke);
+                        startPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                        drawLines(g, drawArea, startPen, categoryName + " (" + sensorIdStr + ")", startDataset);
                         if (strongLineIndex == strongIndex)
                         {
                             startPositionCount = startCount;
@@ -211,7 +213,9 @@ namespace SamplingBME688Serial
                     {
                         int middleCount = (int)(targetDataSet.Count * line2Position);  // 真ん中データの場所
                         List<GraphDataValue> middleDataset = targetDataSet[middleCount];
-                        drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_MIDDLE), lineStroke), "", middleDataset);
+                        Pen middlePen = new Pen(getColor(index, sensorId, POSITION_MIDDLE), lineStroke);
+                        middlePen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                        drawLines(g, drawArea, middlePen, "", middleDataset);
                         if (strongLineIndex == strongIndex)
                         {
                             middlePositionCount = middleCount;
@@ -227,7 +231,9 @@ namespace SamplingBME688Serial
                     {
                         int finishCount = (int)(targetDataSet.Count * line3Position);  // 末尾データの場所
                         List<GraphDataValue> finishDataset = targetDataSet[finishCount];
-                        drawLines(g, drawArea, new Pen(getColor(index, sensorId, POSITION_BOTTOM), lineStroke), "", finishDataset);
+                        Pen lastPen = new Pen(getColor(index, sensorId, POSITION_BOTTOM), lineStroke);
+                        lastPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                        drawLines(g, drawArea, lastPen, "", finishDataset);
                         if (strongLineIndex == strongIndex)
                         {
                             finishPositionCount = finishCount;
@@ -262,10 +268,10 @@ namespace SamplingBME688Serial
                 switch (position)
                 {
                     case POSITION_BOTTOM:
-                        retColor = Color.LightBlue;
+                        retColor = Color.DarkBlue;
                         break;
                     case POSITION_TOP:
-                        retColor = Color.AliceBlue;
+                        retColor = Color.DarkBlue;
                         break;
                     case POSITION_MIDDLE:
                     default:
@@ -278,10 +284,10 @@ namespace SamplingBME688Serial
                 switch (position)
                 {
                     case POSITION_BOTTOM:
-                        retColor = Color.LightGreen;
+                        retColor = Color.DarkGreen;
                         break;
                     case POSITION_TOP:
-                        retColor = Color.GreenYellow;
+                        retColor = Color.DarkGreen;
                         break;
                     case POSITION_MIDDLE:
                     default:
