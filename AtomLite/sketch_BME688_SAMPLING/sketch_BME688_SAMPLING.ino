@@ -450,6 +450,8 @@ void loop(void)
   
   neopixelWrite(LED_PIN, 0x00, 0x00, 0xf0);
   delay(MEAS_DUR);
+  delay(WAIT_DUR);
+  delay(WAIT_DUR);
 
 //  ------------------------------
   if (Serial.available() > 0)
@@ -497,7 +499,7 @@ void loop(void)
         Serial.print(",;");
         if ((expandedMode)&&(data.gas_index >= 0)&&(data.gas_index <= 9))
         {
-          Serial.print(",pf,");
+          Serial.print(",pf,68x,");
           Serial.print(profileName.c_str());
           Serial.print(",");
           Serial.print(temperatureProfile[data.gas_index]);
