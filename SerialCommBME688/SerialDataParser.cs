@@ -35,9 +35,9 @@ namespace SerialCommBME688
             {
                 // 受信データをカンマで切り出し
                 string[] dataValues = data.Split(',');
-                if (dataValues.Length != NUMBER_OF_ITEMS)
+                if (dataValues.Length < NUMBER_OF_ITEMS)
                 {
-                    // データの長さが期待したものではなかった。何もせず抜ける。
+                    // データの長さが期待したものよりも少なかった。何もせず抜ける。
                     return;
                 }
 
