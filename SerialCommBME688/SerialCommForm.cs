@@ -103,6 +103,7 @@ namespace SerialCommBME688
             chkDbEntrySingle.Enabled = isEnable;
             urlDatabaseToEntry.Enabled = isEnable;
             btnShowGraph.Enabled = isEnable;
+            btnShowGraph_2.Enabled = isEnable;
             grpAnalysis.Enabled = isEnable;
 
             btnPortList.Enabled = isEnable;
@@ -131,7 +132,7 @@ namespace SerialCommBME688
             chkEntryDatabase.Enabled = isEnable;
             chkDbEntrySingle.Enabled = isEnable;
             urlDatabaseToEntry.Enabled = isEnable;
-            btnShowGraph.Enabled = isEnable;
+            btnShowGraph_2.Enabled = isEnable;
             grpAnalysis.Enabled = isEnable;
 
             btnPortList.Enabled = isEnable;
@@ -410,6 +411,78 @@ namespace SerialCommBME688
                 catch (Exception ex)
                 {
                     Debug.WriteLine(DateTime.Now + " btnShowGraph_Click()" + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Please select a row.",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        private void btnShowGraph_2_Click(object sender, EventArgs e)
+        {
+            Dictionary<int, DataGridViewRow> selectedData = new Dictionary<int, DataGridViewRow>();
+
+            GraphDataValue lowerLimit = new GraphDataValue(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            GraphDataValue upperLimit = new GraphDataValue(110000000.0f, 20.0f, double.MaxValue, double.MaxValue, double.MaxValue); ;
+
+            //  データが１つ以上選択されていた時は、グラフを表示する
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                try
+                {
+                    // グラフ表示のサイズ（最大値、最小値）を特定する
+                    double lowerPressure = Double.MaxValue;
+                    double upperPressure = Double.MinValue;
+                    double lowerTemperature = Double.MaxValue;
+                    double upperTemperature = Double.MinValue;
+                    double lowerHumidity = Double.MaxValue;
+                    double upperHumidity = Double.MinValue;
+
+                    double lowerLimitZoomRLog = Double.MaxValue;
+                    double upperLimitZoomRLog = Double.MinValue;
+                    double lowerLimitZoomR = Double.MaxValue;
+                    double upperLimitZoomR = Double.MinValue;
+                    foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                    {
+                        try
+                        {
+                            double minValueR = double.Parse(row.Cells[11].Value.ToString());
+                            double minValueRLog = double.Parse(row.Cells[13].Value.ToString());
+                            double maxValueR = double.Parse(row.Cells[10].Value.ToString());
+                            double maxValueRLog = double.Parse(row.Cells[12].Value.ToString());
+
+                            lowerLimitZoomRLog = (lowerLimitZoomRLog >= minValueRLog) ? minValueRLog : lowerLimitZoomRLog;
+                            upperLimitZoomRLog = (upperLimitZoomRLog <= maxValueRLog) ? maxValueRLog : upperLimitZoomRLog;
+
+                            lowerLimitZoomR = (lowerLimitZoomR >= minValueR) ? minValueR : lowerLimitZoomR;
+                            upperLimitZoomR = (upperLimitZoomR <= maxValueR) ? maxValueR : upperLimitZoomR;
+                        }
+                        catch (Exception eex)
+                        {
+                            // --- 最大値・最小値のデータが取れなかった...
+                            Debug.WriteLine(DateTime.Now + " ----- btnShowGraph_2_Click() : cannot get max/min value." + row.Cells[0].Value + " " + eex.Message);
+                        }
+                        Debug.WriteLine("[" + row.Index + "] : : " + row.Cells[0].Value + " ");
+                        selectedData.Add(row.Index, row);
+                    }
+                    GraphDataValue lowerLimitZoom = new GraphDataValue(lowerLimitZoomR, lowerLimitZoomRLog, lowerPressure, lowerTemperature, lowerHumidity);
+                    GraphDataValue upperLimitZoom = new GraphDataValue(upperLimitZoomR, upperLimitZoomRLog, upperPressure, upperTemperature, upperHumidity);
+                    Debug.WriteLine(DateTime.Now + " ----- upperLimit(" + upperLimit + " " + upperLimitZoom + ") lowerLimit(" + lowerLimit + " " + lowerLimitZoom + ")");
+
+                    // データが選択されていた時は、詳細ダイアログを表示する
+                    DataSerialDialog dialog = new DataSerialDialog();
+                    dialog.setSelectedData(ref selectedData, myReceiver.getGasRegDataSet(), myReceiver_2.getGasRegDataSet(), lowerLimit, upperLimit, lowerLimitZoom, upperLimitZoom);
+                    dialog.Owner = this;
+                    dialog.Show();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(DateTime.Now + " btnShowGraph_2_Click()" + ex.Message);
                 }
             }
             else
@@ -781,5 +854,6 @@ namespace SerialCommBME688
                 Debug.WriteLine(DateTime.Now + "  btnPortList_Click() " + ex.Message);
             }
         }
+
     }
 }

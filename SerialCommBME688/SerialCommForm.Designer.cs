@@ -26,9 +26,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SerialCommForm));
             btnConnect = new Button();
             txtPort = new TextBox();
             grpPort = new GroupBox();
+            btnConfig = new Button();
             btnStop = new Button();
             txtConsole = new TextBox();
             btnClear = new Button();
@@ -44,6 +46,7 @@
             lblDuplicate = new Label();
             txtConsole_2 = new TextBox();
             grpPort_2 = new GroupBox();
+            btnConfig_2 = new Button();
             btnStop_2 = new Button();
             btnConnect_2 = new Button();
             txtPort_2 = new TextBox();
@@ -71,6 +74,7 @@
             fldResult2 = new TextBox();
             fldResult1 = new TextBox();
             btnPortList = new Button();
+            btnShowGraph_2 = new Button();
             grpPort.SuspendLayout();
             grpDataCategory.SuspendLayout();
             grpData.SuspendLayout();
@@ -89,7 +93,7 @@
             // 
             btnConnect.Location = new Point(76, 20);
             btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(75, 23);
+            btnConnect.Size = new Size(61, 23);
             btnConnect.TabIndex = 0;
             btnConnect.Text = "Connect";
             btnConnect.UseVisualStyleBackColor = true;
@@ -106,6 +110,7 @@
             // 
             // grpPort
             // 
+            grpPort.Controls.Add(btnConfig);
             grpPort.Controls.Add(btnStop);
             grpPort.Controls.Add(btnConnect);
             grpPort.Controls.Add(txtPort);
@@ -116,12 +121,22 @@
             grpPort.TabStop = false;
             grpPort.Text = "Sensor1";
             // 
+            // btnConfig
+            // 
+            btnConfig.Enabled = false;
+            btnConfig.Image = (Image)resources.GetObject("btnConfig.Image");
+            btnConfig.Location = new Point(194, 19);
+            btnConfig.Name = "btnConfig";
+            btnConfig.Size = new Size(40, 23);
+            btnConfig.TabIndex = 15;
+            btnConfig.UseVisualStyleBackColor = true;
+            // 
             // btnStop
             // 
             btnStop.Enabled = false;
-            btnStop.Location = new Point(157, 20);
+            btnStop.Location = new Point(143, 20);
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(75, 23);
+            btnStop.Size = new Size(45, 23);
             btnStop.TabIndex = 3;
             btnStop.Text = "Stop";
             btnStop.UseVisualStyleBackColor = true;
@@ -231,9 +246,9 @@
             btnShowGraph.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnShowGraph.Location = new Point(699, 472);
             btnShowGraph.Name = "btnShowGraph";
-            btnShowGraph.Size = new Size(123, 23);
+            btnShowGraph.Size = new Size(61, 23);
             btnShowGraph.TabIndex = 11;
-            btnShowGraph.Text = "Show Graph";
+            btnShowGraph.Text = "Graph1";
             btnShowGraph.UseVisualStyleBackColor = true;
             btnShowGraph.Click += btnShowGraph_Click;
             // 
@@ -274,6 +289,7 @@
             // 
             // grpPort_2
             // 
+            grpPort_2.Controls.Add(btnConfig_2);
             grpPort_2.Controls.Add(btnStop_2);
             grpPort_2.Controls.Add(btnConnect_2);
             grpPort_2.Controls.Add(txtPort_2);
@@ -284,12 +300,22 @@
             grpPort_2.TabStop = false;
             grpPort_2.Text = "Sensor2";
             // 
+            // btnConfig_2
+            // 
+            btnConfig_2.Enabled = false;
+            btnConfig_2.Image = (Image)resources.GetObject("btnConfig_2.Image");
+            btnConfig_2.Location = new Point(194, 19);
+            btnConfig_2.Name = "btnConfig_2";
+            btnConfig_2.Size = new Size(40, 23);
+            btnConfig_2.TabIndex = 24;
+            btnConfig_2.UseVisualStyleBackColor = true;
+            // 
             // btnStop_2
             // 
             btnStop_2.Enabled = false;
-            btnStop_2.Location = new Point(157, 20);
+            btnStop_2.Location = new Point(143, 20);
             btnStop_2.Name = "btnStop_2";
-            btnStop_2.Size = new Size(75, 23);
+            btnStop_2.Size = new Size(45, 23);
             btnStop_2.TabIndex = 3;
             btnStop_2.Text = "Stop";
             btnStop_2.UseVisualStyleBackColor = true;
@@ -299,7 +325,7 @@
             // 
             btnConnect_2.Location = new Point(76, 20);
             btnConnect_2.Name = "btnConnect_2";
-            btnConnect_2.Size = new Size(75, 23);
+            btnConnect_2.Size = new Size(61, 23);
             btnConnect_2.TabIndex = 0;
             btnConnect_2.Text = "Connect";
             btnConnect_2.UseVisualStyleBackColor = true;
@@ -601,11 +627,23 @@
             btnPortList.UseVisualStyleBackColor = true;
             btnPortList.Click += btnPortList_Click;
             // 
+            // btnShowGraph_2
+            // 
+            btnShowGraph_2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnShowGraph_2.Location = new Point(762, 472);
+            btnShowGraph_2.Name = "btnShowGraph_2";
+            btnShowGraph_2.Size = new Size(61, 23);
+            btnShowGraph_2.TabIndex = 23;
+            btnShowGraph_2.Text = "Graph2";
+            btnShowGraph_2.UseVisualStyleBackColor = true;
+            btnShowGraph_2.Click += btnShowGraph_2_Click;
+            // 
             // SerialCommForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(835, 566);
+            Controls.Add(btnShowGraph_2);
             Controls.Add(btnPortList);
             Controls.Add(grpAnalysis);
             Controls.Add(btnCreateModel);
@@ -694,5 +732,8 @@
         private Button btnLoadData;
         private CheckBox chkWithPresTempHumi;
         private Button btnPortList;
+        private Button btnConfig;
+        private Button btnShowGraph_2;
+        private Button btnConfig_2;
     }
 }
