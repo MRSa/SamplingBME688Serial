@@ -434,7 +434,10 @@ namespace SamplingBME688Serial
             graphDrawer.drawBackground(g, drawArea);
 
             // 軸の描画
-            graphDrawer.drawAixs(g, drawArea);
+            graphDrawer.drawAixs(g, drawArea, currentIndexNumber,
+                chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked,
+                chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
+                chkPressure.Checked, chkTemperature.Checked, chkHumidity.Checked);
 
             // 凡例の描画
             graphDrawer.drawUsage(g, drawArea);
@@ -444,7 +447,6 @@ namespace SamplingBME688Serial
                 chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked, 
                 chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
                 chkPressure.Checked, chkTemperature.Checked, chkHumidity.Checked);
-
         }
 
         public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)

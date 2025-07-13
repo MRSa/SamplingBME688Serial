@@ -98,7 +98,10 @@ namespace SamplingBME688Serial
         }
 
         // 軸の表示
-        public void drawAixs(Graphics g, RectangleF drawArea)
+        public void drawAixs(Graphics g, RectangleF drawArea, int scaleIndex,
+            bool drawStep1, bool drawStep2, bool drawStep3, bool drawStep4, bool drawStep5,
+            bool drawStep6, bool drawStep7, bool drawStep8, bool drawStep9, bool drawStep10,
+            bool drawPressure, bool drawTemperature, bool drawHumidity)
         {
             float bottomMargin = 5;
             float axisArea = drawArea.Width / areaX;
@@ -109,6 +112,23 @@ namespace SamplingBME688Serial
 
             SolidBrush textBrush = new SolidBrush(Color.Gray);
             Font font = new Font(fontName, fontSize);
+
+            int axisIndex = 1;
+            foreach (KeyValuePair<int, DataGridViewRow> pair in selectedData)
+            {
+                DataGridViewRow rowData = pair.Value;
+                string sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
+                int sensorId = int.Parse(sensorIdStr);
+                string? key = rowData.Cells[0].Value.ToString();
+                string categoryName = key ?? "";
+                List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
+                if (scaleIndex == axisIndex)
+                {
+                    xAxisCount = targetDataSet.Count;
+                    break;
+                }
+                axisIndex++;
+            }
 
             int index = 0;
             while (index <= areaX)
@@ -126,7 +146,7 @@ namespace SamplingBME688Serial
                 //  X軸のラベルを書く
                 int xAxisLabel = Convert.ToInt32(Convert.ToDouble(index) * Convert.ToDouble(xAxisCount) / 9.0d);
                 g.DrawString($"{xAxisLabel}", font, textBrush, lineX - (size.Width / 2.0f), textPointY);
-                //Debug.WriteLine("X axis label: " + xAxisLabel + " count: " + xAxisCount + " [" + index + "]");
+                Debug.WriteLine("X axis label: " + xAxisLabel + " count: " + xAxisCount + " [" + index + "]");
                 index++;
             }
 
@@ -192,79 +212,79 @@ namespace SamplingBME688Serial
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-                        drawLinesPressure(g, drawArea, lineStyle, "Pres.(" + sensorIdStr + ")", targetDataSet);
+                        drawLinesPressure(g, drawArea, lineStyle, "Pres.[" + sensorIdStr + "]", targetDataSet);
                     }
                     if (drawTemperature)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                        drawLinesTemperature(g, drawArea, lineStyle, sensorIdStr + "Temp.", targetDataSet);
+                        drawLinesTemperature(g, drawArea, lineStyle, "Temp.[" + sensorIdStr + "]", targetDataSet);
                     }
                     if (drawHumidity)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        drawLinesHumidity(g, drawArea, lineStyle, sensorIdStr + "Humi.", targetDataSet);
+                        drawLinesHumidity(g, drawArea, lineStyle, "Humi.[" + sensorIdStr + "]", targetDataSet);
                     }
                     if (drawStep1)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-0 " + categoryName, targetDataSet, 0);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-0]", targetDataSet, 0);
                     }
                     if (drawStep2)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-1 " + categoryName, targetDataSet, 1);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-1]", targetDataSet, 1);
                     }
                     if (drawStep3)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-2 " + categoryName, targetDataSet, 2);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-2]", targetDataSet, 2);
                     }
                     if (drawStep4)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-3 " + categoryName, targetDataSet, 3);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-3]", targetDataSet, 3);
                     }
                     if (drawStep5)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-4 " + categoryName, targetDataSet, 4);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-4]", targetDataSet, 4);
                     }
                     if (drawStep6)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-5 " + categoryName, targetDataSet, 5);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-5]", targetDataSet, 5);
                     }
                     if (drawStep7)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-6 " + categoryName, targetDataSet, 6);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-6]", targetDataSet, 6);
                     }
                     if (drawStep8)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-7 " + categoryName, targetDataSet, 7);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-7]", targetDataSet, 7);
                     }
                     if (drawStep9)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-8 " + categoryName, targetDataSet, 8);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-8]", targetDataSet, 8);
                     }
                     if (drawStep10)
                     {
                         Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
                         lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-                        drawLines(g, drawArea, lineStyle, sensorIdStr + "-9 " + categoryName, targetDataSet, 9);
+                        drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-9]", targetDataSet, 9);
                     }
                     strongIndex++;
                 }
