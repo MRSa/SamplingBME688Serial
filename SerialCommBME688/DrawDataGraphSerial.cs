@@ -278,151 +278,181 @@ namespace SamplingBME688Serial
 
         private void drawLines(Graphics g, RectangleF drawArea, Pen pen, string label, List<List<GraphDataValue>> dataset, int dataIndex)
         {
-            // Debug.WriteLine(" ");
-
-            float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
-            int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
-            float areaSize = drawArea.Height - heightMargin - heightMargin;
-            double maxRange = currentUpperLimit - currentLowerLimit;
-
-            int pointIndex = 0;
-            PointF[] points = new PointF[dataset.Count];
-
-            foreach (List<GraphDataValue> dataValue in dataset)
+            try
             {
-                double data;
-                if (dataIndex >= 0)
-                {
-                    data = ((useGasRegistanceLog) ? dataValue[dataIndex].gas_registance_log : dataValue[dataIndex].gas_registance) - currentLowerLimit;
-                }
-                else if (dataIndex == -1)
-                {
-                    data = dataValue[0].pressure;
-                }
-                else if (dataIndex == -2)
-                {
-                    data = dataValue[0].temperature;
-                }
-                else // if (dataIndex == -3)
-                {
-                    data = dataValue[0].humidity;
-                }
-                float lineX = drawArea.Left + widthMargin +  axisArea * ((float)pointIndex);
-                float posY =  ((float)(maxRange - data)) * (areaSize / (float) maxRange) + heightMargin;
-                points[pointIndex] = new PointF(lineX, posY);
-                //Debug.WriteLine(" (" + lineX + "," + posY + " [" + pointIndex + "]");
-                pointIndex++;
-            }
-            g.DrawLines(pen, points);
+                float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
+                int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
+                float areaSize = drawArea.Height - heightMargin - heightMargin;
+                double maxRange = currentUpperLimit - currentLowerLimit;
 
-            int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.25d + 0.08d * dataIndex));
-            float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
-            float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
-            PointF labelPosition = new PointF(labelXPosition, labelYPosition);
-            Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
-            g.DrawString(label, new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
+                int pointIndex = 0;
+                PointF[] points = new PointF[dataset.Count];
+
+                foreach (List<GraphDataValue> dataValue in dataset)
+                {
+                    double data;
+                    if (dataIndex >= 0)
+                    {
+                        data = ((useGasRegistanceLog) ? dataValue[dataIndex].gas_registance_log : dataValue[dataIndex].gas_registance) - currentLowerLimit;
+                    }
+                    else if (dataIndex == -1)
+                    {
+                        data = dataValue[0].pressure;
+                    }
+                    else if (dataIndex == -2)
+                    {
+                        data = dataValue[0].temperature;
+                    }
+                    else // if (dataIndex == -3)
+                    {
+                        data = dataValue[0].humidity;
+                    }
+                    float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
+                    float posY = ((float)(maxRange - data)) * (areaSize / (float)maxRange) + heightMargin;
+                    points[pointIndex] = new PointF(lineX, posY);
+                    //Debug.WriteLine(" (" + lineX + "," + posY + " [" + pointIndex + "]");
+                    pointIndex++;
+                }
+                g.DrawLines(pen, points);
+
+                int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.25d + 0.08d * dataIndex));
+                float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
+                float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
+                PointF labelPosition = new PointF(labelXPosition, labelYPosition);
+                //Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
+                g.DrawString(label, new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " drawLines()" + e.Message + "\r\n\r\n" + e.StackTrace);
+            }
         }
 
         private void drawLinesPressure(Graphics g, RectangleF drawArea, Pen pen, string label, List<List<GraphDataValue>> dataset)
         {
-            float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
-            int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
-            float areaSize = drawArea.Height - heightMargin - heightMargin;
-            double maxRange = currentUpperLimitPressure - currentLowerLimitPressure;
-            double average = 0.0d;
-
-            int pointIndex = 0;
-            PointF[] points = new PointF[dataset.Count];
-
-            foreach (List<GraphDataValue> dataValue in dataset)
+            try
             {
-                double data = dataValue[0].pressure;
-                average = data + average;
-                float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
-                float posY = ((float)(maxRange - data)) * (areaSize / (float)maxRange) + heightMargin;
-                points[pointIndex] = new PointF(lineX, posY);
-                //Debug.WriteLine(" Pres. (" + lineX + "," + posY + " [" + pointIndex + "]" + data);
-                pointIndex++;
+                float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
+                int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
+                float areaSize = drawArea.Height - heightMargin - heightMargin;
+                double maxRange = currentUpperLimitPressure - currentLowerLimitPressure;
+                double average = 0.0d;
+
+                int pointIndex = 0;
+                PointF[] points = new PointF[dataset.Count];
+
+                foreach (List<GraphDataValue> dataValue in dataset)
+                {
+                    double data = dataValue[0].pressure;
+                    average = data + average;
+                    float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
+                    float posY = ((float)(maxRange - (data - currentLowerLimitPressure))) * (areaSize / (float)maxRange) + heightMargin;
+                    points[pointIndex] = new PointF(lineX, posY);
+                    //Debug.WriteLine(" Pres. (" + lineX + "," + posY + " [" + pointIndex + "]" + data);
+                    pointIndex++;
+                }
+                //Debug.WriteLine(" Pressure Lower:" + currentLowerLimitPressure + " Upper:" + currentUpperLimitPressure + " average: " + average + " maxRange: " + maxRange);
+
+                String averageStr = (average / pointIndex / 100.0d).ToString("F1");
+                g.DrawLines(pen, points);
+
+                int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.2d));
+                float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
+                float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
+                PointF labelPosition = new PointF(labelXPosition, labelYPosition);
+                //Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
+                g.DrawString(label + "(Ave. " + averageStr + " hPa)", new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
             }
-
-            String averageStr = (average / pointIndex / 100.0d).ToString("F1");
-            g.DrawLines(pen, points);
-
-            int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.2d));
-            float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
-            float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
-            PointF labelPosition = new PointF(labelXPosition, labelYPosition);
-            Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
-            Debug.WriteLine(" Pressure Lower:" + currentLowerLimitPressure + " Upper:" + currentUpperLimitPressure + " average: " + average + " maxRange: " + maxRange);
-            g.DrawString(label + "(Ave. " + averageStr + " hPa)", new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " drawLinesPressure()" + e.Message + "\r\n\r\n" + e.StackTrace);
+            }
         }
 
         private void drawLinesTemperature(Graphics g, RectangleF drawArea, Pen pen, string label, List<List<GraphDataValue>> dataset)
         {
-            float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
-            int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
-            float areaSize = drawArea.Height - heightMargin - heightMargin;
-            double maxRange = currentUpperLimitTemperature - currentLowerLimitTemperature;
-            double average = 0.0d;
-
-            int pointIndex = 0;
-            PointF[] points = new PointF[dataset.Count];
-
-            foreach (List<GraphDataValue> dataValue in dataset)
+            try
             {
-                double data = dataValue[0].temperature;
-                average = data + average;
-                float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
-                float posY = ((float)(maxRange - data)) * (areaSize / (float)maxRange) + heightMargin;
-                points[pointIndex] = new PointF(lineX, posY);
-                //Debug.WriteLine(" Pres. (" + lineX + "," + posY + " [" + pointIndex + "]" + data);
-                pointIndex++;
+                float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
+                int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
+                float areaSize = drawArea.Height - heightMargin - heightMargin;
+                double maxRange = currentUpperLimitTemperature - currentLowerLimitTemperature;
+                double average = 0.0d;
+
+                int pointIndex = 0;
+                PointF[] points = new PointF[dataset.Count];
+
+                foreach (List<GraphDataValue> dataValue in dataset)
+                {
+                    double data = dataValue[0].temperature;
+                    average = data + average;
+                    float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
+                    float posY = ((float)(maxRange - (data - currentLowerLimitTemperature))) * (areaSize / (float)maxRange) + heightMargin;
+                    points[pointIndex] = new PointF(lineX, posY);
+                    //Debug.WriteLine(" Temp. (" + lineX + "," + posY + " [" + pointIndex + "]" + data);
+                    pointIndex++;
+                }
+                // Debug.WriteLine(" Temperature Lower:" + currentLowerLimitTemperature + " Upper:" + currentUpperLimitTemperature + " average: " + average + " maxRange: " + maxRange);
+
+                String averageStr = (average / pointIndex).ToString("F1");
+                g.DrawLines(pen, points);
+
+                int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.2d));
+                float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
+                float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
+                PointF labelPosition = new PointF(labelXPosition, labelYPosition);
+                //Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
+                g.DrawString(label + "(Ave. " + averageStr + " degC)", new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
             }
-
-            String averageStr = (average / pointIndex).ToString("F1");
-            g.DrawLines(pen, points);
-
-            int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.2d));
-            float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
-            float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
-            PointF labelPosition = new PointF(labelXPosition, labelYPosition);
-            Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
-            Debug.WriteLine(" Temperature Lower:" + currentLowerLimitTemperature + " Upper:" + currentUpperLimitTemperature + " average: " + average + " maxRange: " + maxRange);
-            g.DrawString(label + "(Ave. " + averageStr + " degC)", new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " drawLinesTemperature()" + e.Message + "\r\n\r\n" + e.StackTrace);
+            }
         }
 
         private void drawLinesHumidity(Graphics g, RectangleF drawArea, Pen pen, string label, List<List<GraphDataValue>> dataset)
         {
-            float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
-            int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
-            float areaSize = drawArea.Height - heightMargin - heightMargin;
-            double maxRange = currentUpperLimitHumidity - currentLowerLimitHumidity;
-            double average = 0.0d;
-
-            int pointIndex = 0;
-            PointF[] points = new PointF[dataset.Count];
-
-            foreach (List<GraphDataValue> dataValue in dataset)
+            try
             {
-                double data = dataValue[0].humidity;
-                average = data + average;
-                float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
-                float posY = ((float)(maxRange - data)) * (areaSize / (float)maxRange) + heightMargin;
-                points[pointIndex] = new PointF(lineX, posY);
-                //Debug.WriteLine(" Pres. (" + lineX + "," + posY + " [" + pointIndex + "]" + data);
-                pointIndex++;
+                float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
+                int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
+                float areaSize = drawArea.Height - heightMargin - heightMargin;
+                double maxRange = currentUpperLimitHumidity - currentLowerLimitHumidity;
+                if (maxRange == 0.0d)
+                {
+                    maxRange = 100.0d;
+                }
+                double average = 0.0d;
+
+                int pointIndex = 0;
+                PointF[] points = new PointF[dataset.Count];
+
+                foreach (List<GraphDataValue> dataValue in dataset)
+                {
+                    double data = dataValue[0].humidity;
+                    average = data + average;
+                    float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
+                    float posY = ((float)(maxRange - (data - currentLowerLimitHumidity))) * (areaSize / (float)maxRange) + heightMargin;
+                    points[pointIndex] = new PointF(lineX, posY);
+                    //Debug.WriteLine(" Hum. (" + lineX.ToString("F1") + "," + posY.ToString("F1") + ") [" + pointIndex + "]" + data + " : " + maxRange + " : " + areaSize);
+                    pointIndex++;
+                }
+                //Debug.WriteLine(" Humidity Lower:" + currentLowerLimitHumidity.ToString("F1") + " Upper:" + currentUpperLimitHumidity.ToString("F1") + " average: " + (average / pointIndex).ToString("F1") + " areaSize " + areaSize + " maxRange: " + maxRange);
+
+                String averageStr = (average / pointIndex).ToString("F1");
+                g.DrawLines(pen, points);
+
+                int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.2d));
+                float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
+                float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
+                PointF labelPosition = new PointF(labelXPosition, labelYPosition);
+                //Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
+                g.DrawString(label + "(Ave. " + averageStr + " %)", new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
             }
-
-            String averageStr = (average / pointIndex).ToString("F1");
-            g.DrawLines(pen, points);
-
-            int pointPos = Convert.ToInt32(Convert.ToDouble(pointIndex) * (0.2d));
-            float labelYPosition = ((points[pointPos].Y + 5.0f) > areaSize) ? (points[pointPos].Y - 20.0f) : points[pointPos].Y + 5.0f;
-            float labelXPosition = drawArea.Left + widthMargin + axisArea * ((float)pointPos);
-            PointF labelPosition = new PointF(labelXPosition, labelYPosition);
-            //Debug.WriteLine(" (" + points[pointIndex - 1].X + "," + points[pointIndex - 1].Y + " [" + pointIndex + "]  <" + drawArea.Width + "," + drawArea.Height + ">");
-            Debug.WriteLine(" Humidity Lower:" + currentLowerLimitHumidity + " Upper:" + currentUpperLimitHumidity + " average: " + average + " maxRange: " + maxRange);
-            g.DrawString(label + "(Ave. " + averageStr + " %)", new Font(fontName, fontSize), new SolidBrush(Color.DarkGray), labelPosition);
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " drawLinesHumidity()" + e.Message + "\r\n\r\n" + e.StackTrace);
+            }
         }
     }
 }

@@ -428,7 +428,7 @@ namespace SerialCommBME688
             Dictionary<int, DataGridViewRow> selectedData = new Dictionary<int, DataGridViewRow>();
 
             GraphDataValue lowerLimit = new GraphDataValue(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-            GraphDataValue upperLimit = new GraphDataValue(110000000.0f, 20.0f, double.MaxValue, double.MaxValue, double.MaxValue); ;
+            GraphDataValue upperLimit = new GraphDataValue(110000000.0f, 20.0f, 110000000.0d, 85.0d, 100.0d); ;
 
             //  データが１つ以上選択されていた時は、グラフを表示する
             if (dataGridView1.SelectedRows.Count > 0)
@@ -436,12 +436,12 @@ namespace SerialCommBME688
                 try
                 {
                     // グラフ表示のサイズ（最大値、最小値）を特定する
-                    double lowerPressure = Double.MaxValue;
-                    double upperPressure = Double.MinValue;
-                    double lowerTemperature = Double.MaxValue;
-                    double upperTemperature = Double.MinValue;
-                    double lowerHumidity = Double.MaxValue;
-                    double upperHumidity = Double.MinValue;
+                    double lowerPressure = 110000000.0d;
+                    double upperPressure = 0.0d;
+                    double lowerTemperature = 85.0d;
+                    double upperTemperature = 0.0d;
+                    double lowerHumidity = 100.0d;
+                    double upperHumidity = 0.0d;
 
                     double lowerLimitZoomRLog = Double.MaxValue;
                     double upperLimitZoomRLog = Double.MinValue;
@@ -451,16 +451,32 @@ namespace SerialCommBME688
                     {
                         try
                         {
-                            double minValueR = double.Parse(row.Cells[11].Value.ToString());
-                            double minValueRLog = double.Parse(row.Cells[13].Value.ToString());
                             double maxValueR = double.Parse(row.Cells[10].Value.ToString());
+                            double minValueR = double.Parse(row.Cells[11].Value.ToString());
                             double maxValueRLog = double.Parse(row.Cells[12].Value.ToString());
+                            double minValueRLog = double.Parse(row.Cells[13].Value.ToString());
+
+                            double maxValueTemp = double.Parse(row.Cells[4].Value.ToString());
+                            double minValueTemp = double.Parse(row.Cells[5].Value.ToString());
+                            double maxValueHum = double.Parse(row.Cells[6].Value.ToString());
+                            double minValueHum = double.Parse(row.Cells[7].Value.ToString());
+                            double maxValuePres = double.Parse(row.Cells[8].Value.ToString());
+                            double minValuePres = double.Parse(row.Cells[9].Value.ToString());
 
                             lowerLimitZoomRLog = (lowerLimitZoomRLog >= minValueRLog) ? minValueRLog : lowerLimitZoomRLog;
                             upperLimitZoomRLog = (upperLimitZoomRLog <= maxValueRLog) ? maxValueRLog : upperLimitZoomRLog;
 
                             lowerLimitZoomR = (lowerLimitZoomR >= minValueR) ? minValueR : lowerLimitZoomR;
                             upperLimitZoomR = (upperLimitZoomR <= maxValueR) ? maxValueR : upperLimitZoomR;
+
+                            lowerTemperature = (lowerTemperature >= minValueTemp) ? minValueTemp : lowerTemperature;
+                            upperTemperature = (upperTemperature <= maxValueTemp) ? maxValueTemp : upperTemperature;
+
+                            lowerHumidity = (lowerHumidity >= minValueHum) ? minValueHum : lowerHumidity;
+                            upperHumidity = (upperHumidity <= maxValueHum) ? maxValueHum : upperHumidity;
+
+                            lowerPressure = (lowerPressure >= minValuePres) ? minValuePres : lowerPressure;
+                            upperPressure = (upperPressure <= maxValuePres) ? maxValuePres: upperPressure;
                         }
                         catch (Exception eex)
                         {
@@ -473,6 +489,7 @@ namespace SerialCommBME688
                     GraphDataValue lowerLimitZoom = new GraphDataValue(lowerLimitZoomR, lowerLimitZoomRLog, lowerPressure, lowerTemperature, lowerHumidity);
                     GraphDataValue upperLimitZoom = new GraphDataValue(upperLimitZoomR, upperLimitZoomRLog, upperPressure, upperTemperature, upperHumidity);
                     Debug.WriteLine(DateTime.Now + " ----- upperLimit(" + upperLimit + " " + upperLimitZoom + ") lowerLimit(" + lowerLimit + " " + lowerLimitZoom + ")");
+                    Debug.WriteLine(DateTime.Now + " Pres." + lowerPressure + "-" + upperPressure +" Temp." + lowerTemperature + "-" + upperTemperature + " Hum." + lowerHumidity + "-" + upperHumidity);
 
                     // データが選択されていた時は、詳細ダイアログを表示する
                     DataSerialDialog dialog = new DataSerialDialog();

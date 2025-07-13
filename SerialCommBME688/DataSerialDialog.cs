@@ -332,8 +332,6 @@ namespace SamplingBME688Serial
             // 
             chkHumidity.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chkHumidity.AutoSize = true;
-            chkHumidity.Checked = true;
-            chkHumidity.CheckState = CheckState.Checked;
             chkHumidity.Location = new Point(606, 535);
             chkHumidity.Name = "chkHumidity";
             chkHumidity.Size = new Size(75, 19);
@@ -346,8 +344,6 @@ namespace SamplingBME688Serial
             // 
             chkTemperature.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chkTemperature.AutoSize = true;
-            chkTemperature.Checked = true;
-            chkTemperature.CheckState = CheckState.Checked;
             chkTemperature.Location = new Point(390, 535);
             chkTemperature.Name = "chkTemperature";
             chkTemperature.Size = new Size(91, 19);
@@ -360,8 +356,6 @@ namespace SamplingBME688Serial
             // 
             chkPressure.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chkPressure.AutoSize = true;
-            chkPressure.Checked = true;
-            chkPressure.CheckState = CheckState.Checked;
             chkPressure.Location = new Point(174, 535);
             chkPressure.Name = "chkPressure";
             chkPressure.Size = new Size(70, 19);
