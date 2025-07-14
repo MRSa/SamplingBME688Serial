@@ -146,7 +146,7 @@ namespace SamplingBME688Serial
                 //  X軸のラベルを書く
                 int xAxisLabel = Convert.ToInt32(Convert.ToDouble(index) * Convert.ToDouble(xAxisCount) / 9.0d);
                 g.DrawString($"{xAxisLabel}", font, textBrush, lineX - (size.Width / 2.0f), textPointY);
-                Debug.WriteLine("X axis label: " + xAxisLabel + " count: " + xAxisCount + " [" + index + "]");
+                // Debug.WriteLine("X axis label: " + xAxisLabel + " count: " + xAxisCount + " [" + index + "]");
                 index++;
             }
 
@@ -295,6 +295,10 @@ namespace SamplingBME688Serial
             }
             Debug.WriteLine(" ----- ");
         }
+
+        public String getPressureRangeStr() {  return ((currentLowerLimitPressure / 100.0d).ToString("F1") + " - " + (currentUpperLimitPressure / 100.0d).ToString("F1") + " hPa"); }
+        public String getTemperatureRangeStr() { return (currentLowerLimitTemperature.ToString("F1") + " - " + currentUpperLimitTemperature.ToString("F1") + " degC"); }
+        public String getHumidityRangeStr() { return (currentLowerLimitHumidity.ToString("F1") + " - " + currentUpperLimitHumidity.ToString("F1") + " %"); }
 
         private void drawLines(Graphics g, RectangleF drawArea, Pen pen, string label, List<List<GraphDataValue>> dataset, int dataIndex)
         {

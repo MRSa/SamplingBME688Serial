@@ -1,4 +1,6 @@
 ﻿
+using System.Diagnostics;
+
 namespace SamplingBME688Serial
 {
     class DataSerialDialog : System.Windows.Forms.Form
@@ -36,6 +38,7 @@ namespace SamplingBME688Serial
         public DataSerialDialog()
         {
             InitializeComponent();
+            this.MouseClick += new MouseEventHandler(DataSerialDialog_MouseClick);
         }
 
         protected override void Dispose(bool disposing)
@@ -443,10 +446,15 @@ namespace SamplingBME688Serial
             graphDrawer.drawUsage(g, drawArea);
 
             // グラフの描画
-            graphDrawer.drawGraph(g, drawArea, currentIndexNumber, 
-                chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked, 
+            graphDrawer.drawGraph(g, drawArea, currentIndexNumber,
+                chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked,
                 chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
                 chkPressure.Checked, chkTemperature.Checked, chkHumidity.Checked);
+
+            // 温度、圧力、湿度の上下限の値を表示する
+            lblTemperature.Text = graphDrawer.getTemperatureRangeStr();
+            lblPressure.Text = graphDrawer.getPressureRangeStr();
+            lblHumidity.Text = graphDrawer.getHumidityRangeStr();
         }
 
         public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
@@ -520,6 +528,32 @@ namespace SamplingBME688Serial
 
         private void chkStep_CheckedChanged(object sender, EventArgs e)
         {
+            this.Invalidate();
+        }
+
+        private void DataSerialDialog_MouseClick(object sender, MouseEventArgs e)
+        {
+            // ウィンドウサイズ
+            int margin = 10;
+            int topMargin = 5;
+
+            // ----- 描画領域サイズの決定
+            float topLeftX = margin;
+            float topLeftY = topMargin;
+            float areaWidth = Size.Width - (margin * 4);
+            float areaHeight = lblSelectedIndex.Location.Y - (topMargin * 3);
+
+            float areaPositionX = e.X - topLeftX;
+            float areaPositionY = e.Y - topLeftY;
+
+            String position = "OUT";
+            if ((areaPositionX >= 0.0f)&&(areaPositionX <= areaWidth)&&
+                (areaPositionY >= 0.0f)&&(areaPositionY <= areaHeight))
+            {
+                position = "IN";
+            }
+            Debug.WriteLine($"Mouse Click: X={e.X}, Y={e.Y},  ({areaPositionX},{areaPositionY}) CHECK :{position} ");
+
             this.Invalidate();
         }
     }
