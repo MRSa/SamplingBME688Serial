@@ -30,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="SetHeaterProfileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="DataSerialDialog.cs">
       <SubType>Form</SubType>
     </Compile>
