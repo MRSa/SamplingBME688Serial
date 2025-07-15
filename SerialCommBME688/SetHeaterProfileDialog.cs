@@ -22,6 +22,11 @@ namespace SamplingBME688Serial
             InitializeComponent();
         }
 
+        public void setPortNo(String portNo)
+        {
+            fldPortNo.Text = portNo;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -81,9 +86,10 @@ namespace SamplingBME688Serial
             // btnTransfer
             // 
             btnTransfer.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnTransfer.Enabled = false;
             btnTransfer.Image = (Image)resources.GetObject("btnTransfer.Image");
             btnTransfer.ImageAlign = ContentAlignment.MiddleLeft;
-            btnTransfer.Location = new Point(864, 427);
+            btnTransfer.Location = new Point(864, 413);
             btnTransfer.Name = "btnTransfer";
             btnTransfer.Size = new Size(98, 30);
             btnTransfer.TabIndex = 6;
@@ -94,12 +100,12 @@ namespace SamplingBME688Serial
             // fldInformation
             // 
             fldInformation.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            fldInformation.Location = new Point(150, 463);
+            fldInformation.Location = new Point(150, 449);
             fldInformation.Multiline = true;
             fldInformation.Name = "fldInformation";
             fldInformation.ReadOnly = true;
             fldInformation.ScrollBars = ScrollBars.Both;
-            fldInformation.Size = new Size(812, 86);
+            fldInformation.Size = new Size(812, 100);
             fldInformation.TabIndex = 7;
             // 
             // SetHeaterProfileDialog
@@ -145,7 +151,7 @@ namespace SamplingBME688Serial
             float topLeftX = margin;
             float topLeftY = topMargin;
             float areaWidth = Size.Width - (margin * 4);
-            float areaHeight = lblPortNo.Location.Y - (topMargin * 3);
+            float areaHeight = btnTransfer.Location.Y - (topMargin * 3);
 
             // Graphics オブジェクトを取得
             Graphics g = e.Graphics;
@@ -154,25 +160,7 @@ namespace SamplingBME688Serial
             RectangleF drawArea = new RectangleF(topLeftX, topLeftY, areaWidth, areaHeight);
             graphDrawer.drawBackground(g, drawArea);
 
-            // 軸の描画
-            graphDrawer.drawAixs(g, drawArea, currentIndexNumber,
-                chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked,
-                chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
-                chkPressure.Checked, chkTemperature.Checked, chkHumidity.Checked);
 
-            // 凡例の描画
-            graphDrawer.drawUsage(g, drawArea);
-
-            // グラフの描画
-            graphDrawer.drawGraph(g, drawArea, currentIndexNumber,
-                chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked,
-                chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
-                chkPressure.Checked, chkTemperature.Checked, chkHumidity.Checked);
-
-            // 温度、圧力、湿度の上下限の値を表示する
-            lblTemperature.Text = graphDrawer.getTemperatureRangeStr();
-            lblPressure.Text = graphDrawer.getPressureRangeStr();
-            lblHumidity.Text = graphDrawer.getHumidityRangeStr();
         }
 
         public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
@@ -197,10 +185,6 @@ namespace SamplingBME688Serial
             }
             lblPortNo.Text = labelList[0];
 
-            lblPressure.Text = "";
-            lblTemperature.Text = "";
-            lblHumidity.Text = "";
-            lblMessage.Text = "";
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
@@ -229,8 +213,6 @@ namespace SamplingBME688Serial
 
         private void selectGraphData()
         {
-            // ---- 表示するグラフデータ、表示幅の更新
-            graphDrawer.selectGraphData(chkLogRData.Checked, chkRangeZoom.Checked);
             this.Invalidate();
         }
 

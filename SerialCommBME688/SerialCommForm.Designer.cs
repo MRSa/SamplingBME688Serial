@@ -123,13 +123,13 @@
             // 
             // btnConfig
             // 
-            btnConfig.Enabled = false;
             btnConfig.Image = (Image)resources.GetObject("btnConfig.Image");
             btnConfig.Location = new Point(194, 19);
             btnConfig.Name = "btnConfig";
             btnConfig.Size = new Size(40, 23);
             btnConfig.TabIndex = 15;
             btnConfig.UseVisualStyleBackColor = true;
+            btnConfig.Click += btnConfig_Click;
             // 
             // btnStop
             // 
@@ -302,13 +302,13 @@
             // 
             // btnConfig_2
             // 
-            btnConfig_2.Enabled = false;
             btnConfig_2.Image = (Image)resources.GetObject("btnConfig_2.Image");
             btnConfig_2.Location = new Point(194, 19);
             btnConfig_2.Name = "btnConfig_2";
             btnConfig_2.Size = new Size(40, 23);
             btnConfig_2.TabIndex = 24;
             btnConfig_2.UseVisualStyleBackColor = true;
+            btnConfig_2.Click += btnConfig_2_Click;
             // 
             // btnStop_2
             // 

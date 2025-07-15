@@ -34,6 +34,9 @@ namespace SamplingBME688Serial
         private CheckBox chkPressure;
         private List<string> labelList = new List<string>();
 
+        private bool isPointed = false;
+        private double pointedPositionX = 0.0d;
+        private double pointedPositionY = 0.0d;
 
         public DataSerialDialog()
         {
@@ -451,6 +454,15 @@ namespace SamplingBME688Serial
                 chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
                 chkPressure.Checked, chkTemperature.Checked, chkHumidity.Checked);
 
+            if (isPointed)
+            {
+                //  クリックした場合には、グラフのインジケーターを描画する
+                graphDrawer.drawDataIndicator(g, drawArea, currentIndexNumber, pointedPositionX, pointedPositionY,
+                                    chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked,
+                                    chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
+                                    chkPressure.Checked, chkTemperature.Checked, chkHumidity.Checked);
+            }
+
             // 温度、圧力、湿度の上下限の値を表示する
             lblTemperature.Text = graphDrawer.getTemperatureRangeStr();
             lblPressure.Text = graphDrawer.getPressureRangeStr();
@@ -543,17 +555,19 @@ namespace SamplingBME688Serial
             float areaWidth = Size.Width - (margin * 4);
             float areaHeight = lblSelectedIndex.Location.Y - (topMargin * 3);
 
-            float areaPositionX = e.X - topLeftX;
-            float areaPositionY = e.Y - topLeftY;
-
-            String position = "OUT";
-            if ((areaPositionX >= 0.0f)&&(areaPositionX <= areaWidth)&&
-                (areaPositionY >= 0.0f)&&(areaPositionY <= areaHeight))
+            // ----- マウスクリックした位置に線をひく
+            pointedPositionX = e.X; //  - topLeftX;
+            pointedPositionY = e.Y; //  - topLeftY;
+            if ((pointedPositionX >= 0.0f)&&(pointedPositionX <= areaWidth)&&
+                (pointedPositionY >= 0.0f)&&(pointedPositionY <= areaHeight))
             {
-                position = "IN";
+                isPointed = true;
             }
-            Debug.WriteLine($"Mouse Click: X={e.X}, Y={e.Y},  ({areaPositionX},{areaPositionY}) CHECK :{position} ");
-
+            else
+            {
+                isPointed = false;
+            }
+            // Debug.WriteLine($"Mouse Click: X={e.X}, Y={e.Y},  ({pointedPositionX},{pointedPositionY}) IN :{isPointed} ");
             this.Invalidate();
         }
     }

@@ -19,6 +19,9 @@ namespace SerialCommBME688
         private SensorToUse predictModelType = SensorToUse.None;
         private IPredictionModel? predictionModel = null;
 
+        private SetHeaterProfileDialog setHeaterProfileDialog_1 = null;
+        private SetHeaterProfileDialog setHeaterProfileDialog_2 = null;
+
         public SerialCommForm()
         {
             dataSourceProvider = new GridDataSourceProvider();
@@ -92,6 +95,7 @@ namespace SerialCommBME688
         {
             btnConnect.Enabled = isEnable;
             btnStop.Enabled = !isEnable;
+            btnConfig.Enabled = isEnable;
             btnExport.Enabled = isEnable;
             btnImport.Enabled = isEnable;
             grpExportOption.Enabled = isEnable;
@@ -122,6 +126,7 @@ namespace SerialCommBME688
         {
             btnConnect_2.Enabled = isEnable;
             btnStop_2.Enabled = !isEnable;
+            btnConfig_2.Enabled = isEnable;
             btnExport.Enabled = isEnable;
             btnImport.Enabled = isEnable;
             grpExportOption.Enabled = isEnable;
@@ -476,7 +481,7 @@ namespace SerialCommBME688
                             upperHumidity = (upperHumidity <= maxValueHum) ? maxValueHum : upperHumidity;
 
                             lowerPressure = (lowerPressure >= minValuePres) ? minValuePres : lowerPressure;
-                            upperPressure = (upperPressure <= maxValuePres) ? maxValuePres: upperPressure;
+                            upperPressure = (upperPressure <= maxValuePres) ? maxValuePres : upperPressure;
                         }
                         catch (Exception eex)
                         {
@@ -489,7 +494,7 @@ namespace SerialCommBME688
                     GraphDataValue lowerLimitZoom = new GraphDataValue(lowerLimitZoomR, lowerLimitZoomRLog, lowerPressure, lowerTemperature, lowerHumidity);
                     GraphDataValue upperLimitZoom = new GraphDataValue(upperLimitZoomR, upperLimitZoomRLog, upperPressure, upperTemperature, upperHumidity);
                     Debug.WriteLine(DateTime.Now + " ----- upperLimit(" + upperLimit + " " + upperLimitZoom + ") lowerLimit(" + lowerLimit + " " + lowerLimitZoom + ")");
-                    Debug.WriteLine(DateTime.Now + " Pres." + lowerPressure + "-" + upperPressure +" Temp." + lowerTemperature + "-" + upperTemperature + " Hum." + lowerHumidity + "-" + upperHumidity);
+                    Debug.WriteLine(DateTime.Now + " Pres." + lowerPressure + "-" + upperPressure + " Temp." + lowerTemperature + "-" + upperTemperature + " Hum." + lowerHumidity + "-" + upperHumidity);
 
                     // データが選択されていた時は、詳細ダイアログを表示する
                     DataSerialDialog dialog = new DataSerialDialog();
@@ -872,5 +877,28 @@ namespace SerialCommBME688
             }
         }
 
+        private void btnConfig_Click(object sender, EventArgs e)
+        {
+            // ポート名：　txtPort.Text を引数に渡してダイアログを開く
+            if ((setHeaterProfileDialog_1 == null) || setHeaterProfileDialog_1.IsDisposed)
+            {
+                setHeaterProfileDialog_1 = new SetHeaterProfileDialog();
+                setHeaterProfileDialog_1.setPortNo(txtPort.Text);
+                setHeaterProfileDialog_1.Owner = this;
+                setHeaterProfileDialog_1.Show();
+            }
+        }
+
+        private void btnConfig_2_Click(object sender, EventArgs e)
+        {
+            // ポート名：　txtPort_2.Text を引数に渡してダイアログを開く
+            if ((setHeaterProfileDialog_2 == null) || setHeaterProfileDialog_2.IsDisposed)
+            {
+                setHeaterProfileDialog_2 = new SetHeaterProfileDialog();
+                setHeaterProfileDialog_2.setPortNo(txtPort_2.Text);
+                setHeaterProfileDialog_2.Owner = this;
+                setHeaterProfileDialog_2.Show();
+            }
+        }
     }
 }
