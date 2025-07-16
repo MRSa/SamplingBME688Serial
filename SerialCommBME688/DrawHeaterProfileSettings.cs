@@ -21,39 +21,8 @@ namespace SamplingBME688Serial
         private const float widthMargin = 30; // 30;
         private const float areaX = 10.0f;
 
-        private bool useGasRegistanceLog = false;
-        private double currentUpperLimit = 110000000.0d;
-        private double currentLowerLimit = 0.0d;
-
-        private double currentUpperLimitPressure = 110000.0d;
-        private double currentLowerLimitPressure = 0.0d;
-
-        private double currentUpperLimitTemperature = 85.0d;
-        private double currentLowerLimitTemperature = 0.0d;
-
-        private double currentUpperLimitHumidity = 100.0d;
-        private double currentLowerLimitHumidity = 0.0d;
-
-        public void selectGraphData(bool useGasRegistanceLog, bool isZoom)
-        {
-            this.useGasRegistanceLog = useGasRegistanceLog;
-            if (useGasRegistanceLog)
-            {
-                this.currentLowerLimit = Math.Floor((isZoom) ? lowerLimitZoom.gas_registance_log : lowerLimit.gas_registance_log);
-                this.currentUpperLimit = Math.Ceiling((isZoom) ? upperLimitZoom.gas_registance_log : upperLimit.gas_registance_log);
-            }
-            else
-            {
-                this.currentLowerLimit = Math.Floor((isZoom) ? lowerLimitZoom.gas_registance : lowerLimit.gas_registance);
-                this.currentUpperLimit = Math.Ceiling((isZoom) ? upperLimitZoom.gas_registance : upperLimit.gas_registance);
-            }
-            this.currentUpperLimitPressure = Math.Ceiling((isZoom) ? upperLimitZoom.pressure : upperLimit.pressure);
-            this.currentLowerLimitPressure = Math.Floor((isZoom) ? lowerLimitZoom.pressure : lowerLimit.pressure);
-            this.currentUpperLimitTemperature = Math.Ceiling((isZoom) ? upperLimitZoom.temperature : upperLimit.temperature);
-            this.currentLowerLimitTemperature = Math.Floor((isZoom) ? lowerLimitZoom.temperature : lowerLimit.temperature);
-            this.currentUpperLimitHumidity = Math.Ceiling((isZoom) ? upperLimitZoom.humidity : upperLimit.humidity);
-            this.currentLowerLimitHumidity = Math.Floor((isZoom) ? lowerLimitZoom.humidity : lowerLimit.humidity);
-        }
+        private double upperLimitY = 400.0d;
+        private double lowerLimitY = 0.0d;
 
         public void setDataToDraw(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
         {
@@ -98,10 +67,7 @@ namespace SamplingBME688Serial
         }
 
         // 軸の表示
-        public void drawAixs(Graphics g, RectangleF drawArea, int scaleIndex,
-            bool drawStep1, bool drawStep2, bool drawStep3, bool drawStep4, bool drawStep5,
-            bool drawStep6, bool drawStep7, bool drawStep8, bool drawStep9, bool drawStep10,
-            bool drawPressure, bool drawTemperature, bool drawHumidity)
+        public void drawAixs(Graphics g, RectangleF drawArea)
         {
             float bottomMargin = 5;
             float axisArea = drawArea.Width / areaX;
@@ -112,23 +78,6 @@ namespace SamplingBME688Serial
 
             SolidBrush textBrush = new SolidBrush(Color.Gray);
             Font font = new Font(fontName, fontSize);
-
-            int axisIndex = 1;
-            foreach (KeyValuePair<int, DataGridViewRow> pair in selectedData)
-            {
-                DataGridViewRow rowData = pair.Value;
-                string sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
-                int sensorId = int.Parse(sensorIdStr);
-                string? key = rowData.Cells[0].Value.ToString();
-                string categoryName = key ?? "";
-                List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
-                if (scaleIndex == axisIndex)
-                {
-                    xAxisCount = targetDataSet.Count;
-                    break;
-                }
-                axisIndex++;
-            }
 
             int index = 0;
             while (index <= areaX)
@@ -163,8 +112,8 @@ namespace SamplingBME688Serial
             }
 
             // --- Y軸のラベル（下限・上限）の数値を書く
-            g.DrawString($"{currentLowerLimit:F0}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, areaSize);
-            g.DrawString($"{currentUpperLimit:F0}", font, textBrush, startX + (axisArea * (areaX - 1)) + 2, drawArea.Top);
+            g.DrawString($"{lowerLimitY:F0}", font, textBrush, startX + (axisArea * (areaX - 1)) + 8, lineBottom - 10);
+            g.DrawString($"{upperLimitY:F0}", font, textBrush, startX + (axisArea * (areaX - 1)) + 8, drawArea.Top + 10);
 
             axisPen.Dispose();
         }
@@ -296,10 +245,6 @@ namespace SamplingBME688Serial
             Debug.WriteLine(" ----- ");
         }
 
-        public String getPressureRangeStr() {  return ((currentLowerLimitPressure / 100.0d).ToString("F1") + " - " + (currentUpperLimitPressure / 100.0d).ToString("F1") + " hPa"); }
-        public String getTemperatureRangeStr() { return (currentLowerLimitTemperature.ToString("F1") + " - " + currentUpperLimitTemperature.ToString("F1") + " degC"); }
-        public String getHumidityRangeStr() { return (currentLowerLimitHumidity.ToString("F1") + " - " + currentUpperLimitHumidity.ToString("F1") + " %"); }
-
         private void drawLines(Graphics g, RectangleF drawArea, Pen pen, string label, List<List<GraphDataValue>> dataset, int dataIndex)
         {
             try
@@ -307,7 +252,7 @@ namespace SamplingBME688Serial
                 float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
                 int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
                 float areaSize = drawArea.Height - heightMargin - heightMargin;
-                double maxRange = currentUpperLimit - currentLowerLimit;
+                double maxRange = upperLimitY - lowerLimitY;
 
                 int pointIndex = 0;
                 PointF[] points = new PointF[dataset.Count];
@@ -317,7 +262,7 @@ namespace SamplingBME688Serial
                     double data;
                     if (dataIndex >= 0)
                     {
-                        data = ((useGasRegistanceLog) ? dataValue[dataIndex].gas_registance_log : dataValue[dataIndex].gas_registance) - currentLowerLimit;
+                        data = dataValue[dataIndex].gas_registance_log;
                     }
                     else if (dataIndex == -1)
                     {
@@ -359,7 +304,7 @@ namespace SamplingBME688Serial
                 float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
                 int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
                 float areaSize = drawArea.Height - heightMargin - heightMargin;
-                double maxRange = currentUpperLimitPressure - currentLowerLimitPressure;
+                double maxRange = upperLimitY - lowerLimitY;
                 double average = 0.0d;
 
                 int pointIndex = 0;
@@ -370,7 +315,7 @@ namespace SamplingBME688Serial
                     double data = dataValue[0].pressure;
                     average = data + average;
                     float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
-                    float posY = ((float)(maxRange - (data - currentLowerLimitPressure))) * (areaSize / (float)maxRange) + heightMargin;
+                    float posY = ((float)(maxRange - (data - lowerLimitY))) * (areaSize / (float)maxRange) + heightMargin;
                     points[pointIndex] = new PointF(lineX, posY);
                     //Debug.WriteLine(" Pres. (" + lineX + "," + posY + " [" + pointIndex + "]" + data);
                     pointIndex++;
@@ -400,7 +345,7 @@ namespace SamplingBME688Serial
                 float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
                 int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
                 float areaSize = drawArea.Height - heightMargin - heightMargin;
-                double maxRange = currentUpperLimitTemperature - currentLowerLimitTemperature;
+                double maxRange = upperLimitY - lowerLimitY;
                 double average = 0.0d;
 
                 int pointIndex = 0;
@@ -411,7 +356,7 @@ namespace SamplingBME688Serial
                     double data = dataValue[0].temperature;
                     average = data + average;
                     float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
-                    float posY = ((float)(maxRange - (data - currentLowerLimitTemperature))) * (areaSize / (float)maxRange) + heightMargin;
+                    float posY = ((float)(maxRange - (data - lowerLimitY))) * (areaSize / (float)maxRange) + heightMargin;
                     points[pointIndex] = new PointF(lineX, posY);
                     //Debug.WriteLine(" Temp. (" + lineX + "," + posY + " [" + pointIndex + "]" + data);
                     pointIndex++;
@@ -441,7 +386,7 @@ namespace SamplingBME688Serial
                 float axisArea = (drawArea.Width * (areaX - 1) / areaX) / dataset.Count;
                 int pointMargin = Convert.ToInt32(Math.Ceiling(dataset.Count / (drawArea.Width - widthMargin)));
                 float areaSize = drawArea.Height - heightMargin - heightMargin;
-                double maxRange = currentUpperLimitHumidity - currentLowerLimitHumidity;
+                double maxRange = upperLimitY - lowerLimitY;
                 if (maxRange == 0.0d)
                 {
                     maxRange = 100.0d;
@@ -456,7 +401,7 @@ namespace SamplingBME688Serial
                     double data = dataValue[0].humidity;
                     average = data + average;
                     float lineX = drawArea.Left + widthMargin + axisArea * ((float)pointIndex);
-                    float posY = ((float)(maxRange - (data - currentLowerLimitHumidity))) * (areaSize / (float)maxRange) + heightMargin;
+                    float posY = ((float)(maxRange - (data - lowerLimitY))) * (areaSize / (float)maxRange) + heightMargin;
                     points[pointIndex] = new PointF(lineX, posY);
                     //Debug.WriteLine(" Hum. (" + lineX.ToString("F1") + "," + posY.ToString("F1") + ") [" + pointIndex + "]" + data + " : " + maxRange + " : " + areaSize);
                     pointIndex++;
