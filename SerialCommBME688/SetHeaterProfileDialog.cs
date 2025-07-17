@@ -1,5 +1,10 @@
 ﻿
+using Newtonsoft.Json.Linq;
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace SamplingBME688Serial
@@ -18,6 +23,9 @@ namespace SamplingBME688Serial
         private DataGridView gridHeaterProfile;
         private Label lblHeaterProfile;
         private List<string> labelList = new List<string>();
+        private TextBox fldProfileName;
+        private Button btnLoad;
+        private Button btnSave;
         private HeaterProfileDataGrid dataGrid = new HeaterProfileDataGrid();
 
         public SetHeaterProfileDialog()
@@ -52,17 +60,20 @@ namespace SamplingBME688Serial
             fldInformation = new TextBox();
             gridHeaterProfile = new DataGridView();
             lblHeaterProfile = new Label();
+            fldProfileName = new TextBox();
+            btnLoad = new Button();
+            btnSave = new Button();
             ((System.ComponentModel.ISupportInitialize)gridHeaterProfile).BeginInit();
             SuspendLayout();
             // 
             // fldPortNo
             // 
             fldPortNo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            fldPortNo.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 128);
-            fldPortNo.Location = new Point(12, 486);
+            fldPortNo.Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128);
+            fldPortNo.Location = new Point(12, 461);
             fldPortNo.Name = "fldPortNo";
             fldPortNo.ReadOnly = true;
-            fldPortNo.Size = new Size(79, 27);
+            fldPortNo.Size = new Size(112, 23);
             fldPortNo.TabIndex = 2;
             fldPortNo.TextAlign = HorizontalAlignment.Center;
             // 
@@ -71,7 +82,7 @@ namespace SamplingBME688Serial
             lblPortNo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblPortNo.AutoSize = true;
             lblPortNo.ImageAlign = ContentAlignment.TopLeft;
-            lblPortNo.Location = new Point(12, 468);
+            lblPortNo.Location = new Point(12, 443);
             lblPortNo.Name = "lblPortNo";
             lblPortNo.Size = new Size(51, 15);
             lblPortNo.TabIndex = 4;
@@ -84,7 +95,7 @@ namespace SamplingBME688Serial
             btnLoadProfile.ImageAlign = ContentAlignment.MiddleLeft;
             btnLoadProfile.Location = new Point(12, 519);
             btnLoadProfile.Name = "btnLoadProfile";
-            btnLoadProfile.Size = new Size(79, 30);
+            btnLoadProfile.Size = new Size(112, 30);
             btnLoadProfile.TabIndex = 5;
             btnLoadProfile.Text = "   Reload";
             btnLoadProfile.UseVisualStyleBackColor = true;
@@ -92,13 +103,13 @@ namespace SamplingBME688Serial
             // 
             // btnTransfer
             // 
-            btnTransfer.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnTransfer.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnTransfer.Enabled = false;
             btnTransfer.Image = (Image)resources.GetObject("btnTransfer.Image");
             btnTransfer.ImageAlign = ContentAlignment.MiddleLeft;
-            btnTransfer.Location = new Point(12, 413);
+            btnTransfer.Location = new Point(12, 363);
             btnTransfer.Name = "btnTransfer";
-            btnTransfer.Size = new Size(79, 30);
+            btnTransfer.Size = new Size(112, 30);
             btnTransfer.TabIndex = 6;
             btnTransfer.Text = "   Transfer";
             btnTransfer.UseVisualStyleBackColor = true;
@@ -107,12 +118,12 @@ namespace SamplingBME688Serial
             // fldInformation
             // 
             fldInformation.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            fldInformation.Location = new Point(97, 449);
+            fldInformation.Location = new Point(130, 449);
             fldInformation.Multiline = true;
             fldInformation.Name = "fldInformation";
             fldInformation.ReadOnly = true;
             fldInformation.ScrollBars = ScrollBars.Both;
-            fldInformation.Size = new Size(865, 100);
+            fldInformation.Size = new Size(832, 100);
             fldInformation.TabIndex = 7;
             // 
             // gridHeaterProfile
@@ -122,9 +133,9 @@ namespace SamplingBME688Serial
             gridHeaterProfile.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gridHeaterProfile.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             gridHeaterProfile.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridHeaterProfile.Location = new Point(97, 363);
+            gridHeaterProfile.Location = new Point(130, 363);
             gridHeaterProfile.Name = "gridHeaterProfile";
-            gridHeaterProfile.Size = new Size(865, 80);
+            gridHeaterProfile.Size = new Size(832, 80);
             gridHeaterProfile.TabIndex = 8;
             // 
             // lblHeaterProfile
@@ -138,10 +149,44 @@ namespace SamplingBME688Serial
             lblHeaterProfile.TabIndex = 9;
             lblHeaterProfile.Text = "Heater Profile";
             // 
+            // fldProfileName
+            // 
+            fldProfileName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            fldProfileName.Location = new Point(12, 490);
+            fldProfileName.Name = "fldProfileName";
+            fldProfileName.Size = new Size(112, 23);
+            fldProfileName.TabIndex = 10;
+            fldProfileName.TextChanged += fldProfileName_TextChanged;
+            // 
+            // btnLoad
+            // 
+            btnLoad.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnLoad.Location = new Point(12, 417);
+            btnLoad.Name = "btnLoad";
+            btnLoad.Size = new Size(53, 23);
+            btnLoad.TabIndex = 11;
+            btnLoad.Text = "Load";
+            btnLoad.UseVisualStyleBackColor = true;
+            btnLoad.Click += btnLoad_Click;
+            // 
+            // btnSave
+            // 
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSave.Location = new Point(71, 417);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(53, 23);
+            btnSave.TabIndex = 12;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
+            // 
             // SetHeaterProfileDialog
             // 
             AutoScaleBaseSize = new Size(6, 16);
             ClientSize = new Size(974, 561);
+            Controls.Add(btnSave);
+            Controls.Add(btnLoad);
+            Controls.Add(fldProfileName);
             Controls.Add(lblHeaterProfile);
             Controls.Add(gridHeaterProfile);
             Controls.Add(fldInformation);
@@ -163,6 +208,9 @@ namespace SamplingBME688Serial
         {
             gridHeaterProfile.DataSource = dataGrid.HeaterProfile;
             gridHeaterProfile.Columns[0].ReadOnly = true;
+
+            // ヒータープロファイル名を反映させる
+            fldProfileName.Text = dataGrid.HeaterProfileName;
 
             // ヒータープロファイルをセンサ（デバイス）から読み込む
             reloadHeaterProfileFromDevice(fldPortNo.Text);
@@ -295,6 +343,200 @@ namespace SamplingBME688Serial
             // ヒータープロファイルをセンサ（デバイス）へ書き込む
 
 
+        }
+
+        private void fldProfileName_TextChanged(object sender, EventArgs e)
+        {
+            // ----- ヒータープロファイル名称を反映
+            dataGrid.HeaterProfileName = fldProfileName.Text;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            // ----- ヒータープロファイルをファイルに保存する
+            String heaterProfileString = getHeaterProfileString(dataGrid);
+
+            Debug.WriteLine(DateTime.Now + " Heater Profile : " + heaterProfileString);
+
+            Stream myStream;
+            SaveFileDialog saveJsonFileDialog = new SaveFileDialog();
+
+            saveJsonFileDialog.FileName = dataGrid.HeaterProfileName + ".txt";
+            saveJsonFileDialog.Filter = "Text files (*.txt)|*.txt";
+            saveJsonFileDialog.FilterIndex = 2;
+            saveJsonFileDialog.RestoreDirectory = true;
+
+            if (saveJsonFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((myStream = saveJsonFileDialog.OpenFile()) != null)
+                    {
+                        Debug.WriteLine("OpenFile : canWrite: " + myStream.CanWrite);
+                        StreamWriter writer = new StreamWriter(myStream, Encoding.UTF8);
+                        writer.AutoFlush = true;
+                        writer.WriteLine(heaterProfileString);
+                        writer.Close();
+                        myStream.Close();
+                    }
+                    MessageBox.Show(
+                        " Saved Heater Profile (" + dataGrid.HeaterProfileName + "): " + saveJsonFileDialog.FileName,
+                        "Information",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(DateTime.Now + " btnSave_Click(" + ")" + ex.Message + "\r\n\r\n" + ex.StackTrace);
+
+                    MessageBox.Show(
+                        "Failed to save a Heater Profile : " + dataGrid.HeaterProfileName,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private String getHeaterProfileString(HeaterProfileDataGrid data)
+        {
+            String cmdData = "";
+            try
+            {
+                cmdData += "CMD:SETPROF {";
+                cmdData += "\"name\":\"" + data.HeaterProfileName + "\"";
+                cmdData += ",\"tempProf\":[";
+                cmdData += dataGrid.HeaterProfile[0].Step0 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step1 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step2 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step3 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step4 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step5 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step6 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step7 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step8 + ",";
+                cmdData += dataGrid.HeaterProfile[0].Step9;
+                cmdData += "],\"holdProf\":[";
+                cmdData += dataGrid.HeaterProfile[1].Step0 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step1 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step2 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step3 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step4 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step5 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step6 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step7 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step8 + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step9;
+                cmdData += "]}";
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " getHeaterProfileString(" + data.HeaterProfileName + ")" + e.Message + "\r\n\r\n" + e.StackTrace);
+            }
+            return (cmdData);
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            // ----- ヒータープロファイルをファイルから読み込む
+            try
+            {
+                String fileContent = "";
+                var filePath = string.Empty;
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.InitialDirectory = "c:\\";
+                    openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                    openFileDialog.FilterIndex = 2;
+                    openFileDialog.RestoreDirectory = true;
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        //Get the path of specified file
+                        filePath = openFileDialog.FileName;
+
+                        //Read the contents of the file into a stream
+                        var fileStream = openFileDialog.OpenFile();
+
+                        using (StreamReader reader = new StreamReader(fileStream))
+                        {
+                            fileContent = reader.ReadToEnd();
+                        }
+                    }
+                }
+                int isProfile = fileContent.IndexOf("CMD:SETPROF");
+                int startIndex = fileContent.IndexOf("{");
+                int endIndex = fileContent.IndexOf("}");
+                if ((isProfile < 0)||(startIndex <= 0)||(endIndex <= 0)||(endIndex <= startIndex)||(endIndex <= isProfile) || (startIndex <= isProfile))
+                {
+                    // ----- ヒータプロファイルデータではなかったのでエラー応答する
+                    MessageBox.Show(
+                        "Failed to load a Heater Profile\n\nThe specified file format is not supported as a heater profile.\n", 
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return;
+                }
+
+                String jsonString = fileContent.Substring(startIndex, (endIndex - startIndex + 1));
+                Debug.WriteLine(DateTime.Now + " Heater Profile : " + jsonString);
+                HeaterProfileJson? loadHeaterProfile = JsonSerializer.Deserialize<HeaterProfileJson>(jsonString);
+                if ((loadHeaterProfile == null)||(loadHeaterProfile?.tempProf.Count < 10) || (loadHeaterProfile?.holdProf.Count < 10))
+                {
+                    // ----- ヒータプロファイルデータの解析に失敗したので、エラー応答する
+                    MessageBox.Show(
+                        "Failed to load a Heater Profile\n\nThe specified file format is not supported as a heater profile.\n",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return;
+                }
+                dataGrid.HeaterProfileName = loadHeaterProfile?.name ?? "";
+                fldProfileName.Text = loadHeaterProfile?.name;
+                dataGrid.HeaterProfile[0].Step0 = loadHeaterProfile?.tempProf.ElementAt(0) ?? 0;
+                dataGrid.HeaterProfile[0].Step1 = loadHeaterProfile?.tempProf.ElementAt(1) ?? 0;
+                dataGrid.HeaterProfile[0].Step2 = loadHeaterProfile?.tempProf.ElementAt(2) ?? 0;
+                dataGrid.HeaterProfile[0].Step3 = loadHeaterProfile?.tempProf.ElementAt(3) ?? 0;
+                dataGrid.HeaterProfile[0].Step4 = loadHeaterProfile?.tempProf.ElementAt(4) ?? 0;
+                dataGrid.HeaterProfile[0].Step5 = loadHeaterProfile?.tempProf.ElementAt(5) ?? 0;
+                dataGrid.HeaterProfile[0].Step6 = loadHeaterProfile?.tempProf.ElementAt(6) ?? 0;
+                dataGrid.HeaterProfile[0].Step7 = loadHeaterProfile?.tempProf.ElementAt(7) ?? 0;
+                dataGrid.HeaterProfile[0].Step8 = loadHeaterProfile?.tempProf.ElementAt(8) ?? 0;
+                dataGrid.HeaterProfile[0].Step9 = loadHeaterProfile?.tempProf.ElementAt(9) ?? 0;
+
+                dataGrid.HeaterProfile[1].Step0 = loadHeaterProfile?.holdProf.ElementAt(0) ?? 0;
+                dataGrid.HeaterProfile[1].Step1 = loadHeaterProfile?.holdProf.ElementAt(1) ?? 0;
+                dataGrid.HeaterProfile[1].Step2 = loadHeaterProfile?.holdProf.ElementAt(2) ?? 0;
+                dataGrid.HeaterProfile[1].Step3 = loadHeaterProfile?.holdProf.ElementAt(3) ?? 0;
+                dataGrid.HeaterProfile[1].Step4 = loadHeaterProfile?.holdProf.ElementAt(4) ?? 0;
+                dataGrid.HeaterProfile[1].Step5 = loadHeaterProfile?.holdProf.ElementAt(5) ?? 0;
+                dataGrid.HeaterProfile[1].Step6 = loadHeaterProfile?.holdProf.ElementAt(6) ?? 0;
+                dataGrid.HeaterProfile[1].Step7 = loadHeaterProfile?.holdProf.ElementAt(7) ?? 0;
+                dataGrid.HeaterProfile[1].Step8 = loadHeaterProfile?.holdProf.ElementAt(8) ?? 0;
+                dataGrid.HeaterProfile[1].Step9 = loadHeaterProfile?.holdProf.ElementAt(9) ?? 0;
+
+                gridHeaterProfile.Refresh();
+
+                MessageBox.Show(
+                    " Load Heater Profile : " + dataGrid.HeaterProfileName,
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " load profile from File  " + ex.Message + "\r\n\r\n" + ex.StackTrace);
+                MessageBox.Show(
+                    "Failed to load a Heater Profile : " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
     }
 }
