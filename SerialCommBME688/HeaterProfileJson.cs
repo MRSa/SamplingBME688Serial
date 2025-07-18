@@ -3,6 +3,7 @@
     public class HeaterProfileJson
     {
         public string name {  get; set; }
+        public int measDur {  get; set; }
         public List<int> tempProf { get; set; }
         public List<int> holdProf { get; set; }
     }

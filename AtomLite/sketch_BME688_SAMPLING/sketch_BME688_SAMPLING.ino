@@ -171,6 +171,7 @@ bool checkReceivedString(String &str)
     // ----- 現在のプロファイルを応答する
     DynamicJsonDocument profileJson(1024);
     profileJson["pf"] = expandedMode;
+    profileJson["measDur"] = MEAS_DUR;
     profileJson["name"] = profileName;
     JsonArray tempProf = profileJson.createNestedArray("tempProf");
     JsonArray holdProf = profileJson.createNestedArray("holdProf");

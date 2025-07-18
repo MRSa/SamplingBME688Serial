@@ -406,6 +406,7 @@ namespace SamplingBME688Serial
             {
                 cmdData += "CMD:SETPROF {";
                 cmdData += "\"name\":\"" + data.HeaterProfileName + "\"";
+                cmdData += ",\"measDur\":" + data.MeasurementDuration;
                 cmdData += ",\"tempProf\":[";
                 cmdData += dataGrid.HeaterProfile[0].Step0 + ",";
                 cmdData += dataGrid.HeaterProfile[0].Step1 + ",";
@@ -418,16 +419,16 @@ namespace SamplingBME688Serial
                 cmdData += dataGrid.HeaterProfile[0].Step8 + ",";
                 cmdData += dataGrid.HeaterProfile[0].Step9;
                 cmdData += "],\"holdProf\":[";
-                cmdData += dataGrid.HeaterProfile[1].Step0 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step1 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step2 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step3 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step4 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step5 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step6 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step7 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step8 + ",";
-                cmdData += dataGrid.HeaterProfile[1].Step9;
+                cmdData += dataGrid.HeaterProfile[1].Step0 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step1 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step2 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step3 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step4 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step5 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step6 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step7 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step8 / data.MeasurementDuration + ",";
+                cmdData += dataGrid.HeaterProfile[1].Step9 / data.MeasurementDuration;
                 cmdData += "]}";
             }
             catch (Exception e)
@@ -494,8 +495,10 @@ namespace SamplingBME688Serial
                     );
                     return;
                 }
+                //Debug.WriteLine(DateTime.Now + " load profile from File  " + loadHeaterProfile?.name + " [ " + loadHeaterProfile?.measDur + " ] " + (loadHeaterProfile?.holdProf.ElementAt(0) * loadHeaterProfile?.measDur));
                 dataGrid.HeaterProfileName = loadHeaterProfile?.name ?? "";
                 fldProfileName.Text = loadHeaterProfile?.name;
+                dataGrid.MeasurementDuration = loadHeaterProfile?.measDur ?? 140;
                 dataGrid.HeaterProfile[0].Step0 = loadHeaterProfile?.tempProf.ElementAt(0) ?? 0;
                 dataGrid.HeaterProfile[0].Step1 = loadHeaterProfile?.tempProf.ElementAt(1) ?? 0;
                 dataGrid.HeaterProfile[0].Step2 = loadHeaterProfile?.tempProf.ElementAt(2) ?? 0;
@@ -507,16 +510,16 @@ namespace SamplingBME688Serial
                 dataGrid.HeaterProfile[0].Step8 = loadHeaterProfile?.tempProf.ElementAt(8) ?? 0;
                 dataGrid.HeaterProfile[0].Step9 = loadHeaterProfile?.tempProf.ElementAt(9) ?? 0;
 
-                dataGrid.HeaterProfile[1].Step0 = loadHeaterProfile?.holdProf.ElementAt(0) ?? 0;
-                dataGrid.HeaterProfile[1].Step1 = loadHeaterProfile?.holdProf.ElementAt(1) ?? 0;
-                dataGrid.HeaterProfile[1].Step2 = loadHeaterProfile?.holdProf.ElementAt(2) ?? 0;
-                dataGrid.HeaterProfile[1].Step3 = loadHeaterProfile?.holdProf.ElementAt(3) ?? 0;
-                dataGrid.HeaterProfile[1].Step4 = loadHeaterProfile?.holdProf.ElementAt(4) ?? 0;
-                dataGrid.HeaterProfile[1].Step5 = loadHeaterProfile?.holdProf.ElementAt(5) ?? 0;
-                dataGrid.HeaterProfile[1].Step6 = loadHeaterProfile?.holdProf.ElementAt(6) ?? 0;
-                dataGrid.HeaterProfile[1].Step7 = loadHeaterProfile?.holdProf.ElementAt(7) ?? 0;
-                dataGrid.HeaterProfile[1].Step8 = loadHeaterProfile?.holdProf.ElementAt(8) ?? 0;
-                dataGrid.HeaterProfile[1].Step9 = loadHeaterProfile?.holdProf.ElementAt(9) ?? 0;
+                dataGrid.HeaterProfile[1].Step0 = (loadHeaterProfile?.holdProf.ElementAt(0) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step1 = (loadHeaterProfile?.holdProf.ElementAt(1) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step2 = (loadHeaterProfile?.holdProf.ElementAt(2) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step3 = (loadHeaterProfile?.holdProf.ElementAt(3) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step4 = (loadHeaterProfile?.holdProf.ElementAt(4) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step5 = (loadHeaterProfile?.holdProf.ElementAt(5) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step6 = (loadHeaterProfile?.holdProf.ElementAt(6) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step7 = (loadHeaterProfile?.holdProf.ElementAt(7) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step8 = (loadHeaterProfile?.holdProf.ElementAt(8) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
+                dataGrid.HeaterProfile[1].Step9 = (loadHeaterProfile?.holdProf.ElementAt(9) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
 
                 gridHeaterProfile.Refresh();
 
