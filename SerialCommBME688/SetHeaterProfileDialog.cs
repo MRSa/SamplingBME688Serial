@@ -28,6 +28,8 @@ namespace SamplingBME688Serial
         private Button btnSave;
         private HeaterProfileDataGrid dataGrid = new HeaterProfileDataGrid();
         private Button btnAbort;
+        private Label lblTotalCycleTime;
+        private double totalCycleTime;
         private SetSerialHeaterProfile setSerial = new SetSerialHeaterProfile();
 
         public SetHeaterProfileDialog()
@@ -67,6 +69,7 @@ namespace SamplingBME688Serial
             btnLoad = new Button();
             btnSave = new Button();
             btnAbort = new Button();
+            lblTotalCycleTime = new Label();
             ((System.ComponentModel.ISupportInitialize)gridHeaterProfile).BeginInit();
             SuspendLayout();
             // 
@@ -141,10 +144,10 @@ namespace SamplingBME688Serial
             gridHeaterProfile.Name = "gridHeaterProfile";
             gridHeaterProfile.Size = new Size(832, 80);
             gridHeaterProfile.TabIndex = 8;
+            gridHeaterProfile.CellEndEdit += gridHeaterProfile_CellEndEdit;
             // 
             // lblHeaterProfile
             // 
-            lblHeaterProfile.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblHeaterProfile.AutoSize = true;
             lblHeaterProfile.ImageAlign = ContentAlignment.TopLeft;
             lblHeaterProfile.Location = new Point(12, 9);
@@ -195,10 +198,20 @@ namespace SamplingBME688Serial
             btnAbort.UseVisualStyleBackColor = true;
             btnAbort.Click += btnAbort_Click;
             // 
+            // lblTotalCycleTime
+            // 
+            lblTotalCycleTime.AutoSize = true;
+            lblTotalCycleTime.Location = new Point(97, 9);
+            lblTotalCycleTime.Name = "lblTotalCycleTime";
+            lblTotalCycleTime.Size = new Size(42, 15);
+            lblTotalCycleTime.TabIndex = 14;
+            lblTotalCycleTime.Text = "XXXXX";
+            // 
             // SetHeaterProfileDialog
             // 
             AutoScaleBaseSize = new Size(6, 16);
             ClientSize = new Size(974, 561);
+            Controls.Add(lblTotalCycleTime);
             Controls.Add(btnAbort);
             Controls.Add(btnSave);
             Controls.Add(btnLoad);
@@ -227,6 +240,16 @@ namespace SamplingBME688Serial
 
             // ヒータープロファイル名を反映させる
             fldProfileName.Text = dataGrid.HeaterProfileName;
+
+            // ----- 画面上のボタンの有効・無効を制御
+            btnTransfer.Enabled = false;
+            btnLoad.Enabled = false;
+            btnSave.Enabled = false;
+            btnLoadProfile.Enabled = false;
+
+            // ----- インフォメーションエリアをクリア
+            fldInformation.Text = "";
+            lblTotalCycleTime.Text = "";
 
             // ヒータープロファイルをセンサ（デバイス）から読み込む
             reloadHeaterProfileFromDevice(fldPortNo.Text);
@@ -291,45 +314,21 @@ namespace SamplingBME688Serial
 
         }
 
-        private void btnPrev_Click(object sender, EventArgs e)
-        {
-            currentIndexNumber--;
-            if (currentIndexNumber <= 0)
-            {
-                currentIndexNumber = maxIndexNumber;
-            }
-            fldPortNo.Text = currentIndexNumber + "/" + maxIndexNumber;
-            lblPortNo.Text = labelList[currentIndexNumber - 1];
-            this.Invalidate();
-        }
-
-        private void btnNext_Click(object sender, EventArgs e)
-        {
-            currentIndexNumber++;
-            if (currentIndexNumber > maxIndexNumber)
-            {
-                currentIndexNumber = 1;
-            }
-            fldPortNo.Text = currentIndexNumber + "/" + maxIndexNumber;
-            lblPortNo.Text = labelList[currentIndexNumber - 1];
-            this.Invalidate();
-        }
-
         private void reloadHeaterProfileFromDevice(String portNoString)
         {
             try
             {
+                btnTransfer.Enabled = false;
+                btnLoad.Enabled = false;
+                btnSave.Enabled = false;
+                btnLoadProfile.Enabled = false;
+                btnAbort.Enabled = true;
                 Debug.WriteLine(DateTime.Now + " reloadHeaterProfileFromDevice(" + portNoString + ") : TRY");
-
                 setSerial.getCurrentHeaterProfile(portNoString, this);
-
-                btnTransfer.Enabled = true;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(DateTime.Now + " reloadHeaterProfileFromDevice(" + portNoString + ")" + e.Message + "\r\n\r\n" + e.StackTrace);
-
-                btnTransfer.Enabled = false;
             }
             this.Invalidate();
         }
@@ -348,7 +347,7 @@ namespace SamplingBME688Serial
             DialogResult result = MessageBox.Show(message, "Information", buttons, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                if (transferHeaterProfile())
+                if (transferHeaterProfile(fldPortNo.Text))
                 {
                     MessageBox.Show(
                         " Transferred a Heater Profile : " + dataGrid.HeaterProfileName,
@@ -356,6 +355,7 @@ namespace SamplingBME688Serial
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
                     );
+                    reloadHeaterProfileFromDevice(fldPortNo.Text);
                 }
                 else
                 {
@@ -368,19 +368,18 @@ namespace SamplingBME688Serial
             }
         }
 
-
-        private bool transferHeaterProfile()
+        private bool transferHeaterProfile(String portNoString)
         {
             try
             {
                 // ==== データを転送する
-                String heaterProfileString = getHeaterProfileString(dataGrid);
-                Debug.WriteLine(DateTime.Now + " transferHeaterProfile() :" + heaterProfileString);
-                return (true);
+                String sendData = getHeaterProfileString(dataGrid);
+                fldInformation.Text += "\nSEND[" + portNoString + "] " + sendData;
+                return (setSerial.transferHeaterProfile(portNoString, sendData));
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(DateTime.Now + " transferHeaterProfile()" + ex.Message + "\r\n\r\n" + ex.StackTrace);
+                Debug.WriteLine(DateTime.Now + " transferHeaterProfile() " + ex.Message + "\r\n\r\n" + ex.StackTrace);
             }
             return (false);
         }
@@ -479,6 +478,15 @@ namespace SamplingBME688Serial
             return (cmdData);
         }
 
+        private void applyDurationTime()
+        {
+            int totalTime = dataGrid.HeaterProfile[1].Step0 + dataGrid.HeaterProfile[1].Step1 + dataGrid.HeaterProfile[1].Step2 +
+                dataGrid.HeaterProfile[1].Step3 + dataGrid.HeaterProfile[1].Step4 + dataGrid.HeaterProfile[1].Step5 + dataGrid.HeaterProfile[1].Step6 +
+                dataGrid.HeaterProfile[1].Step7 + dataGrid.HeaterProfile[1].Step8 + dataGrid.HeaterProfile[1].Step9;
+
+            totalCycleTime = Convert.ToDouble(totalTime);
+            lblTotalCycleTime.Text = "(Duration : " + (totalCycleTime / 1000.0d).ToString("F2") + " sec.)";
+        }
 
         private bool applyHeaterProfileFromJsonString(String data)
         {
@@ -529,6 +537,9 @@ namespace SamplingBME688Serial
                 dataGrid.HeaterProfile[1].Step8 = (loadHeaterProfile?.holdProf.ElementAt(8) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
                 dataGrid.HeaterProfile[1].Step9 = (loadHeaterProfile?.holdProf.ElementAt(9) ?? 0) * (loadHeaterProfile?.measDur ?? 140);
 
+                // ----- トータルの時間を更新
+                applyDurationTime();
+
                 // ----- 画面の更新
                 gridHeaterProfile.Refresh();
                 this.Invalidate();
@@ -536,7 +547,7 @@ namespace SamplingBME688Serial
             }
             catch (Exception ex)
             {
-                // ----- 例外発声
+                // ----- 例外発生
                 Debug.WriteLine(DateTime.Now + " applyHeaterProfileFromJsonString() " + data + " " + ex.Message + "\r\n\r\n" + ex.StackTrace);
             }
             return (false);
@@ -614,7 +625,23 @@ namespace SamplingBME688Serial
                 this.Invoke(new Action(() =>
                 {
                     // --- 受信したヒータープロファイルを画面に反映させる
+                    fldInformation.Text += heaterProfile;
+
+                    btnTransfer.Enabled = true;
+                    btnLoad.Enabled = true;
+                    btnSave.Enabled = true;
+                    btnLoadProfile.Enabled = true;
+                    btnAbort.Enabled = true;
+
                     applyHeaterProfileFromJsonString(receivedProfile);
+
+                }));
+            }
+            else
+            {
+                // ----- メッセージだけ画面に表示する。
+                this.Invoke(new Action(() =>
+                {
                     fldInformation.Text += heaterProfile;
                 }));
             }
@@ -628,6 +655,8 @@ namespace SamplingBME688Serial
                 this.Invoke(new Action(() =>
                 {
                     fldInformation.Text = "";
+                    btnAbort.Enabled = true;
+                    btnLoadProfile.Enabled = true;
                 }));
             }
         }
@@ -635,6 +664,21 @@ namespace SamplingBME688Serial
         private void btnAbort_Click(object sender, EventArgs e)
         {
             setSerial.stopReadHeaterProfile();
+        }
+
+        private void gridHeaterProfile_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                // データの編集が終わったとき...画面をリフレッシュ
+                applyDurationTime();
+                this.Invalidate();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(DateTime.Now + " gridHeaterProfile_CellEndEdit() " + ex.Message + "\r\n\r\n" + ex.StackTrace);
+
+            }
         }
     }
 }

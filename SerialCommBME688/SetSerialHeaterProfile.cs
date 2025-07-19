@@ -27,6 +27,49 @@ namespace SamplingBME688Serial
 
         }
 
+        public bool transferHeaterProfile(String comPort, String sendData)
+        {
+            try
+            {
+                Debug.WriteLine(DateTime.Now + " transferHeaterProfile() Port: " + comPort + " DATA: " + sendData);
+
+                /*****/
+                mySerialPort.BaudRate = 115200;
+                mySerialPort.Parity = System.IO.Ports.Parity.None;
+                mySerialPort.DataBits = 8;
+                mySerialPort.StopBits = System.IO.Ports.StopBits.One;
+                mySerialPort.Handshake = System.IO.Ports.Handshake.None;
+                mySerialPort.PortName = comPort;
+                mySerialPort.Open();
+                _isReceiving = false;
+                /*****/
+
+                if (mySerialPort.IsOpen)
+                {
+                    mySerialPort.WriteLine(sendData);
+                }
+                else
+                {
+                    throw new Exception("NOT OPEN COM PORT :" + comPort);
+                }
+                mySerialPort.Close();
+                return (true);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " transferHeaterProfile(" + comPort + ") " + sendData + " " + e.Message + "\r\n\r\n" + e.StackTrace);
+            }
+            try
+            {
+                mySerialPort.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(DateTime.Now + " transferHeaterProfile(" + comPort + ") : CLOSE " + e.Message + "\r\n\r\n" + e.StackTrace);
+            }
+            return (false);
+        }
+
         public bool getCurrentHeaterProfile(String comPort, IHeaterProfileNotify callback)
         {
             try
