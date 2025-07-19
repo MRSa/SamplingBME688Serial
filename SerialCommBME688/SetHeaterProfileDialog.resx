@@ -135,6 +135,13 @@
         biUAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="btnAbort.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAE1JREFUOE9j
+        GAU0AvLy8v/l5OS0oFwGEBskBuUSBrKysqYwQ2CakQ0kCgA1OIM0kqUZBCgyAMkLzjCDSDIEpAFkCJQL
+        NxDKHQXUBQwMAMp5GRVf46XuAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAgIAAAAEAIAAoCAEAFgAAACgAAACAAAAAAAEAAAEAIAAAAAAAAAgBAAAAAAAAAAAAAAAAAAAA

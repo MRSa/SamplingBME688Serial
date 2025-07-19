@@ -14,12 +14,12 @@
 
             // ----- デフォルトのヒータープロファイルデータ
             HeaterProfile = new List<HeaterProfileData> {
-                new HeaterProfileData { Name = "Temperature (degC)", Step0 = 200, Step1 = 200, Step2 = 200, Step3 = 200, Step4 = 200, Step5 = 200, Step6 = 200, Step7 = 200, Step8 = 200, Step9 = 200 },
-                new HeaterProfileData { Name = "Hold Time (ms)", Step0 = 420, Step1 = 280, Step2 = 320, Step3 = 280, Step4 = 280, Step5 = 280, Step6 = 420, Step7 = 140, Step8 = 280, Step9 = 280 },
+                new HeaterProfileData { Name = "Temperature (degC)", Step0 = 320, Step1 = 100, Step2 = 100, Step3 = 100, Step4 = 200, Step5 = 200, Step6 = 200, Step7 = 320, Step8 = 320, Step9 = 320 },
+                new HeaterProfileData { Name = "Hold Time (ms)", Step0 = 700, Step1 = 280, Step2 = 1400, Step3 = 4200, Step4 = 700, Step5 = 700, Step6 = 700, Step7 = 700, Step8 = 700, Step9 = 700 },
             };
 
             // ----- ヒータープロファイル名
-            HeaterProfileName = new String("default");
+            HeaterProfileName = new String("DEFAULT");
 
         }
     }
