@@ -54,7 +54,6 @@ namespace SamplingBME688Serial
             }
             base.Dispose(disposing);
         }
-
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetHeaterProfileDialog));
@@ -285,33 +284,13 @@ namespace SamplingBME688Serial
             graphDrawer.drawBackground(g, drawArea);
 
             // 軸の描画
-            graphDrawer.drawAixs(g, drawArea);
+            int totalTimeMs = dataGrid.HeaterProfile[1].Step0 + dataGrid.HeaterProfile[1].Step1 + dataGrid.HeaterProfile[1].Step2 +
+                dataGrid.HeaterProfile[1].Step3 + dataGrid.HeaterProfile[1].Step4 + dataGrid.HeaterProfile[1].Step5 + dataGrid.HeaterProfile[1].Step6 +
+                dataGrid.HeaterProfile[1].Step7 + dataGrid.HeaterProfile[1].Step8 + dataGrid.HeaterProfile[1].Step9;
+            graphDrawer.drawAixs(g, drawArea, totalTimeMs);
 
-
-        }
-
-        public void setSelectedData(ref Dictionary<int, DataGridViewRow> selectedData, Dictionary<string, List<List<GraphDataValue>>> dataSet1, Dictionary<string, List<List<GraphDataValue>>> dataSet2, GraphDataValue lowerLimit, GraphDataValue upperLimit, GraphDataValue lowerLimitZoom, GraphDataValue upperLimitZoom)
-        {
-            // 描画クラスに描画するデータを送り込む
-            graphDrawer.setDataToDraw(ref selectedData, dataSet1, dataSet2, lowerLimit, upperLimit, lowerLimitZoom, upperLimitZoom);
-
-            maxIndexNumber = selectedData.Count;
-
-            fldPortNo.Text = currentIndexNumber + "/" + maxIndexNumber;
-
-            labelList.Clear();
-
-            foreach (KeyValuePair<int, DataGridViewRow> pair in selectedData)
-            {
-                DataGridViewRow rowData = pair.Value;
-                string sensorIdStr = rowData.Cells[1].Value.ToString() ?? "1";
-                //int sensorId = int.Parse(sensorIdStr);
-                string? key = rowData.Cells[0].Value.ToString();
-                string categoryName = key ?? "";
-                labelList.Add(categoryName + "(" + sensorIdStr + ")");
-            }
-            lblPortNo.Text = labelList[0];
-
+            // グラフの描画
+            graphDrawer.drawGraph(g, drawArea, dataGrid);
         }
 
         private void reloadHeaterProfileFromDevice(String portNoString)
