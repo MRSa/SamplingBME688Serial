@@ -536,8 +536,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = datas[0].pressure / 100.0d;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (3 * labelFont.Height));
-                                g.DrawString("Pressure :" + value.ToString("F1") + " hPa", labelFont, brush, labelPos);
+                                String label = "Pressure :" + value.ToString("F1") + " hPa";
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (3 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawTemperature)
                             {
@@ -545,8 +552,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = datas[0].temperature;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (4 * labelFont.Height));
-                                g.DrawString("Temperature :" + value.ToString("F1") + " ℃", labelFont, brush, labelPos);
+                                String label = "Temperature :" + value.ToString("F1") + " ℃";
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (4 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawHumidity)
                             {
@@ -554,8 +568,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = datas[0].humidity;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (5 * labelFont.Height));
-                                g.DrawString("Humidity :" + value.ToString("F0") + " %", labelFont, brush, labelPos);
+                                String label = "Humidity :" + value.ToString("F0") + " %";
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (5 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep0)
                             {
@@ -563,8 +584,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[0].gas_registance_log : datas[0].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (6 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-0] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-0] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (6 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep1)
                             {
@@ -572,8 +600,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[1].gas_registance_log : datas[1].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (7 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-1] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-1] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (7 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep2)
                             {
@@ -581,8 +616,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[2].gas_registance_log : datas[2].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (8 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-2] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-2] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (8 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep3)
                             {
@@ -590,8 +632,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[3].gas_registance_log : datas[3].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (9 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-3] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-3] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (9 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep4)
                             {
@@ -599,8 +648,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[4].gas_registance_log : datas[4].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (10 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-4] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-4] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (10 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep5)
                             {
@@ -608,8 +664,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[5].gas_registance_log : datas[5].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (11 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-5] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-5] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (11 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep6)
                             {
@@ -617,8 +680,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[6].gas_registance_log : datas[6].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (12 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-6] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-6] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (12 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep7)
                             {
@@ -626,8 +696,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[7].gas_registance_log : datas[7].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (13 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-7] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-7] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (13 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep8)
                             {
@@ -635,8 +712,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[8].gas_registance_log : datas[8].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (14 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-8] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-8] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (14 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep9)
                             {
@@ -644,8 +728,15 @@ namespace SamplingBME688Serial
                                 penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                                 SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
                                 double value = (useGasRegistanceLog) ? datas[9].gas_registance_log : datas[9].gas_registance;
-                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (15 * labelFont.Height));
-                                g.DrawString(categoryName + "[" + sensorIdStr + "-9] " + value.ToString("F0"), labelFont, brush, labelPos);
+                                String label = categoryName + "[" + sensorIdStr + "-9] " + value.ToString("F0");
+                                SizeF size = g.MeasureString(label, labelFont);
+                                float positionX = labelPositionX;
+                                if ((labelPositionX + size.Width) > (drawArea.Width - widthMargin))
+                                {
+                                    positionX = labelPositionX - size.Width - lineMargin;
+                                }
+                                PointF labelPos = new PointF(positionX, lineTop + lineMargin + (15 * labelFont.Height));
+                                g.DrawString(label, labelFont, brush, labelPos);
                             }
                         }
                         catch (Exception ee)
