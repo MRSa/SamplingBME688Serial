@@ -194,7 +194,7 @@ namespace SamplingBME688Serial
             bool drawStep6, bool drawStep7, bool drawStep8, bool drawStep9, bool drawStep10,
             bool drawPressure, bool drawTemperature, bool drawHumidity)
         {
-            Debug.WriteLine(DateTime.Now + " ----- drawGraph ----- : " + strongLineIndex);
+            //Debug.WriteLine(DateTime.Now + " ----- drawGraph ----- : " + strongLineIndex);
             try
             {
                 //  選択されているグラフを書く
@@ -482,8 +482,8 @@ namespace SamplingBME688Serial
             }
         }
         public void drawDataIndicator(Graphics g, RectangleF drawArea, int strongLineIndex, double posX, double posY,
-            bool drawStep1, bool drawStep2, bool drawStep3, bool drawStep4, bool drawStep5,
-            bool drawStep6, bool drawStep7, bool drawStep8, bool drawStep9, bool drawStep10,
+            bool drawStep0, bool drawStep1, bool drawStep2, bool drawStep3, bool drawStep4,
+            bool drawStep5, bool drawStep6, bool drawStep7, bool drawStep8, bool drawStep9,
             bool drawPressure, bool drawTemperature, bool drawHumidity)
         {
             try
@@ -493,16 +493,22 @@ namespace SamplingBME688Serial
                     // ==== エリア外をクリックした、線を引かないで戻る
                     return;
                 }
+
                 float lineMargin = 5.0f;
-                Debug.WriteLine($" - - - drawDataIndicator(): X={posX}, Y={posY}  - - -");
-
-
+                double percentX = (posX - (widthMargin + 10)) / (drawArea.Width / areaX * (areaX - 1));  // (drawArea.Width - widthMargin * 2);
+                Debug.WriteLine($" - - - drawDataIndicator(): X={posX}, Y={posY}  - - -　[max:" + xAxisCount + "] " + (percentX * 100.0).ToString("F2") + "% : " + (percentX * xAxisCount).ToString("F0"));
 
                 // --------- マウスでクリックした場所にラインを引く
                 Pen indicatorLine = new Pen(Color.DarkRed, 2);
                 float lineTop = drawArea.Top + lineMargin; //  + heightMargin;
                 float lineBottom = drawArea.Height + lineMargin - heightMargin;
                 g.DrawLine(indicatorLine, Convert.ToInt32(posX), lineTop, Convert.ToInt32(posX), lineBottom);
+
+                // ----- ラインのカウントを表示する。
+                Font labelFont = new Font(fontName, fontSize);
+                float labelPositionX = Convert.ToInt32(posX) + lineMargin;
+                PointF labelPosition = new PointF(labelPositionX, lineTop + lineMargin);
+                g.DrawString((percentX * xAxisCount).ToString("F0"), labelFont, new SolidBrush(Color.DarkRed), labelPosition);
 
                 //  選択されているポイントの値を表示する
                 int strongIndex = 1;
@@ -517,88 +523,138 @@ namespace SamplingBME688Serial
                     string categoryName = key ?? "";
                     List<List<GraphDataValue>> targetDataSet = (sensorId == 1) ? dataSet1[categoryName] : dataSet2[categoryName];
 
-                    int lineStroke = (strongLineIndex == strongIndex) ? 2 : 0;
-                    if (drawPressure)
+                    // ----- ここで各データのラベルをグラフ上に記載する
+                    if (strongLineIndex == strongIndex)
                     {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-                        //drawLinesPressure(g, drawArea, lineStyle, "Pres.[" + sensorIdStr + "]", targetDataSet);
-                    }
-                    if (drawTemperature)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                        //drawLinesTemperature(g, drawArea, lineStyle, "Temp.[" + sensorIdStr + "]", targetDataSet);
-                    }
-                    if (drawHumidity)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        //drawLinesHumidity(g, drawArea, lineStyle, "Humi.[" + sensorIdStr + "]", targetDataSet);
-                    }
-                    if (drawStep1)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-0]", targetDataSet, 0);
-                    }
-                    if (drawStep2)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-1]", targetDataSet, 1);
-                    }
-                    if (drawStep3)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-2]", targetDataSet, 2);
-                    }
-                    if (drawStep4)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-3]", targetDataSet, 3);
-                    }
-                    if (drawStep5)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-4]", targetDataSet, 4);
-                    }
-                    if (drawStep6)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-5]", targetDataSet, 5);
-                    }
-                    if (drawStep7)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-6]", targetDataSet, 6);
-                    }
-                    if (drawStep8)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-7]", targetDataSet, 7);
-                    }
-                    if (drawStep9)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-8]", targetDataSet, 8);
-                    }
-                    if (drawStep10)
-                    {
-                        //Pen lineStyle = new Pen(((sensorId == 1) ? Color.DarkBlue : Color.DarkGreen), lineStroke);
-                        //lineStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-                        //drawLines(g, drawArea, lineStyle, categoryName + "[" + sensorIdStr + "-9]", targetDataSet, 9);
+                        try
+                        {
+                            List<GraphDataValue> datas = targetDataSet[Convert.ToInt32((percentX * xAxisCount).ToString("F0"))];
+                            int lineStroke = (strongLineIndex == strongIndex) ? 2 : 0;
+                            if (drawPressure)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = datas[0].pressure / 100.0d;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (3 * labelFont.Height));
+                                g.DrawString("Pressure :" + value.ToString("F1") + " hPa", labelFont, brush, labelPos);
+                            }
+                            if (drawTemperature)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = datas[0].temperature;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (4 * labelFont.Height));
+                                g.DrawString("Temperature :" + value.ToString("F1") + " ℃", labelFont, brush, labelPos);
+                            }
+                            if (drawHumidity)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = datas[0].humidity;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (5 * labelFont.Height));
+                                g.DrawString("Humidity :" + value.ToString("F0") + " %", labelFont, brush, labelPos);
+                            }
+                            if (drawStep0)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[0].gas_registance_log : datas[0].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (6 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-0] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep1)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[1].gas_registance_log : datas[1].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (7 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-1] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep2)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[2].gas_registance_log : datas[2].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (8 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-2] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep3)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[3].gas_registance_log : datas[3].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (9 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-3] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep4)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[4].gas_registance_log : datas[4].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (10 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-4] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep5)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[5].gas_registance_log : datas[5].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (11 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-5] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep6)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[6].gas_registance_log : datas[6].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (12 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-6] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep7)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[7].gas_registance_log : datas[7].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (13 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-7] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep8)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[8].gas_registance_log : datas[8].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (14 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-8] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                            if (drawStep9)
+                            {
+                                Pen penStyle = new Pen(((sensorId == 1) ? Color.Blue : Color.Green), lineStroke);
+                                penStyle.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                                SolidBrush brush = new SolidBrush((sensorId == 1) ? Color.DarkMagenta : Color.DarkOrchid);
+                                double value = (useGasRegistanceLog) ? datas[9].gas_registance_log : datas[9].gas_registance;
+                                PointF labelPos = new PointF(labelPositionX, lineTop + lineMargin + (15 * labelFont.Height));
+                                g.DrawString(categoryName + "[" + sensorIdStr + "-9] " + value.ToString("F0"), labelFont, brush, labelPos);
+                            }
+                        }
+                        catch (Exception ee)
+                        {
+                            Debug.WriteLine(DateTime.Now + " drawDataIndicator() LABEL: " + ee.Message + "\r\n\r\n" + ee.StackTrace + " strongLineIndex: " + strongLineIndex);
+                        }
                     }
                     strongIndex++;
                 }
-
             }
             catch (Exception e)
             {

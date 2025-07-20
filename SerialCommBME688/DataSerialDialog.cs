@@ -456,7 +456,7 @@ namespace SamplingBME688Serial
 
             if (isPointed)
             {
-                //  クリックした場合には、グラフのインジケーターを描画する
+                //  マウスをクリックした場合には、グラフのインジケーターを描画する
                 graphDrawer.drawDataIndicator(g, drawArea, currentIndexNumber, pointedPositionX, pointedPositionY,
                                     chkStep0.Checked, chkStep1.Checked, chkStep2.Checked, chkStep3.Checked, chkStep4.Checked,
                                     chkStep5.Checked, chkStep6.Checked, chkStep7.Checked, chkStep8.Checked, chkStep9.Checked,
