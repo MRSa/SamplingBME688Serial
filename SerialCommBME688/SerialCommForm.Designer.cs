@@ -660,7 +660,7 @@
             Controls.Add(grpPort);
             Controls.Add(grpLogConsole);
             Name = "SerialCommForm";
-            Text = "BME688 Sampling";
+            Text = "BME688/690 Sampling";
             FormClosing += SerialCommForm_FormClosing;
             Load += SerialCommForm_Load;
             grpPort.ResumeLayout(false);

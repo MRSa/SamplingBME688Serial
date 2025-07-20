@@ -10,17 +10,25 @@
     <Authors>MRSa</Authors>
     <Company>Gokigen Project</Company>
     <Copyright>Copyright 2024- GOKIGEN Project</Copyright>
-    <Description>A "smell" detector using BME688</Description>
+    <Description>A "smell" detector using BME688/690</Description>
     <PackageProjectUrl>https://github.com/MRSa/SamplingBME688Serial</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/MRSa/SamplingBME688Serial</RepositoryUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>icon0.ico</ApplicationIcon>
+    <PackageIcon>app_icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="icon0.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\images\app_icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
