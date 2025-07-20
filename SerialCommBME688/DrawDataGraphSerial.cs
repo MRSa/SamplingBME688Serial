@@ -494,6 +494,8 @@ namespace SamplingBME688Serial
                     return;
                 }
 
+                int backgroundAlpha = 195;
+                int backgroundColorBase = 245;
                 float lineMargin = 5.0f;
                 double percentX = (posX - (widthMargin + 10)) / (drawArea.Width / areaX * (areaX - 1));  // (drawArea.Width - widthMargin * 2);
                 Debug.WriteLine($" - - - drawDataIndicator(): X={posX}, Y={posY}  - - -　[max:" + xAxisCount + "] " + (percentX * 100.0).ToString("F2") + "% : " + (percentX * xAxisCount).ToString("F0"));
@@ -544,6 +546,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (3 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawTemperature)
@@ -560,6 +563,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (4 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawHumidity)
@@ -576,6 +580,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (5 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep0)
@@ -592,6 +597,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (6 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep1)
@@ -608,6 +614,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (7 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep2)
@@ -624,6 +631,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (8 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep3)
@@ -640,6 +648,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (9 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep4)
@@ -656,6 +665,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (10 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep5)
@@ -672,6 +682,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (11 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep6)
@@ -688,6 +699,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (12 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep7)
@@ -704,6 +716,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (13 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep8)
@@ -720,6 +733,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (14 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                             if (drawStep9)
@@ -736,6 +750,7 @@ namespace SamplingBME688Serial
                                     positionX = labelPositionX - size.Width - lineMargin;
                                 }
                                 PointF labelPos = new PointF(positionX, lineTop + lineMargin + (15 * labelFont.Height));
+                                g.FillRectangle(new SolidBrush(Color.FromArgb(backgroundAlpha, backgroundColorBase, backgroundColorBase, backgroundColorBase)), new RectangleF(labelPos.X, labelPos.Y, size.Width, size.Height));
                                 g.DrawString(label, labelFont, brush, labelPos);
                             }
                         }
