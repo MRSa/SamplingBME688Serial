@@ -1,8 +1,8 @@
-# Windows アプリケーション for BME688
+# Windows アプリケーション for BME688/BME690
 
 ## 目次
 
-- [Windows アプリケーション for BME688](#windows-アプリケーション-for-bme688)
+- [Windows アプリケーション for BME688/BME690](#windows-アプリケーション-for-bme688bme690)
   - [目次](#目次)
   - [概要](#概要)
   - [前提パッケージ](#前提パッケージ)

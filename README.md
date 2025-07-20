@@ -1,8 +1,8 @@
-# SamplingBME688Serial : BME688でにおいを判別する（一式）
+# SamplingBME688Serial : BME688/BME690でにおいを判別する（一式）
 
 -----
 
-- [SamplingBME688Serial : BME688でにおいを判別する（一式）](#samplingbme688serial--bme688でにおいを判別する一式)
+- [SamplingBME688Serial : BME688/BME690でにおいを判別する（一式）](#samplingbme688serial--bme688bme690でにおいを判別する一式)
   - [リポジトリ](#リポジトリ)
   - [概要](#概要)
   - [全体像](#全体像)
@@ -11,6 +11,7 @@
   - [Windows アプリケーション](#windows-アプリケーション)
   - [Database on Docker](#database-on-docker)
   - [サンプルデータ](#サンプルデータ)
+  - [センサ固定用ボード (M5 Env Pro Unit用)](#センサ固定用ボード-m5-env-pro-unit用)
 
 -----
 
@@ -20,7 +21,7 @@
 
 ## 概要
 
-BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme688/) と [ATOM Lite](https://docs.m5stack.com/en/core/atom_lite)を最大２つWindows PCに接続し、C#で作成したWindowsアプリケーションで「におい」を学習し、学習結果を使って、どの「匂い」かを当てる（ことができるかもしれない）ようにしたシステムを提供します。
+BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme688/) または [BME690](https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme690/) と、 [ATOM Lite](https://docs.m5stack.com/en/core/ATOM%20Lite) もしくは [ATOM S3 Lite](https://docs.m5stack.com/en/core/AtomS3%20Lite) を最大２つWindows PCに接続し、C#で作成したWindowsアプリケーションで「におい」を学習し、学習結果を使って、どの「匂い」かを当てる（ことができるかもしれない）ようにしたシステムを提供します。
 
 「匂い」の学習には、.NET用の機械学習フレームワーク([ML.NET](https://dotnet.microsoft.com/en-us/apps/machinelearning-ai/ml-dotnet))が提供する、[多クラス分類のトレーナー](https://learn.microsoft.com/ja-jp/dotnet/machine-learning/resources/tasks#multiclass-classification)を使用でき、各トレーナーによる判定の違いをお試しいただけるようになっています。
 
@@ -48,15 +49,15 @@ BOSCH社のAIガスセンサ[BME688](https://www.bosch-sensortec.com/products/en
 
 ## BME688-Atom Lite
 
-BME688とAtom LiteをI2Cで接続し、それをWindows PCにつないで、センサーのデータをWindows Appに送ります。
+BME688/BME690とAtom Lite/Atom S3 LiteをI2Cで接続し、それをWindows PCにつないで、センサーのデータをWindows Appに送ります。
 
 ![Atom Lite](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/AtomLite.png?raw=true)
 
-BME688 と Atom Lite についての詳細は [こちら](AtomLite/README.md) を参照してください。
+BME688/BME690 と Atom Lite/Atom S3 Lite についての詳細は [こちら](AtomLite/README.md) を参照してください。
 
 ## Windows アプリケーション
 
-Atom Liteから送られてきたBME688の匂いデータについて、機械学習を行い、学習したデータを使ってどの匂いか判定させるアプリです。
+Atom Lite/Atom S3 Liteから送られてきたBME688/BME690の匂いデータについて、機械学習を行い、学習したデータを使ってどの匂いか判定させるアプリです。
 
 ![WindowsApp](https://github.com/MRSa/SamplingBME688Serial/blob/master/images/overview0.png?raw=true)
 
@@ -86,7 +87,6 @@ BME688で収集したデータを置いています。
 [M5 Env Pro Unit](https://docs.m5stack.com/en/unit/ENV%20Pro%20Unit)を2台まとめて板に固定できるボードです。
 
 - [EnvProUnit_BaseBoard.stl](EnvProUnit_BaseBoard.stl)
-
 
 以上
 <!----
