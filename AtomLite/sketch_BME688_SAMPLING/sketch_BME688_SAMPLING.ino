@@ -61,6 +61,13 @@ void errLeds(void);
 //  I2C: Address
 #define BME688_I2C_ADDR_1ST 0x76
 #define BME688_I2C_ADDR_2ND 0x77
+#define SSD1315_I2C_ADDR 0x3C
+
+#include <M5UnitMiniOLED.h>
+#define SSD1315_FREQ 400000
+bool isSsd1315Exist = false;
+M5UnitMiniOLED ssd1315_display(SDA_PIN, SCL_PIN, SSD1315_FREQ);
+M5Canvas canvas(&ssd1315_display);
 
 #include <math.h>
 Bme68x bme;
@@ -69,7 +76,6 @@ bool expandedMode = false;
 String profileName;
 uint16_t temperatureProfile[10];
 uint16_t maintainProfile[10];
-
 
 bool parseProfileFromJson(String &jsonString)
 {
@@ -283,6 +289,38 @@ void applyDefaultProfile()
   preferences.end();
 }
 
+void showMiniOledUnit(uint16_t gas_index)
+{
+  if (isSsd1315Exist)
+  {
+    try
+    {
+      const char *lcdMessage = profileName.c_str();
+      size_t textlen = strlen(lcdMessage); // / sizeof(message[0]);
+      size_t textPos = 0;
+      int32_t cursor_x = ssd1315_display.width();
+      if (textlen > 16)
+      {
+        textlen = 16;
+      }
+      canvas.setCursor(5, 40); // 1行目
+      while (textPos < textlen && cursor_x <= ssd1315_display.width()) {
+        canvas.print(lcdMessage[textPos++]);
+        cursor_x = canvas.getCursorX();
+        if (lcdMessage[textPos] == 0x00)
+        {
+          // --- 文字がなくなったら抜ける
+          break;
+        }
+      }
+      canvas.setCursor(10, 20);  // 2行目
+      canvas.print((gas_index));
+      ssd1315_display.waitDisplay();
+      canvas.pushSprite(&ssd1315_display, 0, (ssd1315_display.height() - canvas.height()) >> 1);
+    }
+    catch (...) { }
+  }
+}
 
 /**
  * @brief Initializes the sensor and hardware settings
@@ -314,6 +352,27 @@ void setup(void)
   {
     delay(10);
   }
+
+  /* Initializes SSD1315(LCD) on I2C library */
+  if (ssd1315_display.init())
+  {
+    // ---- ディスプレイの接続を確認
+    isSsd1315Exist = true;
+    ssd1315_display.setRotation(1);
+    canvas.setColorDepth(1);  // mono color
+    //canvas.setFont(&lgfxJapanGothicP_8);
+    canvas.setTextWrap(false);
+    canvas.setTextSize(0);
+    canvas.createSprite(ssd1315_display.width() + 64, 72);
+    Serial.println("Detected a Mini OLED UNIT.");
+  }
+  else
+  {
+    // ---- ディスプレイ未接続
+    isSsd1315Exist = false;
+    Serial.println("A Mini OLED UNIT is not connected.");
+  }
+  Serial.println("");
 
   /* initializes the sensor based on I2C library */
   bme.begin(BME688_I2C_ADDR_2ND, Wire);
@@ -510,6 +569,8 @@ void loop(void)
         }
         Serial.println();
         last = current;
+
+        showMiniOledUnit(data.gas_index);
         delay(WAIT_DUR);
         neopixelWrite(LED_PIN, 0x00, 0x00, 0xf0);
         delay(WAIT_DUR);

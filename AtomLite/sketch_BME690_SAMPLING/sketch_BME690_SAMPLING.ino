@@ -46,6 +46,13 @@ void errLeds(void);
 // I2C: Address
 #define BME690_I2C_ADDR_1ST 0x76
 #define BME690_I2C_ADDR_2ND 0x77
+#define SSD1315_I2C_ADDR 0x3C
+
+#include <M5UnitMiniOLED.h>
+#define SSD1315_FREQ 400000
+bool isSsd1315Exist = false;
+M5UnitMiniOLED ssd1315_display(SDA_PIN, SCL_PIN, SSD1315_FREQ);
+M5Canvas canvas(&ssd1315_display);
 
 #include <math.h>
 Bme69x bme;
@@ -54,7 +61,6 @@ bool expandedMode = false;
 String profileName;
 uint16_t temperatureProfile[10];
 uint16_t maintainProfile[10];
-
 
 bool parseProfileFromJson(String &jsonString)
 {
@@ -268,6 +274,38 @@ void applyDefaultProfile()
   preferences.end();
 }
 
+void showMiniOledUnit(uint16_t gas_index)
+{
+  if (isSsd1315Exist)
+  {
+    try
+    {
+      const char *message = profileName.c_str();
+      size_t textlen = strlen(message); // / sizeof(message[0]);
+      size_t textPos = 0;
+      int32_t cursor_x = ssd1315_display.width();
+      if (textlen > 16)
+      {
+        textlen = 16;
+      }
+      canvas.setCursor(5, 40); // 1行目
+      while (textPos < textlen && cursor_x <= ssd1315_display.width()) {
+        canvas.print(message[textPos++]);
+        cursor_x = canvas.getCursorX();
+        if (message[textPos] == 0x00)
+        {
+          // --- 文字がなくなったら抜ける
+          break;
+        }
+      }
+      canvas.setCursor(10, 20);  // 2行目
+      canvas.print((gas_index));
+      ssd1315_display.waitDisplay();
+      canvas.pushSprite(&ssd1315_display, 0, (ssd1315_display.height() - canvas.height()) >> 1);
+    }
+    catch (...) { }
+  }
+}
 
 /**
  * @brief Initializes the sensor and hardware settings
@@ -282,6 +320,7 @@ void setup(void)
   cfg.led_brightness = 96;
   M5.begin(cfg);
 
+  mainLED = CRGB::Black;
   pinMode(LED_PIN, OUTPUT);
   FastLED.addLeds<NEOPIXEL, LED_PIN>(&mainLED, 1);
 
@@ -289,10 +328,36 @@ void setup(void)
 
   //  LED OFF
   FastLED.setBrightness(10);
-  mainLED = CRGB::Black;
   neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue); // FastLED.show();
 
+  Serial.begin(115200);
   Wire.begin(SDA_PIN, SCL_PIN);
+
+  while (!Serial)
+  {
+    delay(10);
+  }
+
+  /* Initializes SSD1315(LCD) on I2C library */
+  if (ssd1315_display.init())
+  {
+    // ---- ディスプレイの接続を確認
+    isSsd1315Exist = true;
+    ssd1315_display.setRotation(1);
+    canvas.setColorDepth(1);  // mono color
+    //canvas.setFont(&lgfxJapanGothicP_8);
+    canvas.setTextWrap(false);
+    canvas.setTextSize(0);
+    canvas.createSprite(ssd1315_display.width() + 64, 72);
+    Serial.println("Detected a Mini OLED UNIT.");
+  }
+  else
+  {
+    // ---- ディスプレイ未接続
+    isSsd1315Exist = false;
+    Serial.println("A Mini OLED UNIT is not connected.");
+  }
+  Serial.println("");
 
   /* initializes the sensor based on I2C library */
   bme.begin(BME690_I2C_ADDR_2ND, Wire);
@@ -321,7 +386,6 @@ void setup(void)
   bme.setTPH();
 
   // Preferenceから温度設定情報を読み込む。（読み込めない場合はデフォルト値を設定）
-
   Preferences preferences;
   preferences.begin("profile");
   bool isProfileEntry = preferences.getBool("isEntry");
@@ -499,6 +563,7 @@ void loop(void)
         Serial.println();
         last = current;
 
+        showMiniOledUnit(data.gas_index);
         delay(WAIT_DUR);
         mainLED = CRGB::Black;
         neopixelWrite(LED_PIN, mainLED.red, mainLED.green, mainLED.blue);
